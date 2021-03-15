@@ -1,3 +1,12 @@
-# Alroha
+# Algoga-Frontend
 
-> A302팀
+
+
+## npm-install
+
+``` bash
+$npm install vuex --save
+$npm install axios --save
+$npm install lodash --save
+```
+
