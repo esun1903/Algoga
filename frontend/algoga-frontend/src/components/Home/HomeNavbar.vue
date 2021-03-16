@@ -19,7 +19,18 @@
 
 <script>
 export default {
-    name : 'HomeNavbar'
+    name : 'HomeNavbar',
+    mounted: function(){
+      window.addEventListener("scroll",function(){                
+        if (window.scrollY > 10) {
+          document.querySelector("#home-navbar").classList.add('nav-shadow')          
+        } else {
+          if (document.querySelector("#home-navbar").classList.contains('nav-shadow')){
+            document.querySelector("#home-navbar").classList.remove('nav-shadow')
+          } 
+        }
+      })
+    }
 }
 </script>
 
@@ -31,11 +42,13 @@ export default {
   width: 80vw;
   height: 60px;   
   margin:10px auto 0 auto;
-  box-shadow: 0px 2px 5px var(--shadow-color);
   background-color: var(--back-color);  
   border-radius: 5px;  
 }
 
+.nav-shadow {
+  box-shadow: 0px 2px 5px var(--shadow-color);
+}
 
 #home-navbar > nav {
   display:flex;
