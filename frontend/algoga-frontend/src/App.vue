@@ -19,6 +19,7 @@ export default {
 :root {
   --font-color: black;
   --back-color: white;
+  --shadow-color: rgba(0,0,0,0.5);
   --test-color: red;
 
 }
