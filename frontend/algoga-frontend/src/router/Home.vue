@@ -18,5 +18,8 @@ export default {
 </script>
 
 <style>
+#home{
+  height:1000vh
+}
 
 </style>
