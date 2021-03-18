@@ -107,10 +107,10 @@
 
 ### Backend
 
-- Backend 폴더로 들어와 Python을 설치합니다. 
+- Backend 폴더로 들어와 라이브러리를 설치합니다.
 
   - ```
-    $ pip install django
+    pip install -r requirements.txt
     ```
 
 - 서버를 실행합니다.
