@@ -24,15 +24,15 @@
 
 💁🏻‍♂️**프론트엔드**  
 
-1. **이동희**  - [@Donghee-L](https://github.com/Donghee-L)
+    1. **이동희**  - [@Donghee-L](https://github.com/Donghee-L)
 
-2. **박철완**  - [@Parking9](https://github.com/Parking9)
+    2. **박철완**  - [@Parking9](https://github.com/Parking9)
 
   💁🏻‍♀️**백엔드**  
 
-1. **최은선**  - [@esun1903](https://github.com/esun1903)
+    1. **최은선**  - [@esun1903](https://github.com/esun1903)
 
-2. **표기동**  - [@pyoki32](https://github.com/pyoki32)
+    2. **표기동**  - [@pyoki32](https://github.com/pyoki32)
 
 
   💁🏻‍♂️**데이터분석**  
@@ -61,7 +61,7 @@
 
 ### **✔ 가치 제안 및 기대 효과**
 
-
+ 
 
 
 
@@ -77,9 +77,15 @@
 
 ### ✔ 와이어프레임
 
-
+![메인](/uploads/ecc41721c1c81d178c757b0731729c5f/메인.PNG)
+![메인2](/uploads/666ec839ba5183d45bf83551538ae02f/메인2.PNG)
+![메인3](/uploads/b96e410070a56f231a134229a3cfab54/메인3.PNG)
+![메인4](/uploads/925e5c5077f24bedf4b093efcdff5c19/메인4.PNG)
+![메인5](/uploads/4960e2c5c83c4b3d33197af77ddf605c/메인5.PNG)
 
 ### ✔ 기술스택
+
+![기술스택](/uploads/08492e84a7446c58dab5f9646cc22b54/기술스택.PNG)
 
 
 
@@ -101,16 +107,16 @@
 
 ### Backend
 
-- Python을 설치합니다. 
+- Backend 폴더로 들어와 Python을 설치합니다. 
 
   - ```
     $ pip install django
     ```
 
-- 서버 실행
+- 서버를 실행합니다.
 
   - ```
-    $ pip install django
+    $ python manage.py runserver
     ```
 
     
