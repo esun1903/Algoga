@@ -2,9 +2,7 @@
 
 
 
-![로고](C:\Users\multicampus\Desktop\로고.png)
-
-
+![로고](/uploads/9db12f1663e34251619fde2e1db60423/로고.png)
 
 ### ❓알고가 서비스란?  
 
@@ -20,9 +18,9 @@
 
 
 
-### 👨‍👨‍👧‍👧알로하 팀원소개
+### 알로하 팀원소개
 
-![안녕하세요! 알고가(팀명 - 알로하)입니다 환 0cf46eb2a1a244c49568511ba0389808](C:\Users\multicampus\Desktop\Export-8520b7f4-8780-4afc-9c31-c6815e26fac9\안녕하세요! 알고가(팀명 - 알로하)입니다 환 0cf46eb2a1a244c49568511ba0389808.png)
+![팀원소개](/uploads/40db06c773e1fb753caf8ea2f83ef094/팀원소개.PNG)
 
 💁🏻‍♂️**프론트엔드**  
 
@@ -45,7 +43,7 @@
 
 ### ✔ 기획배경
 
-![안녕하세요! 알고가(팀명 - 알로하)입니다 환 0cf46eb2a1a244c49568511ba0389808 1](C:\Users\multicampus\Desktop\Export-8520b7f4-8780-4afc-9c31-c6815e26fac9\안녕하세요! 알고가(팀명 - 알로하)입니다 환 0cf46eb2a1a244c49568511ba0389808 1.png)
+![기획배경](/uploads/30df97592152a5989b6dd5c4b105b466/기획배경.png)
 
 ​     다양한 알고리즘 사이트들이 있지만 자신이 어떠한 부분이 부족한지 어떤 문제를 풀어야할지 모를때가 많습니다. 이를 위해 알고가에서는 사용자가 부족한 알고리즘 분야를 알려주고 문제를 추천해주어알고리즘의 역량을 기를 수 있습니다. 
 
@@ -73,7 +71,7 @@
 
 ### ✔ ERD 설계 
 
-### ![erd](C:\Users\multicampus\Desktop\erd.png)
+![erd](/uploads/91d432142fa48e9ccc8496e3526205f6/erd.png)
 
  
 
@@ -85,5 +83,34 @@
 
 
 
+### ⚙️ Install and Usage
 
+### Frontend
 
+- frontend 폴더로 들어와 필요한 패키지를 설치합니다.
+
+  - ```bash
+    $ npm i
+    ```
+
+- frontend 폴더 (vue 프로젝트)를 실행합니다.
+
+  - ```bash
+    $ npm run serve
+    ```
+
+### Backend
+
+- Python을 설치합니다. 
+
+  - ```
+    $ pip install django
+    ```
+
+- 서버 실행
+
+  - ```
+    $ pip install django
+    ```
+
+    
