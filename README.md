@@ -22,20 +22,20 @@
 
 ![팀원소개](/uploads/40db06c773e1fb753caf8ea2f83ef094/팀원소개.PNG)
 
-💁🏻‍♂️**프론트엔드**  
+️**프론트엔드**  
 
 1. **이동희**  - [@Donghee-L](https://github.com/Donghee-L)
 
 2. **박철완**  - [@Parking9](https://github.com/Parking9)
 
-  💁🏻‍♀️**백엔드**  
+️**백엔드**  
 
 1. **최은선**  - [@esun1903](https://github.com/esun1903)
 
 2. **표기동**  - [@pyoki32](https://github.com/pyoki32)
 
 
-  💁🏻‍♂️**데이터분석**  
+️**데이터분석**  
 
 1. **권영일** - [@KwonYI](https://github.com/KwonYI)
 
