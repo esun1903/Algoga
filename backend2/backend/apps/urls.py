@@ -10,9 +10,12 @@ urlpatterns = [
     path("v1/user/<int:user_int>", viewSet.as_view({"get": "list"}), name="user"),
 
     #회원수정
-    path("v1/userupdate?", viewSet.as_view({"post" : "update"}), name="userSeq"),
+    path("v1/userupdate?", viewSet.as_view({"put" : "update"}), name="userSeq"),
 
     #회원탈퇴
     path("v1/userdelete/<int:user_seq>", viewSet.as_view({"get": "Userdelete"}), name="user_seq"),
+
+    #로그아웃
+    path('logout/', LogoutView.as_view(), name='auth_logout'),
     
 ]
