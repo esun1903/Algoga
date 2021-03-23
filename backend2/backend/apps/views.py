@@ -27,3 +27,7 @@ class viewSet(viewsets.ModelViewSet):
         music = music_serializer.save()
 
         return Response(UserSerializer(music).data, status=status.HTTP_201_CREATED)
+
+
+
+      
