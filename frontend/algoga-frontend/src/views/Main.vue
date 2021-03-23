@@ -6,18 +6,21 @@
       <div>
         <!-- feed -->
       </div>
-      <section>
-        
-        <!-- challenge -->
-        here / challenge components 
+      <div id='main-content'>
+        <section>
+          
+          <!-- challenge -->
+          here / challenge components 
 
-        <LogStudy />
-        <!-- history -->
+          <LogStudy />
+          <!-- history -->
 
-        <History />
-      </section>
-      <div>
-        <!-- 여기는 status가들어가겠조? -->
+          <History />
+        </section>
+        <div>
+          <!-- 여기는 status가들어가겠조? -->
+          <MainAside />
+        </div>
       </div>
     </div>
 
@@ -28,6 +31,7 @@
 import MainNavbar from "@/components/Main/MainNavbar"
 import LogStudy from "@/components/Main/LogStudy"
 import History from "@/components/Main/History"
+import MainAside from "@/components/Main/MainAside"
 
 
 export default {
@@ -36,17 +40,23 @@ export default {
       MainNavbar,
       LogStudy,
       History,
+      MainAside,
   }
 
 }
 </script>
 
 <style>
-#main > div >section {
-  width: 1000px;    
-  margin: 20px auto;
-    
+#main > div:nth-child(2){
+  display: flex;
 }
-
-
+#main > div > div > section {
+  width: 1000px;    
+  margin: 20px 50px 20px 0;
+  
+}
+#main-content{
+  display: flex;
+  margin: 0 auto;
+}
 </style>
