@@ -1,8 +1,14 @@
 from django.urls import path 
 from django.conf import settings 
-from .views import viewSet
+from .views import *
 
 urlpatterns = [ 
-    path("v1/user", viewSet.as_view({"get": "list", "post": "add"}), name="user"),
-    path("v1/user/<int:user_int>", viewSet.as_view({"get": "list"}), name="user"),
+ 
+    path("v1/user", UserViewSet.as_view({"get": "list", "post": "add"}), name="musics"),
+    path("v1/user/<str:email>", UserViewSet.as_view({"get": "list"}), name="email"),
+
+
+    path("v1/test", UserViewSet.as_view({"post": "regist"})),
+   
+
 ]
