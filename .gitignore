@@ -32,13 +32,15 @@ build/
 
 ### VS Code ###
 .vscode/
-
+my_settings.py
 .DS_Store
 node_modules
 /dist
 
 # local env files
+env/
 .env
+.env/
 .env.local
 .env.*.local
 
