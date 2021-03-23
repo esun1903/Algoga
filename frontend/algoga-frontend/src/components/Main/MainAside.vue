@@ -62,7 +62,7 @@ p{
 }
 #mainAside{
   width: 400px;
-  border: 4px solid var(--font-color);
+  border-left: 1px solid rgba(61, 61, 61, 0.479);
 }
 #profileBox{
   display: flex;
@@ -155,7 +155,6 @@ p{
 }
 #problemSummary{
   margin: 20px 40px;
-  border: 1px solid red;
   box-sizing: content-box;
 }
 </style>
