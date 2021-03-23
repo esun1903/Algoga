@@ -74,6 +74,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+#로그아웃을 위해 추가한 부분 
+ACCOUNT_LOGOUT_ON_GET = True
+
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
