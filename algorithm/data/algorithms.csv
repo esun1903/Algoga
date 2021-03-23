@@ -1,0 +1,173 @@
+﻿id,algo_id,algo_name_kr,algo_name_en,algo_url,algo_cnt
+0,124,수학,Mathematics,/problem/tag/124,2227
+1,25,다이나믹 프로그래밍,Dynamic programming,/problem/tag/25,1676
+2,102,구현,Implementation,/problem/tag/102,1591
+3,7,그래프 이론,Graph theory,/problem/tag/7,1505
+4,175,자료 구조,Data structures,/problem/tag/175,1366
+5,33,그리디 알고리즘,Greedy,/problem/tag/33,767
+6,11,그래프 탐색,Graph traversal,/problem/tag/11,750
+7,158,문자열,String,/problem/tag/158,750
+8,125,브루트포스 알고리즘,Bruteforcing,/problem/tag/125,609
+9,65,세그먼트 트리,Segment tree,/problem/tag/65,589
+10,120,트리,Tree,/problem/tag/120,551
+11,97,정렬,Sorting,/problem/tag/97,534
+12,12,이분 탐색,Binary search,/problem/tag/12,519
+13,100,기하학,Geometry,/problem/tag/100,495
+14,95,정수론,Number theory,/problem/tag/95,462
+15,126,너비 우선 탐색,Breadth-first search,/problem/tag/126,392
+16,6,조합론,Combinatorics,/problem/tag/6,286
+17,121,사칙연산,Arithmetic,/problem/tag/121,276
+18,127,깊이 우선 탐색,Depth-first search,/problem/tag/127,268
+19,139,누적 합,Prefix sum,/problem/tag/139,265
+20,22,다익스트라,Dijkstra's,/problem/tag/22,244
+21,141,시뮬레이션,Simulation,/problem/tag/141,237
+22,14,비트마스킹,Bitmask,/problem/tag/14,236
+23,81,분리 집합,Disjoint set,/problem/tag/81,214
+24,5,백트래킹,Backtracking,/problem/tag/5,208
+25,24,분할 정복,Divide and conquer,/problem/tag/24,201
+26,128,구성적,Constructive,/problem/tag/128,194
+27,109,애드 혹,Ad-Hoc,/problem/tag/109,193
+28,106,스위핑,Sweeping,/problem/tag/106,168
+29,92,트리에서의 다이나믹 프로그래밍,Dynamic programming on trees,/problem/tag/92,154
+30,45,최대 유량,Maximum flow,/problem/tag/45,153
+31,71,스택,Stack,/problem/tag/71,146
+32,96,파싱,Parsing,/problem/tag/96,139
+33,59,우선순위 큐,Priority queue,/problem/tag/59,138
+34,137,Case work,Case work,/problem/tag/137,138
+35,66,느리게 갱신되는 세그먼트 트리,Segment tree with lazy propagation,/problem/tag/66,133
+36,80,두 포인터,Two-pointer,/problem/tag/80,130
+37,87,비트필드를 이용한 다이나믹 프로그래밍,Dynamic programming using bitfield,/problem/tag/87,125
+38,9,소수 판정,Primality test,/problem/tag/9,118
+39,74,트리를 사용한 집합과 맵,Set / Map by trees,/problem/tag/74,118
+40,140,게임 이론,Game theory,/problem/tag/140,116
+41,39,분할 정복을 이용한 거듭제곱,Exponentiation by squaring,/problem/tag/39,112
+42,123,오프라인 쿼리,Offline queries,/problem/tag/123,110
+43,13,이분 매칭,Bipartite matching,/problem/tag/13,100
+44,49,최소 스패닝 트리,Minimum spanning tree,/problem/tag/49,95
+45,117,임의 정밀도 / 큰 수 연산,Arbitrary precision / Big integers,/problem/tag/117,93
+46,41,최소 공통 조상,Lowest common ancestor,/problem/tag/41,89
+47,62,재귀,Recursion,/problem/tag/62,83
+48,67,에라토스테네스의 체,Sieve of Eratosthenes,/problem/tag/67,83
+49,8,해싱,Hashing,/problem/tag/8,82
+50,76,강한 연결 요소,Strongly connected component,/problem/tag/76,82
+51,136,해시를 사용한 집합과 맵,Set / Map by hashing,/problem/tag/136,76
+52,31,플로이드–와샬,Floyd–Warshall,/problem/tag/31,74
+53,78,위상 정렬,Topological sorting,/problem/tag/78,73
+54,20,볼록 껍질,Convex hull,/problem/tag/20,71
+55,144,선형대수학,Linear algebra,/problem/tag/144,71
+56,28,고속 푸리에 변환,Fast Fourier transform,/problem/tag/28,69
+57,79,트라이,Trie,/problem/tag/79,66
+58,38,포함 배제의 원리,Inclusion and exclusion,/problem/tag/38,61
+59,161,값 / 좌표 압축,Value / coordinate compression,/problem/tag/161,56
+60,89,볼록 껍질을 이용한 최적화,Convex hull trick,/problem/tag/89,54
+61,40,KMP,Knuth–Morris–Pratt,/problem/tag/40,50
+62,48,최소 비용 최대 유량,Minimum cost maximum flow,/problem/tag/48,50
+63,77,접미사 배열과 LCP 배열,Suffix array and LCP array,/problem/tag/77,50
+64,84,희소 배열,Sparse table,/problem/tag/84,49
+65,130,제곱근 분할법,Square root decomposition,/problem/tag/130,48
+66,148,배낭 문제,Knapsack,/problem/tag/148,48
+67,73,덱,Deque,/problem/tag/73,45
+68,169,작은 집합에서 큰 집합으로 합치는 테크닉,Smaller to larger technique,/problem/tag/169,44
+69,70,스프라그–그런디 정리,Sprague–Grundy theorem,/problem/tag/70,43
+70,42,선분 교차 판정,Line segment intersection check,/problem/tag/42,41
+71,43,가장 긴 증가하는 부분 수열: O(n log n),Longest increasing sequence in O(n log n),/problem/tag/43,41
+72,46,중간에서 만나기,Meet in the middle,/problem/tag/46,41
+73,177,확률론,Probability theory,/problem/tag/177,41
+74,26,유클리드 호제법,Euclidean algorithm,/problem/tag/26,40
+75,35,Heavy-light 분할,Heavy-light decomposition,/problem/tag/35,40
+76,172,런타임 전의 전처리,Precomputation,/problem/tag/172,39
+77,170,매개 변수 탐색,Parametric search,/problem/tag/170,37
+78,1,2-SAT,2-SAT,/problem/tag/1,35
+79,18,센트로이드 분할,Centroid decomposition,/problem/tag/18,35
+80,115,무작위화,Randomization,/problem/tag/115,35
+81,150,오일러 경로 테크닉,Euler tour technique,/problem/tag/150,35
+82,68,슬라이딩 윈도우,Sliding window,/problem/tag/68,34
+83,111,미적분학,Calculus,/problem/tag/111,34
+84,32,가우스 소거법,Gaussian elimination,/problem/tag/32,33
+85,142,휴리스틱,Heuristics,/problem/tag/142,33
+86,101,삼분 탐색,Ternary search,/problem/tag/101,32
+87,167,최대 유량 최소 컷 정리,Max-flow min-cut theorem,/problem/tag/167,32
+88,55,퍼시스턴트 세그먼트 트리,Persistent segment tree,/problem/tag/55,31
+89,4,단절점과 단절선,Articulation points and bridges,/problem/tag/4,29
+90,131,3차원 기하학,Geometry; 3D,/problem/tag/131,29
+91,143,선인장,Cactus,/problem/tag/143,29
+92,93,오일러 경로,Eulerian path / circuit,/problem/tag/93,26
+93,152,비트 집합,Bit set,/problem/tag/152,26
+94,19,중국인의 나머지 정리,Chinese remainder theorem,/problem/tag/19,25
+95,72,큐,Queue,/problem/tag/72,25
+96,91,분할 정복을 사용한 최적화,Divide and conquer optimization,/problem/tag/91,25
+97,50,Mo's,Mo's,/problem/tag/50,23
+98,54,병렬 이분 탐색,Parallel binary search,/problem/tag/54,21
+99,119,오일러 지표 (χ=V-E+F),Euler characteristic (χ=V-E+F),/problem/tag/119,21
+100,10,벨만–포드,Bellman–Ford,/problem/tag/10,20
+101,69,스플레이 트리,Splay tree,/problem/tag/69,20
+102,166,다차원 세그먼트 트리,Multidimensional segment tree,/problem/tag/166,19
+103,168,평면 그래프,Planar graph,/problem/tag/168,19
+104,2,아호-코라식,Aho-Corasick,/problem/tag/2,18
+105,110,벌래캠프–매시,Berlekamp–Massey,/problem/tag/110,18
+106,171,순열 사이클 분할,Permutation cycle decomposition,/problem/tag/171,17
+107,27,확장 유클리드 호제법,Extended Euclidean algorithm,/problem/tag/27,16
+108,64,회전하는 캘리퍼스,Rotating calipers,/problem/tag/64,16
+109,116,물리학,Physics,/problem/tag/116,16
+110,29,페르마의 소정리,Fermat's little theorem,/problem/tag/29,15
+111,153,이중 연결 요소,Biconnected component,/problem/tag/153,15
+112,155,머지 소트 트리,Merge sort tree,/problem/tag/155,15
+113,51,뫼비우스 반전 공식,Möbius inversion,/problem/tag/51,14
+114,61,라빈–카프,Rabin–Karp,/problem/tag/61,14
+115,63,정규 표현식,Regular Expression,/problem/tag/63,14
+116,98,링크/컷 트리,Link/cut tree,/problem/tag/98,14
+117,107,커넥션 프로파일을 이용한 다이나믹 프로그래밍,Dynamic programming using connection profile,/problem/tag/107,14
+118,108,덱을 이용한 다이나믹 프로그래밍,Dynamic programming using a deque,/problem/tag/108,14
+119,44,매내처,Manacher's,/problem/tag/44,13
+120,176,0-1 너비 우선 탐색,0-1 BFS,/problem/tag/176,13
+121,56,볼록 다각형 내부의 점 판정,Point in convex polygon check,/problem/tag/56,12
+122,122,수치해석,Numerical analysis,/problem/tag/122,12
+123,138,외판원 순회 문제,Travelling salesman problem,/problem/tag/138,12
+124,151,오일러 피 함수,Euler totient function,/problem/tag/151,12
+125,154,연결 리스트,Linked list,/problem/tag/154,12
+126,157,함수 개형을 이용한 최적화,Slope trick,/problem/tag/157,12
+127,134,Alien 트릭,Alien's trick,/problem/tag/134,10
+128,156,인터프리터,Interpreter,/problem/tag/156,10
+129,3,다각형의 넓이,Area of a polygon,/problem/tag/3,9
+130,52,오프라인 동적 연결성 판정,Offline dynamic connectivity,/problem/tag/52,9
+131,58,폴라드 로,Pollard rho,/problem/tag/58,9
+132,103,선형 계획법,Linear programming,/problem/tag/103,9
+133,16,번사이드 보조정리,Burnside's lemma,/problem/tag/16,8
+134,57,오목 다각형 내부의 점 판정,Point in non-convex polygon check,/problem/tag/57,8
+135,145,트리 동형 사상,Tree isomorphism,/problem/tag/145,8
+136,164,모듈로 곱셈 역원,Modular multiplicative inverse,/problem/tag/164,8
+137,34,홀의 결혼 정리,Hall's theorem,/problem/tag/34,7
+138,36,헝가리안,Hungarian,/problem/tag/36,7
+139,47,밀러–라빈 소수 판별법,Miller–Rabin,/problem/tag/47,7
+140,112,키타마사,Kitamasa,/problem/tag/112,7
+141,146,이산 로그,Discrete logarithm,/problem/tag/146,7
+142,60,피타고라스 정리,Pythagoras theorem,/problem/tag/60,6
+143,83,Z,Z,/problem/tag/83,6
+144,135,도미네이터 트리,Dominator tree,/problem/tag/135,6
+145,162,최소 외접원,Minimum enclosing circle,/problem/tag/162,6
+146,165,단조 큐를 이용한 최적화,Monotone queue optimization,/problem/tag/165,6
+147,179,기댓값의 선형성,Linearity of expectation,/problem/tag/179,6
+148,180,쌍대성,Duality,/problem/tag/180,6
+149,15,일반적인 매칭,General matching,/problem/tag/15,5
+150,53,회문 트리,Palindrome tree,/problem/tag/53,5
+151,75,스토어–바그너,Stoer–Wagner,/problem/tag/75,5
+152,90,크누스 최적화,Knuth optimization,/problem/tag/90,5
+153,104,매트로이드,Matroid,/problem/tag/104,5
+154,113,뤼카 정리,Lucas theorem,/problem/tag/113,5
+155,181,쌍대 그래프,Dual graph,/problem/tag/181,5
+156,129,양방향 탐색,Bidirectional search,/problem/tag/129,4
+157,23,유향 최소 신장 트리,Directed minimum spanning tree,/problem/tag/23,3
+158,82,보로노이 다이어그램,Voronoi diagram,/problem/tag/82,3
+159,147,이산 제곱근,Discrete square root,/problem/tag/147,3
+160,160,보이어–무어 다수결 투표,Boyer–Moore majority vote,/problem/tag/160,3
+161,163,히르쉬버그,Hirschberg's,/problem/tag/163,3
+162,178,통계학,Statistics,/problem/tag/178,3
+163,21,델로네 삼각분할,Delaunay triangulation,/problem/tag/21,2
+164,132,4차원 이상의 기하학,Geometry; hyperdimensional,/problem/tag/132,2
+165,159,로프,Rope,/problem/tag/159,2
+166,173,춤추는 링크,Dancing links,/problem/tag/173,2
+167,174,크누스 X,Knuth's X,/problem/tag/174,2
+168,182,접미사 트리,Suffix tree,/problem/tag/182,2
+169,94,레드-블랙 트리,Red-black tree,/problem/tag/94,1
+170,105,탑 트리,Top tree,/problem/tag/105,1
+171,149,이산 k제곱근,Discrete k-th root,/problem/tag/149,1
