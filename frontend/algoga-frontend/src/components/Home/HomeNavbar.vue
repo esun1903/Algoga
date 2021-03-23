@@ -10,8 +10,8 @@
         </div>
       </div>
       <div>
-        <a href="#">Signin</a>
-        <a href="#">SignUp</a>
+        <a href="#" @click="emitSign(1)">Signin</a>
+        <a href="#" @click ="emitSign(2)">SignUp</a>
       </div>
     </nav>
   </div>
@@ -20,6 +20,16 @@
 <script>
 export default {
     name : 'HomeNavbar',
+    methods:{
+      emitSign:function(status){
+        console.log('emitSign')
+        if (status === 1) {
+          this.$emit("signin")
+        } else {
+          this.$emit("signup")
+        }
+      }
+    },
     mounted: function(){
       window.addEventListener("scroll",function(){                
         if (window.scrollY > 10) {
