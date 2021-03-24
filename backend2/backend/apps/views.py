@@ -1,29 +1,17 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions
 from .serializers import *
-import json
-from django.http import HttpResponse, JsonResponse
 from .models import User
 from rest_framework import status, viewsets, mixins 
 from rest_framework.response import Response 
 from django.views import View 
 from django.http import Http404
 from rest_framework.views import APIView
-# from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from .models import Post
 
 
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
-@authentication_classes((JSONWebTokenAuthentication,))
-def posts(request):
-    posts = Post.objects.filter(
-        published_at__isnull=False).order_by('-published_at')    
-    post_list = PostSerializer.serialize('json', posts)
-    return HttpResponse(post_list, content_type="text/json-comment-filtered")									
 
 
 class viewSet(viewsets.ModelViewSet):
@@ -42,28 +30,22 @@ class viewSet(viewsets.ModelViewSet):
         return  Response("완료", status=status.HTTP_200_CREATED)
 
 
-
-#로그아웃을 위한 api
-# class LogoutView(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request):
-#         try:
-#             refresh_token = request.data["refresh_token"]
-#             token = RefreshToken(refresh_token)
-#             token.blacklist()
-
-#             return Response(status=status.HTTP_205_RESET_CONTENT)
-#         except Exception as e:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
+@permission_classes([AllowAny])
 class UserViewSet(viewsets.GenericViewSet, 
                 mixins.ListModelMixin, 
                 View): 
 
     serializer_class = UserSerializer				
 
+    def login(self, request, email, password):
+         
+        loginUser =  User.objects.filter(email =email , password = password)
+        
+        if loginUser.exists():
+            return Response(status=status.HTTP_200_OK)
+        
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
 
     def signUp(self, request): 
         users =  User.objects.filter(email =request.data["email"])
@@ -77,5 +59,20 @@ class UserViewSet(viewsets.GenericViewSet,
         user = userSerializer.save()
 
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+
+    def userInfoUpdate(self,request, email):
+
+        users =  User.objects.filter(email =email)
+        if not users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        userInfoModify = User.objects.get(email=email)
+        userInfoModify.password =request.data["password"]
+        userInfoModify.baek_id  =request.data["baek_id"]
+        userInfoModify.nickname =request.data["nickname"]
+        userInfoModify.profile_image=request.data["profile_image"]
+        userInfoModify.save()
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
