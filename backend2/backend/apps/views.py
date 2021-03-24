@@ -53,8 +53,8 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         user = userSerializer.save()
-
-        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        #UserSerializer(user).data list 할때 필요
+        return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
     def userInfoUpdate(self,request, email):
 
@@ -69,7 +69,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userInfoModify.profile_image=request.data["profile_image"]
         userInfoModify.save()
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response("수정 성공",status=status.HTTP_201_CREATED)
 
     def Userdelete(self,request,email): 
         
