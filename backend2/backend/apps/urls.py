@@ -1,6 +1,7 @@
 from django.urls import path 
 from django.conf import settings 
 from .views import *
+from . import views
 
 urlpatterns = [ 
 
@@ -17,6 +18,7 @@ urlpatterns = [
     #로그아웃
    # path('logout/', LogoutView.as_view(), name='auth_logout'),
 
-
+    #JWT인증
+    path('posts/', views.posts, name='posts'),
     
 ]
