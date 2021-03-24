@@ -9,41 +9,40 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
-
-
-class viewSet(viewsets.ModelViewSet):
- 
-    serializer_class = UserSerializer
- 
-    # UserUpdate 
-    def Userupdate(self, request): 
-        return Response("수정완료", status=status.HTTP_201_CREATED)
-
-
-    # UserDelete
-    
 
 
 @permission_classes([AllowAny])
-class UserViewSet(viewsets.GenericViewSet, 
-                mixins.ListModelMixin, 
-                View): 
+class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View): 
 
     serializer_class = UserSerializer				
 
+   
     def login(self, request, email, password):
          
         loginUser =  User.objects.filter(email =email , password = password)
         
         if loginUser.exists():
-            return Response(status=status.HTTP_200_OK)
+            request.session['email'] = email
+            return Response("로그인성공",status=status.HTTP_200_OK)
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+    def sessionCheck(self, request):
         
-
+        userSession = request.session.get('email')
+        
+        if userSession :
+            user = User.objects.get(email = userSession)
+            return Response(user.email)
+       
+        return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+    def logout(self, request):
+        request.session.clear();
+        return Response("로그 아웃",status=status.HTTP_200_OK)
+        
     def signUp(self, request): 
         users =  User.objects.filter(email =request.data["email"])
         if users.exists():
