@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions
-from .serializers import UserSerializer
+from .serializers import *
 import json
 from django.http import HttpResponse, JsonResponse
 from .models import User
@@ -10,6 +10,20 @@ from django.views import View
 from django.http import Http404
 from rest_framework.views import APIView
 # from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from .models import Post
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+@authentication_classes((JSONWebTokenAuthentication,))
+def posts(request):
+    posts = Post.objects.filter(
+        published_at__isnull=False).order_by('-published_at')    
+    post_list = PostSerializer.serialize('json', posts)
+    return HttpResponse(post_list, content_type="text/json-comment-filtered")									
 
 
 class viewSet(viewsets.ModelViewSet):
@@ -63,5 +77,5 @@ class UserViewSet(viewsets.GenericViewSet,
         user = userSerializer.save()
 
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-									
-      
+
+
