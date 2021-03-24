@@ -14,7 +14,7 @@ urlpatterns = [
     path("v1/userInfoUpdate/<str:email>", UserViewSet.as_view({"put": "userInfoUpdate"})),
 
     #회원탈퇴
-    path("v1/userdelete/<int:user_seq>", viewSet.as_view({"get": "Userdelete"}), name="user_seq"),
+    path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
 
     #로그아웃
    # path('logout/', LogoutView.as_view(), name='auth_logout'),

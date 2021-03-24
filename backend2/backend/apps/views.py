@@ -24,10 +24,7 @@ class viewSet(viewsets.ModelViewSet):
 
 
     # UserDelete
-    def Userdelete(self,request,user_seq): 
-        deleteuser = User.objects.get(user_seq = user_seq)
-        deleteuser.delete()
-        return  Response("완료", status=status.HTTP_200_CREATED)
+    
 
 
 @permission_classes([AllowAny])
@@ -75,4 +72,13 @@ class UserViewSet(viewsets.GenericViewSet,
 
         return Response(status=status.HTTP_201_CREATED)
 
-
+    def Userdelete(self,request,email): 
+        
+        users = User.objects.filter(email = email)
+        if not users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+      
+        userdelete = User.objects.get(email = email)
+        userdelete.delete()
+        
+        return  Response("삭제성공", status=status.HTTP_201_CREATED)
