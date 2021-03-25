@@ -3,6 +3,7 @@ from django.conf import settings
 from .views import *
 from .problem_views import *
 from . import views
+from . import problem_views
 
 urlpatterns = [ 
     #로그인
@@ -23,7 +24,7 @@ urlpatterns = [
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
 
-    #문제추천해주기 
-    path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
+    #사용자가 맞은 문제 불러오기
+    path("v1/problem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
     
 ]
