@@ -1,6 +1,7 @@
 from django.urls import path 
 from django.conf import settings 
 from .views import *
+from .problem_views import *
 from . import views
 
 urlpatterns = [ 
@@ -22,10 +23,7 @@ urlpatterns = [
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
 
-    #로그아웃
-    path('logout/', LogoutView.as_view(), name='auth_logout'),
-
     #문제추천해주기 
-    path("v1/userupdate?", viewSet.as_view({"put" : "update"}), name="userSeq"),
+    path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
 ]
