@@ -7,8 +7,8 @@
         <!-- feed -->
       </div>
       <div id='main-content'>
+        
         <section>
-          
           <!-- challenge -->
           here / challenge components 
 
@@ -16,11 +16,16 @@
           <!-- history -->
 
           <History />
+
+          <button @click='test'>TEST Button router to problemSolving</button>
+
         </section>
         <div>
-          <!-- 여기는 status가들어가겠조? -->
+        <!-- 여기는 status가들어가겠조? -->
           <MainAside />
         </div>
+        
+    
       </div>
     </div>
 
@@ -41,6 +46,11 @@ export default {
       LogStudy,
       History,
       MainAside,
+  },
+  methods:{
+    test:function(){
+      this.$router.push('register')
+    }
   }
 
 }
