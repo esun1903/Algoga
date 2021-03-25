@@ -36,9 +36,11 @@ my_settings.py
 .DS_Store
 node_modules
 /dist
+### Django ###
 /__pycache__
 __pycache__/
-__pycache__	
+__pycache__
+__pycache__/*	
 # local env files
 env/
 .env
