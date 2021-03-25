@@ -17,5 +17,8 @@ urlpatterns = [
 
     #로그아웃
     path('logout/', LogoutView.as_view(), name='auth_logout'),
+
+    #문제추천해주기 
+     path("v1/userupdate?", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
 ]
