@@ -17,12 +17,8 @@
         </transition>
       </div>
       <div id='main-content'>
-        <div>
-          <!-- 여기는 status가들어가겠조? -->
-          <MainAside />
-        </div>
+        
         <section>
-          
           <!-- challenge -->
           here / challenge components 
 
@@ -30,7 +26,16 @@
           <!-- history -->
 
           <History />
+
+          <button @click='test'>TEST Button router to problemSolving</button>
+
         </section>
+        <div>
+        <!-- 여기는 status가들어가겠조? -->
+          <MainAside />
+        </div>
+        
+    
       </div>
     </div>
 
@@ -57,6 +62,11 @@ export default {
   data : function(){
     return{
       feedOpened : false,
+    }
+  },
+  methods:{
+    test:function(){
+      this.$router.push('register')
     }
   }
 }
