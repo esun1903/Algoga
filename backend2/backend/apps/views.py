@@ -18,7 +18,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = UserSerializer				
 
-   
     def login(self, request, email, password):
          
         loginUser =  User.objects.filter(email =email , password = password)
@@ -81,3 +80,26 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userdelete.delete()
         
         return  Response("삭제성공", status=status.HTTP_201_CREATED)
+
+@permission_classes([AllowAny])
+class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
+    
+    serializer_class = CodeBoardSerializer
+   
+    def solutionCodeList(self, request, email, password):
+        return
+    def solutionCodePage(self, request, email, password):
+        return
+    def codeBoardRegiste(self, request):
+        codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
+        if not codeBoardSerializer.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        codeBoardSerializer.save()
+
+        return Response("코드보드 등록완료", status=status.HTTP_201_CREATED)
+    
+    def solutionUpdate(self, request, email, password):
+        return    
+    def solutionDelete(self, request, email, password):
+        return  
