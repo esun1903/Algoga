@@ -21,7 +21,8 @@ urlpatterns = [
     path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
     #codBoard 수정
     path("v1/codeBoardUpdate/<str:code_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
-
+    #codBoard 삭제
+    path("v1/codeBoardDelete/<str:code_seq>", codeBoardViewSet.as_view({"delete": "codeBoardDelete"})),
 
 
     #문제추천해주기 
