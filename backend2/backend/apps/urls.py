@@ -3,6 +3,7 @@ from django.conf import settings
 from .views import *
 from .problem_views import *
 from . import views
+from . import problem_views
 
 urlpatterns = [ 
     #로그인

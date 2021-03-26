@@ -32,6 +32,7 @@ export default {
   background-color: var(--back-color);  
   border-radius: 5px; 
   background-color: var(--test-color);
+  z-index: 1000;
 }
 
 </style>
