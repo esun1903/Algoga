@@ -1,16 +1,18 @@
 <template>
   <div id="app">
     <router-view /> 
+    <ModeBtn />
   </div>
 </template>
 
 <script>
+import ModeBtn from "@/components/ModeBtn"
 
 
 export default {
   name: 'App',
   components: {
-
+    ModeBtn,
   }
 }
 </script>
@@ -30,6 +32,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;  
+  background-color: var(--back-color);
 }
 .text-center{
   text-align: center;

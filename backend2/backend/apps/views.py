@@ -64,10 +64,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         userInfoModify = User.objects.get(email=email)
-        userInfoModify.password =request.data["password"]
-        userInfoModify.baek_id  =request.data["baek_id"]
-        userInfoModify.nickname =request.data["nickname"]
-        userInfoModify.profile_image=request.data["profile_image"]
+        userInfoModify.password = request.data["password"]
+        userInfoModify.baek_id  = request.data["baek_id"]
+        userInfoModify.nickname = request.data["nickname"]
+        userInfoModify.profile_image = request.data["profile_image"]
         userInfoModify.save()
 
         return Response("수정 성공",status=status.HTTP_201_CREATED)
