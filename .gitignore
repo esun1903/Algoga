@@ -32,15 +32,29 @@ build/
 
 ### VS Code ###
 .vscode/
-
+my_settings.py
 .DS_Store
 node_modules
 /dist
-
+### Django ###
+/__pycache__
+__pycache__/
+__pycache__
+__pycache__/*	
 # local env files
+env/
 .env
+.env/
 .env.local
 .env.*.local
+
+# local venv 
+venv/
+.venv
+.venv/
+.venv.local
+.venv.*.local
+
 
 # Log files
 npm-debug.log*
