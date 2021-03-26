@@ -4,7 +4,7 @@
     <div>
       <div>
         <!-- feed -->
-        <div v-show='!feedOpened'  @click="[feedOpened = !feedOpened, hi]" id='feed-container'>
+        <div v-show='!feedOpened'  @click="feedOpened = !feedOpened" id='feed-container'>
           <span id='feed-btn'>
             <i class="far fa-bell"></i>
           </span>
