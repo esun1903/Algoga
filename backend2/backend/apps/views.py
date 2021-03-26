@@ -99,7 +99,21 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response("코드보드 등록완료", status=status.HTTP_201_CREATED)
     
-    def solutionUpdate(self, request, email, password):
-        return    
-    def solutionDelete(self, request, email, password):
+    def codeBoardUpdate(self, request, code_seq):
+        codeBoard =  CodeBoard.objects.filter(seq =code_seq)
+        if not codeBoard.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        # codeBoardModify = CodeBoard.objects.get(seq=code_seq)
+        # codeBoardModify.code =request.data["code"]
+        # codeBoardModify.explanation  =request.data["explanation"]
+        # codeBoardModify.free_write =request.data["free_write"]
+        # codeBoardModify.problem_seq=request.data["problem_seq"]
+        # codeBoardModify.language_seq=request.data["language_seq"]
+        # codeBoardModify.save()
+        codeBoard.update(code =request.data["code"],explanation  =request.data["explanation"],free_write =request.data["free_write"],problem_seq=request.data["problem_seq"],language_seq=request.data["language_seq"])
+        return Response("수정 성공",status=status.HTTP_201_CREATED)
+
+
+    def codeBoardDelete(self, request, email, password):
         return  
