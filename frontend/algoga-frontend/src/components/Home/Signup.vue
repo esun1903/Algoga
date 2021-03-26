@@ -10,31 +10,31 @@
 
       <div>
         <label for="">Email Address</label><br>
-        <input type="text">
+        <input type="text" v-model="data.email">
       </div>
       <div>
         <label for="">Password</label><br>
-        <input type="text">
+        <input type="text" v-model='data.password'>
       </div>
       <div>
         <label for="">Confirm Password</label><br>
-        <input type="text">
+        <input type="text" v-model='passwordConfirm'>
       </div>
       <div>
         <label for="">Nickname</label><br>
-        <input type="text">
+        <input type="text" v-model='data.nickname'>
       </div>
       <div>
         <label for="">BOJ</label><br>
-        <input type="text">
+        <input type="text" v-model='data.bake_id'>
       </div>
       <div>
         <label for="">Email</label><br>
         <input type="text">
       </div>
       <div>
-        <button>SIGNUP BTN</button>
-      </div>
+        <button @click='signUp'>SIGNUP BTN</button>
+      </div> 
     </div>
 
     <div @click="closed"></div>
@@ -44,16 +44,42 @@
 </template>
 
 <script>
+import axios from 'axios'
+
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
+
 export default {
   name:"Signup",
   data:function(){
     return {
-
+      data:{
+        email:'',
+        password:'',
+        bake_id:'',
+        nickname:'',
+        profile_image:'profile image test null',
+        register_date: "2021-03-25T11:22:05.954Z",
+      },
+      passwordConfirm:'',
     }
   },
   methods:{
     closed:function(){
       this.$emit("closed")
+    },
+    signUp:function(){
+      axios.post(`${SERVER_URL}apps/v1/signUp`,this.data,{
+        headers:{
+          "Content-Type":'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 
