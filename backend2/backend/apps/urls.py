@@ -17,9 +17,10 @@ urlpatterns = [
     path("v1/userInfoUpdate/<str:email>", UserViewSet.as_view({"put": "userInfoUpdate"})),
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
-    #코드풀이 등록
+    #codBoard 등록
     path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
-    
+    #codBoard 수정
+    path("v1/codeBoardUpdate/<str:code_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
 
 
 
