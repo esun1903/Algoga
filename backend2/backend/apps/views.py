@@ -39,10 +39,12 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
     
     def logout(self, request):
+        
         request.session.clear();
         return Response("로그 아웃",status=status.HTTP_200_OK)
         
     def signUp(self, request): 
+        
         users =  User.objects.filter(email =request.data["email"])
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -52,7 +54,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         userSerializer.save()
-        #UserSerializer(user).data list 할때 필요
+        
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
     def userInfoUpdate(self,request, email):
@@ -75,9 +77,8 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users = User.objects.filter(email = email)
         if not users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-      
-        userdelete = User.objects.get(email = email)
-        userdelete.delete()
+       
+        users.delete()
         
         return  Response("삭제성공", status=status.HTTP_201_CREATED)
 
@@ -86,11 +87,25 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
     serializer_class = CodeBoardSerializer
    
-    def solutionCodeList(self, request, email, password):
-        return
-    def solutionCodePage(self, request, email, password):
-        return
+    def codeBoardAll(self, request):
+
+        boardcodes = CodeBoard.objects.all();
+        serializer = CodeBoardSerializer(boardcodes, many=True)
+
+        return Response(serializer.data)
+
+    def codeBoardPage(self, request , code_seq):
+       
+        codeBoard =  CodeBoard.objects.filter(seq =code_seq)
+        if not codeBoard.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = CodeBoardSerializer(codeBoard, many=True)    
+
+        return Response(serializer.data)
+    
     def codeBoardRegiste(self, request):
+        
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
         if not codeBoardSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)

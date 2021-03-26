@@ -20,11 +20,14 @@ urlpatterns = [
     #codBoard 등록
     path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
     #codBoard 수정
-    path("v1/codeBoardUpdate/<str:code_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
+    path("v1/codeBoardUpdate/<int:code_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
     #codBoard 삭제
-    path("v1/codeBoardDelete/<str:code_seq>", codeBoardViewSet.as_view({"delete": "codeBoardDelete"})),
-
-
+    path("v1/codeBoardDelete/<int:code_seq>", codeBoardViewSet.as_view({"delete": "codeBoardDelete"})),
+    #codBoard All
+    path("v1/codeBoardAll", codeBoardViewSet.as_view({"get": "codeBoardAll"})),
+    #codBoard page
+    path("v1/codeBoardPage/<int:code_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
+    
     #문제추천해주기 
     path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
