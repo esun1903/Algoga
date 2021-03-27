@@ -147,5 +147,16 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         commentSerializer.save()
 
-        
+
         return  Response("댓글등록", status=status.HTTP_201_CREATED)   
+
+    def commentUpdate(self, request, comment_seq):
+        
+        comment =  Comment.objects.filter(seq =comment_seq)
+        if not comment.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        comment.update(text =request.data["text"])
+        return Response("수정 성공",status=status.HTTP_200_OK)
+
+      
