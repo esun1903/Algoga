@@ -70,7 +70,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userInfoModify.profile_image = request.data["profile_image"]
         userInfoModify.save()
 
-        return Response("수정 성공",status=status.HTTP_201_CREATED)
+        return Response("수정 성공",status=status.HTTP_200_OK)
 
     def Userdelete(self,request,email): 
         
@@ -80,7 +80,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
        
         users.delete()
         
-        return  Response("삭제성공", status=status.HTTP_201_CREATED)
+        return  Response("삭제성공", status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
@@ -102,7 +102,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         serializer = CodeBoardSerializer(codeBoard, many=True)    
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def codeBoardRegiste(self, request):
         
@@ -121,7 +121,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoard.update(code =request.data["code"],explanation  =request.data["explanation"],free_write =request.data["free_write"],problem_seq=request.data["problem_seq"],language_seq=request.data["language_seq"])
-        return Response("수정 성공",status=status.HTTP_201_CREATED)
+        return Response("수정 성공",status=status.HTTP_200_OK)
 
 
     def codeBoardDelete(self, request, code_seq):
@@ -132,6 +132,20 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         codeBoard.delete()
         
-        return  Response("삭제성공", status=status.HTTP_201_CREATED)
+        return  Response("삭제성공", status=status.HTTP_200_OK)
 
-    
+@permission_classes([AllowAny])
+class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
+
+    serializer_class = CommentSerializer
+
+    def commentRegiste(self, request):
+
+        commentSerializer = CommentSerializer(data=request.data, partial=True)
+        if not commentSerializer.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        commentSerializer.save()
+
+        
+        return  Response("댓글등록", status=status.HTTP_201_CREATED)   

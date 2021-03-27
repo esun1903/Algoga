@@ -28,8 +28,10 @@ urlpatterns = [
     path("v1/codeBoardAll", codeBoardViewSet.as_view({"get": "codeBoardAll"})),
     #codBoard page
     path("v1/codeBoardPage/<int:code_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
+    #commnet 등록
+    path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
     
     #문제추천해주기 
-    path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
+    #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
 ]
