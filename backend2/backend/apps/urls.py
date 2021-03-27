@@ -21,15 +21,24 @@ urlpatterns = [
     #codBoard 등록
     path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
     #codBoard 수정
-    path("v1/codeBoardUpdate/<int:code_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
+    path("v1/codeBoardUpdate/<int:codeBoard_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
     #codBoard 삭제
-    path("v1/codeBoardDelete/<int:code_seq>", codeBoardViewSet.as_view({"delete": "codeBoardDelete"})),
+    path("v1/codeBoardDelete/<int:codeBoard_seq>", codeBoardViewSet.as_view({"delete": "codeBoardDelete"})),
     #codBoard All
     path("v1/codeBoardAll", codeBoardViewSet.as_view({"get": "codeBoardAll"})),
     #codBoard page
-    path("v1/codeBoardPage/<int:code_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
+    path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
+    #commnet 등록
+    path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
+    #commnet 수정
+    path("v1/commentUpdate/<int:comment_seq>", commentViewSet.as_view({"put": "commentUpdate"})),
+    #commnet 삭제
+    path("v1/commentDelete/<int:comment_seq>", commentViewSet.as_view({"delete": "commentDelete"})),
+    #commentList
+    path("v1/commentList/<int:codeBoard_seq>", commentViewSet.as_view({"get": "commentList"})),
+
     
     #문제추천해주기 
-    path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
+    #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
 ]
