@@ -32,6 +32,8 @@ urlpatterns = [
     path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
     #commnet 수정
     path("v1/commentUpdate/<int:comment_seq>", commentViewSet.as_view({"put": "commentUpdate"})),
+    #commnet 삭제
+    path("v1/commentDelete/<int:comment_seq>", commentViewSet.as_view({"delete": "commentDelete"})),
 
     
     #문제추천해주기 

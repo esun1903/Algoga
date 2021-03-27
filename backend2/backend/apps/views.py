@@ -158,5 +158,15 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         comment.update(text =request.data["text"])
         return Response("수정 성공",status=status.HTTP_200_OK)
+    
+    def commentDelete(self, request, comment_seq):
+
+        comment =  Comment.objects.filter(seq =comment_seq)
+        if not comment.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        comment.delete()
+        
+        return  Response("삭제성공", status=status.HTTP_200_OK)
 
       
