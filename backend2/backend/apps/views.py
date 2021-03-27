@@ -94,9 +94,9 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data)
 
-    def codeBoardPage(self, request , code_seq):
+    def codeBoardPage(self, request , codeBoard_seq):
        
-        codeBoard =  CodeBoard.objects.filter(seq =code_seq)
+        codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -114,9 +114,9 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response("코드보드 등록완료", status=status.HTTP_201_CREATED)
     
-    def codeBoardUpdate(self, request, code_seq):
+    def codeBoardUpdate(self, request, codeBoard_seq):
         
-        codeBoard =  CodeBoard.objects.filter(seq =code_seq)
+        codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -124,9 +124,9 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("수정 성공",status=status.HTTP_200_OK)
 
 
-    def codeBoardDelete(self, request, code_seq):
+    def codeBoardDelete(self, request, codeBoard_seq):
 
-        codeBoard =  CodeBoard.objects.filter(seq =code_seq)
+        codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -168,5 +168,14 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         comment.delete()
         
         return  Response("삭제성공", status=status.HTTP_200_OK)
+    
+    def commentList(self, request , codeBoard_seq):
+       
+        comments =  Comment.objects.filter(code_board_seq = codeBoard_seq)
+        if not comments.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+        serializer = CommentSerializer(comments, many=True)    
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
       
