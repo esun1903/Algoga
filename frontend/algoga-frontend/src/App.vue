@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <router-view /> 
-    <ModeBtn />
+    <!-- <ModeBtn /> -->
   </div>
 </template>
 
 <script>
-import ModeBtn from "@/components/ModeBtn"
+// import ModeBtn from "@/components/ModeBtn"
 
 
 export default {
