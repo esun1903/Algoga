@@ -9,9 +9,10 @@
     </div>
     <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> -->
     <div id ='userContent'>
-      <div id ='recommendBox'>
+      <transition name="fade" mode="out-in">
+      <div v-if="asideContent" id ='summary-box'>
         <p class='text-center'>
-          <span id='solvedTitle'>Solved Summary</span>
+          <span class='box-title'>Solved Summary</span>
           <span class='tooltip'>
             <i class="fas fa-question-circle"></i>
             <p class='tooltiptext'>너의 문제</p>
@@ -27,9 +28,22 @@
           >
             <span>{{problem}} : {{solvedList[problem]}}</span>
           </div>
-          <h1>문제들</h1>
         </div>
+        <p @click='asideContent = !asideContent' class='content-toggle'>recommend</p>
       </div>
+      </transition>
+      <transition name="fade" mode="out-in">
+      <div v-if='!asideContent' id ='recommendBox'>
+        <p class='text-center'>
+          <span class='box-title'>Recommended Problem</span>
+          <span class='tooltip'>
+            <i class="fas fa-question-circle"></i>
+            <p class='tooltiptext'>어떠한 방식을 통해 추천함</p>
+          </span>
+        </p>
+        <p @click='asideContent = !asideContent'  class='content-toggle'>summary</p>      
+      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -38,10 +52,9 @@
 
 export default {
     name:"MainAside",
-    components:[
-    ],
     data: function(){
       return{
+        asideContent : true,
         solvedList: {
           'dfs' : 21,
           'bfs' : 16,
@@ -52,6 +65,9 @@ export default {
           'sorting' : 8,
         }
       }
+    },
+    methods : {
+
     }
 }
 </script>
@@ -62,7 +78,7 @@ p{
 }
 #mainAside{
   width: 400px;
-  border-left: 1px solid rgba(61, 61, 61, 0.479);
+  border-right: 1px solid rgba(61, 61, 61, 0.479);
 }
 #profileBox{
   display: flex;
@@ -95,8 +111,9 @@ p{
   width: 100%;
   padding-top: 40px;
 }
-#recommendBox{
+#summary-box{
   width: 100%;
+  translate: all 1s ease-out;
 }
 #userGraph{
   width: calc(100% - 40px);
@@ -110,7 +127,7 @@ p{
   cursor: pointer;
   text-decoration-line: underline;
 }
-#solvedTitle{
+.box-title{
   font-size: 1.5rem;
 }
 #graphBox{
@@ -156,5 +173,14 @@ p{
 #problemSummary{
   margin: 20px 40px;
   box-sizing: content-box;
+}
+.content-toggle{
+  float: right;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
 }
 </style>
