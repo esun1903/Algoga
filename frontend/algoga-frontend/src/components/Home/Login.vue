@@ -19,7 +19,7 @@
                     <input id='remember' type="checkbox">
                 </div>
                 <div>
-                    <button>Login</button>
+                    <button @click='Login'>Login</button>
                 </div>
             </div>
         </div>
@@ -29,6 +29,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
 export default {
     name : 'Login',
     data : function(){
@@ -41,6 +44,16 @@ export default {
         closeLoginModal : function(){
             this.$emit('closed')
         },
+        Login:function(){
+            axios.get(`${SERVER_URL}apps/v1/login/${this.idInput}/${this.passwordInput}`)
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+
     }
 }
 </script>
@@ -76,7 +89,7 @@ export default {
 #modalBack{
   display: block;
   background-color: var(--shadow-color);
-  z-index: 999;
+  z-index: 9999;
   position: fixed;
   top: 0;
   left: 0;
