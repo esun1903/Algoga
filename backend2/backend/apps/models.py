@@ -30,3 +30,28 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class Problem(models.Model):
+    seq = models.AutoField(primary_key=True)
+    number = models.IntegerField()
+    name = models.CharField(max_length=100)
+    correct_user = models.IntegerField()
+    submission_cnt = models.IntegerField()
+    correct_rate = models.FloatField()
+    level = models.IntegerField()
+    avg_try = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'problem'
+
+
+class UserProblem(models.Model):
+    problem_seq = models.OneToOneField(Problem, models.DO_NOTHING, db_column='problem_seq', primary_key=True)
+    user_seq = models.ForeignKey(User, models.DO_NOTHING, db_column='user_seq')
+    correct = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'user_problem'
+        unique_together = (('problem_seq', 'user_seq'),)

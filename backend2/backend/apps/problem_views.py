@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import *
 from rest_framework import permissions
 from .serializers import *
-from .problemserializers import *
-from .models import User
+from .Userproblemserializers import *
+from .models import *
 from rest_framework import status, viewsets, mixins 
 from rest_framework.response import Response 
 from django.views import View 
@@ -17,7 +17,6 @@ import os
 import time
 
 DATA_DIR = "./data"
-
 rankpage = "https://www.acmicpc.net/ranklist/"
 userpage = "https://www.acmicpc.net/user/"
     
@@ -25,7 +24,8 @@ userpage = "https://www.acmicpc.net/user/"
 @permission_classes([AllowAny])
 class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
-    serializer_class = UserSerializer				
+    serializer_class = UserProblemserializers
+    # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
    # 사용자가 '문제 불러오기'를 클릭하면 
@@ -56,67 +56,150 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         for div in divs :
             problems = list(map(lambda x : x.text, div.find_all('a')))
             user_problems.append(problems)
+        
+        totalProblem = Problem.objects.all()
+        mySet = set()
+        for problem in totalProblem :
+                mySet.add(problem.number)
 
-      
-        print("맞은문제")  
-        print(user_problems[0])
-        print("*******************")
+        solveProblemList = list()
 
+        for problem in user_problems[0]: 
+                if int (problem) in mySet: 
+                    solveProblemList.append(problem)
+                    
+        #  만약. user.seq
+        # if usersProblems.exists(): 
+        #     for Problem_one in usersProblems :
+        #         Problem_one.delete() 
 
-
-        print("시도했지만  맞지 못한 문제") 
-        print(user_problems[-1])
-        print("*******************")
+        users =  UserProblem.objects.filter(user_seq = user.seq)
+        if  users.exists():
+            for userProblem in users :
+                userProblem.delete()
     
-    
-        # 얘에 대한 처리 나중에 꼭 해줘야함 
-        # print("맞았지만 만점을 받지 못한 문제")  
-        # print(user_problems[1])
-        # print("*******************")
+        # 디비에 있는 맞은 문제 번호 리스트 
+        for num in solveProblemList:
+                for problem in totalProblem :
+                        if int (num) == int (problem.number): 
+                                test3 = {'problem_seq' : int(problem.seq) , 'user_seq' : int(problem.seq),'correct': 0}
+                                problem_list =  UserProblemserializers(data = test3 ) 
+                                new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=problem.seq), user_seq = User.objects.get(seq=user.seq),correct = 0)
         
-   
-        
-       
-        # 만약, user_problem 테이블에 사용자 seq가 있는 컬럼들을 검색해서 
-        # 다 삭제하고 
-        # 넣어주기 
-        print("여기야~~~~~~~~~~~~~")
-        print(user.seq)
-        
-        usersProblems = User_Problem.objects.filter(user_seq = user.seq)
-        # 다 삭제하기 ~
-        if usersProblems.exists():
-            for Problem in usersProblems :
-                Problem.delete()
-        
+        mySet = set()
+        for problem in totalProblem :
+                mySet.add(problem.number)
 
+        solveProblemList = list()
+
+        for problem in user_problems[1]: 
+                if int (problem) in mySet: 
+                    solveProblemList.append(problem)
+                    
+        # 디비에 있는 맞은 문제 번호 리스트 
+        for num in solveProblemList:
+                for problem in totalProblem :
+                        if int (num) == int (problem.number): 
+                                test3 = {'problem_seq' : int(problem.seq) , 'user_seq' : int(problem.seq),'correct': 1}
+                                problem_list =  UserProblemserializers(data = test3 ) 
+                                new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=problem.seq), user_seq = User.objects.get(seq=user.seq),correct = 1)
+                
+
+        return Response("갱신되었습니다 !", status=status.HTTP_201_CREATED)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # # 시도했지만 맞지 못한 문제 
+        #     for problem in user_problems[1] :
+        #     problem_list = UserProblem()
+        #     problem_list.problem_seq = problem
+        #     problem_list.correct = 1
+        #     problem_list.user_seq = user.seq
+        #     UserProblem.problem_seq 
+        #     problem_list.save()
         #TINYINT : 0 ~ 255 까지의 범위를 갖고있다. 
         #correct : 맞은 문제 : 0
         #        : 시도했지만  맞지 못한 문제 : 1 
         #        : 맞았지만 만점을 받지 못한 문제 : 2
         # 맞은문제
-        for problem in user_problems[0] :
-            problem_list = User_Problem()
-            problem_list.correct = 0
-            problem_list.problem_seq = problem
-            problem_list.user_seq = seq
-            print(problem_list)
-            problem_list.save()
+        # problem2 = Problem.objects.filter(number = two_problem ) # 모든 문제에서 검색해서 
 
-        # # 시도했지만 맞지 못한 문제 
-        for problem in user_problems[1] :
-            problem_list = User_Problem()
-            problem_list.correct = 1
-            problem_list.problem_seq = problem
-            problem_list.user_seq = seq
-            print(problem_list)
-            problem_list.save()
+                #List<Problem> list  = new LinkedList<>(); 
+        # Set<Integer> set = 갖고와
+        # for (int i : user_problem[0]) :
+            # if(set.__contains__(i)) {
+                # list.add (new Proble(i, userId, 0));
+            # }
+        # for(Problem problem : list) {
+            # db.save(problem);
+        # }    
 
-    
-
-
-
-
+        # print("시도했지만  맞지 못한 문제") 
+        # print(user_problems[-1])
+        # print("*******************")
         
-        return Response("성공 ~ ", status=status.HTTP_201_CREATED)
     
+        # 얘에 대한 처리 나중에 꼭 해줘야함 
+        # print("맞았지만 만점을 받지 못한 문제")  
+        # print(user_problems[1])
+        # print("*******************")
+
+       
+        # 만약, user_problem 테이블에 사용자 seq가 있는 컬럼들을 검색해서 
+        # 다 삭제하고 
+        # 넣어주기 
+        # print("유저의 번호:")
+        # print(user.seq)
+        # usersProblems = UserProblem.objects.filter(user_seq = user.seq)
+        
+        # # # 다 삭제하기 ~
+        
+        # if usersProblems.exists(): 
+        #     for Problem_one in usersProblems :
+        #         Problem_one.delete() 
+
+        # for one_problem in user_problems[0] :
+        #     print("문제")
+        #     print(one_problem)
+
+        #     temp = Problem.objects.get(number = int(one_problem))
+        #     print(temp)
+            # if Problem.objects.get(number = int(one_problem))  == None :
+            #     print("==============")
+            #     continue
+            # else :
+            #     test = Problem.objects.get(number = int(one_problem))
+                
+            #     print(test)
+            #     if test != None:
+            #         test3 = {'problem_seq' : int(test.seq) , 'user_seq' : int(user.seq), 'correct': 0}
+            #         problem_list =  UserProblemserializers(data = test3) 
+            #         new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=test.seq), user_seq = User.objects.get(seq=user.seq), correct = 0)
+                
+            #     else :
+            #         continue
+
+
+            #     # print("문제의 seq")
+            #     # # print(test.seq)
+            #     # print("유저의 seq")
+            #     # print(user.seq)
+                
+            #     # print("내가 이걸 체크해")
+            #     # # print(test.seq)
