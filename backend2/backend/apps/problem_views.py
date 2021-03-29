@@ -124,7 +124,6 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
 
 
-
         # # 시도했지만 맞지 못한 문제 
         #     for problem in user_problems[1] :
         #     problem_list = UserProblem()
@@ -154,13 +153,13 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # print(user_problems[-1])
         # print("*******************")
         
-    
+
         # 얘에 대한 처리 나중에 꼭 해줘야함 
         # print("맞았지만 만점을 받지 못한 문제")  
         # print(user_problems[1])
         # print("*******************")
 
-       
+        
         # 만약, user_problem 테이블에 사용자 seq가 있는 컬럼들을 검색해서 
         # 다 삭제하고 
         # 넣어주기 
@@ -180,26 +179,26 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         #     temp = Problem.objects.get(number = int(one_problem))
         #     print(temp)
-            # if Problem.objects.get(number = int(one_problem))  == None :
-            #     print("==============")
-            #     continue
-            # else :
-            #     test = Problem.objects.get(number = int(one_problem))
-                
-            #     print(test)
-            #     if test != None:
-            #         test3 = {'problem_seq' : int(test.seq) , 'user_seq' : int(user.seq), 'correct': 0}
-            #         problem_list =  UserProblemserializers(data = test3) 
-            #         new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=test.seq), user_seq = User.objects.get(seq=user.seq), correct = 0)
-                
-            #     else :
-            #         continue
+        # if Problem.objects.get(number = int(one_problem))  == None :
+        #     print("==============")
+        #     continue
+        # else :
+        #     test = Problem.objects.get(number = int(one_problem))
+            
+        #     print(test)
+        #     if test != None:
+        #         test3 = {'problem_seq' : int(test.seq) , 'user_seq' : int(user.seq), 'correct': 0}
+        #         problem_list =  UserProblemserializers(data = test3) 
+        #         new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=test.seq), user_seq = User.objects.get(seq=user.seq), correct = 0)
+            
+        #     else :
+        #         continue
 
 
-            #     # print("문제의 seq")
-            #     # # print(test.seq)
-            #     # print("유저의 seq")
-            #     # print(user.seq)
-                
-            #     # print("내가 이걸 체크해")
-            #     # # print(test.seq)
+        #     # print("문제의 seq")
+        #     # # print(test.seq)
+        #     # print("유저의 seq")
+        #     # print(user.seq)
+            
+        #     # print("내가 이걸 체크해")
+        #     # # print(test.seq)]
