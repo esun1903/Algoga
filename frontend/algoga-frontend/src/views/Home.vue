@@ -1,16 +1,18 @@
 <template>
   <div id='home'> 
       <HomeNavbar @signup = "signupClick" @signin = "loginClick"/>
-      <h1>Hello</h1>
-      <button @click="loginClick" id='loginModalBtn'>로그인</button>
-      <Login
-        v-if='loginClicked'
-        @closed ='loginClick'
-      />
-      <Signup
-        v-if ="signupClicked"
-        @closed = "signupClick"
-      />
+      <Login v-if='loginClicked' @closed ='loginClick'/>
+      <Signup v-if ="signupClicked" @closed = "signupClick"/>
+      <!-- <button @click="loginClick" id='loginModalBtn'>로그인</button> -->
+      <FirstHome />
+      <Home2nd />
+
+      <footer>asd</footer>
+
+
+
+
+
   </div>
 </template>
 
@@ -18,6 +20,8 @@
 import HomeNavbar from '@/components/Home/HomeNavbar'
 import Login from '@/components/Home/Login'
 import Signup from '@/components/Home/Signup'
+import FirstHome from '@/components/Home/FirstHome'
+import Home2nd from '@/components/Home/Home2nd'
 
 export default {
     name : 'Home',
@@ -25,11 +29,13 @@ export default {
       HomeNavbar,
       Login,
       Signup,
+      FirstHome,
+      Home2nd,
     },
     data : function(){
       return{
         loginClicked : false,
-        signupClicked: false,
+        signupClicked: true,
       }
     },
     methods :{
@@ -45,8 +51,8 @@ export default {
 </script>
 
 <style>
-#home{
-  height:1000vh
-}
 
+#home> footer {
+  height:100vh
+}
 </style>

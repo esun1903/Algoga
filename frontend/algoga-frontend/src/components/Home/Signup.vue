@@ -1,95 +1,64 @@
 <template>
   <div id="signup">
-    <div>
-      <header> 
-        <h2>Signup</h2>
-        <div @click="closed">
-          <i class="far fa-times-circle"></i>
-        </div>
-      </header>
-
-      <div>
-        <label for="">Email Address</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <label for="">Password</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <label for="">Confirm Password</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <label for="">Nickname</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <label for="">BOJ</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <label for="">Email</label><br>
-        <input type="text">
-      </div>
-      <div>
-        <button>SIGNUP BTN</button>
-      </div>
+    <div class="sign-up-page">
+      <SignupHeader :nowIdx = 'nowIdx' />
+      <SignupSection :nowIdx = 'nowIdx' @nextStage='nextStage'/>
     </div>
-
-    <div @click="closed"></div>
-
-
+    <div class="sign-up-back" @click='closeSignup'></div>
   </div>
 </template>
 
 <script>
+import SignupHeader from "@/components/Signup/SignupHeader"
+import SignupSection from "@/components/Signup/SignupSection.vue"
+
 export default {
-  name:"Signup",
+  name: "Signup",
+  components:{
+    SignupHeader,
+    SignupSection,
+  },
   data:function(){
     return {
-
+      nowIdx: 0,
     }
   },
   methods:{
-    closed:function(){
+    closeSignup:function(){
       this.$emit("closed")
-    }
+    },
+    nextStage:function(idx){
+      if (this.nowIdx === 8) {return}      
+      this.nowIdx += idx      
+    },
+  },
+  mounted(){
+    
   }
-
 
 }
 </script>
 
 <style>
-#signup > div:nth-child(1) {
+
+.sign-up-page {
   position:fixed;
-  top:50%;
-  left:50%;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
-  width: 600px;
-  height: 800px;
+  width: 800px;  height: 600px;
   background-color: white;  
-  z-index: 1000;   
+  z-index: 10000;   
+  border-radius: 10px;
+  overflow: hidden;  
 }
 
-#signup > div:nth-child(1) > header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-
-#signup > div:nth-child(2) {
+.sign-up-back {
   background-color: var(--shadow-color);
   position: fixed;
-  top:0;
-  left:0;
-  width: 100%;
-  height:100%;
-  z-index: 999;
-}
+  top:0;left:0;
+  width: 100%; height:100%;
+  z-index: 9999;
 
+}
 
 </style>
