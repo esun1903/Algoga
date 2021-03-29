@@ -55,7 +55,7 @@ export default {
   background-color: var(--back-color);  
   border-radius: 5px;  
   color: var(--font-color);
-  z-index: 10000;
+  z-index: 1000;
     
 }
 
@@ -94,6 +94,7 @@ export default {
   align-items: center;  
   height:100%;
   margin: auto 0;
+  cursor:pointer;
 }
 
 #home-navbar > nav >div:nth-child(1) > div > div {

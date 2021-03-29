@@ -3,7 +3,8 @@
     <div>
       <img src="../../assets/main.jpg" alt="">
       <div class="img-cover">
-        <FontEffect :char="char" />
+        <FontEffect :char="char"/>
+        <!-- <ImgBoarderEffect /> -->
       </div>
     </div>
     <div>     
@@ -32,6 +33,7 @@
 
 <script>
 import FontEffect from "@/components/Effect/FontEffect"
+// import ImgBoarderEffect from "@/components/Effect/ImgBoarderEffect"
 
 
 
@@ -39,6 +41,7 @@ export default {
   name:"FirstHome",
   components:{
     FontEffect,
+    // ImgBoarderEffect,
   },
   methods:{
     resizing:function(){
