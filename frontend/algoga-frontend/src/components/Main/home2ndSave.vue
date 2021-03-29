@@ -1,5 +1,5 @@
 <template>
-  <div id="home-2nd">
+  <div id="home-2ndsave">
     <div data-aos='fade-up'>
       <h2>이런 분들에게 추천 드립니다.</h2>
     </div>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name:"Home2nd",
+  name:"Home2ndsave",
   data:function(){
     return {
     }
@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style>
-#home-2nd {
+#home-2ndsave {
   width:100%;  
   text-align: center; 
   background-color: rgb(136, 135, 135);
@@ -67,7 +67,7 @@ export default {
 
 
 
-#home-2nd > div:nth-child(2) {
+#home-2ndsave> div:nth-child(2) {
   display:flex;    
   justify-content: center;
   align-items: center;
@@ -75,7 +75,7 @@ export default {
   max-width: 1200px;
   
 }
-#home-2nd > div:nth-child(2) > div {
+#home-2ndsave > div:nth-child(2) > div {
   width: 30%;  
   border-radius: 100%;
   display: flex;
