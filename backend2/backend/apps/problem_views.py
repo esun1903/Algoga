@@ -118,7 +118,12 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         serializer = Problemserializers(totalProblem, many=True)    
         return  Response(serializer.data, status=status.HTTP_200_OK)
 
-
+    @permission_classes([AllowAny])
+    def searchNameProblem(self, request,name): 
+        #이름 검색해서 나온 값 주기
+        totalProblem = Problem.objects.filter(name = name)
+        serializer = Problemserializers(totalProblem, many=True)    
+        return  Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
