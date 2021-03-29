@@ -37,7 +37,9 @@ urlpatterns = [
     #commentList
     path("v1/commentList/<int:codeBoard_seq>", commentViewSet.as_view({"get": "commentList"})),
 
-    
+    #사용자가 맞은 문제 불러오기
+    path("v1/problem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
+  
     #문제추천해주기 
     #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
