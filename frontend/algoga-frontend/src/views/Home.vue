@@ -35,7 +35,7 @@ export default {
     data : function(){
       return{
         loginClicked : false,
-        signupClicked: false,
+        signupClicked: true,
       }
     },
     methods :{
