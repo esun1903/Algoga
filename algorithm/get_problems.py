@@ -202,11 +202,55 @@ def get_problem_with_algorithm():
     problem_infos_df.to_csv(os.path.join(DATA_DIR, "all_problem_with_algorithm.csv"), index = False, encoding='utf-8-sig')
     pd.to_pickle(problem_infos_df, os.path.join(DATA_DIR, "all_problem_with_algorithm.pkl"))
 
+def get_recommend_problem_with_datail_information():
+    url = "https://www.acmicpc.net/problem/"
+    recommend_problem_numbers = pd.read_pickle("./new_data/recommend_problems.pkl")['id']
+    
+    numbers = []
+    time_limits = []
+    memory_limits = []
+    submission_cnts = []
+    answer_cnts = []
+    correct_user_cnts = []
+    answer_rates = []
+
+    for number in recommend_problem_numbers:
+        problem_page = requests.get(url + str(number))
+        problem_soup = BeautifulSoup(problem_page.content, "html.parser")
+
+        row = problem_soup.find('div', {'class': 'table-responsive'}).find('table').find('tbody').find('tr').find_all('td')
+
+        infos = [a.text for a in row]
+
+        numbers.append(number)
+        time_limits.append(infos[0].rstrip())
+        memory_limits.append(infos[1])
+        submission_cnts.append(infos[2])
+        answer_cnts.append(infos[3])
+        correct_user_cnts.append(infos[4])
+        answer_rates.append(infos[5])
+
+    problem_detail_infos_df = pd.DataFrame(
+        {
+            'number' : numbers,
+            'time_limit' : time_limits,
+            'memory_limit' : memory_limits, 
+            'submission_cnt' : submission_cnts,
+            'answer_cnt' : answer_cnts,
+            'correct_user_cnt' : correct_user_cnts,
+            'answer_rate' : answer_rates,
+        })
+
+    problem_detail_infos_df.to_csv(os.path.join(DATA_DIR, "recommend_problem_with_datail_information.csv"), index = False, encoding='utf-8-sig')
+    pd.to_pickle(problem_detail_infos_df, os.path.join(DATA_DIR, "recommend_problem_with_datail_information.pkl"))
+
+
 def main():
     # get_all_problem_in_baekjoon()
     # get_all_problem_in_solved()
     # get_all_algorithm()
     # get_problem_with_algorithm()
+    get_recommend_problem_with_datail_information()
 
 if __name__ == "__main__":
     main()
