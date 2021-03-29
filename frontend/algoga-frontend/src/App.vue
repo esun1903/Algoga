@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <router-view /> 
-    <!-- <ModeBtn /> -->
+    <ModeBtn />
   </div>
 </template>
 
 <script>
-// import ModeBtn from "@/components/ModeBtn"
+import ModeBtn from "@/components/ModeBtn"
 
 
 export default {
@@ -35,7 +35,7 @@ export default {
   --font-color: black;
   --font-color2:white;
   --back-color: white;
-
+  --signup-line: brown;
   --shadow-color: rgba(0,0,0,0.5);
   --test-color: red;
   --logo-color: rgb(252, 69, 69);
@@ -55,6 +55,11 @@ export default {
     border-width: 0.05em;
   }
 }
+
+input::placeholder {opacity: 0.5;}
+
+
+
 
 
 #app {
