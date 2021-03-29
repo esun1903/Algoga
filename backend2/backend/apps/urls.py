@@ -26,7 +26,6 @@ urlpatterns = [
 
     #사용자가 맞은 문제 불러오기
     path("v1/problem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
-
-
-    
+  
+  
 ]
