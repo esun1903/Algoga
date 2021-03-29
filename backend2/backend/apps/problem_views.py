@@ -2,6 +2,7 @@ from django.contrib.auth.models import *
 from rest_framework import permissions
 from .serializers import *
 from .Userproblemserializers import *
+from .Problemserializers import *
 from .models import *
 from rest_framework import status, viewsets, mixins 
 from rest_framework.response import Response 
@@ -110,7 +111,12 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
 
 
-
+    @permission_classes([AllowAny])
+    def allProblem(self, request): 
+        #모든 문제 주기
+        totalProblem = Problem.objects.all()
+        serializer = Problemserializers(totalProblem, many=True)    
+        return  Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
