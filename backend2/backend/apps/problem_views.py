@@ -12,6 +12,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from bs4 import BeautifulSoup
+from django.core.paginator import Paginator
+from .pagination import PostPageNumberPagination
 import pandas as pd
 import requests
 import os
@@ -133,12 +135,20 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return  Response(serializer.data, status=status.HTTP_200_OK)
 
 
+    @permission_classes([AllowAny])
+    def allPaginationProblem(self, request): 
+        #모든 문제를 (problem_seq를 정렬해서 두기)
+        totalProblem = UserProblem.objects.all().order_by('problem_seq')
+        serializer_class = UserProblemserializers(totalProblem,many=True)
+        pagination_class = PostPageNumberPagination
+        return  super().get_queryset().filter()
 
-
-
-
-
-
+    @permission_classes([AllowAny])
+    def Problem(self, request ,seq ): 
+        #문제의 seq를 받아 그 문제에 대한 정보를 모두 리턴 
+        totalProblem = Problem.objects.get(seq=seq)
+        serializer_class = Problemserializers(totalProblem)
+        return  Response(serializer_class.data, status=status.HTTP_200_OK)
 
 
         # # 시도했지만 맞지 못한 문제 

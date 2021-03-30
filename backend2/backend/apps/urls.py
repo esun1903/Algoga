@@ -38,14 +38,18 @@ urlpatterns = [
     path("v1/commentList/<int:codeBoard_seq>", commentViewSet.as_view({"get": "commentList"})),
 
     #사용자가 맞은 문제 불러오기
-    path("v1/problem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
+    path("v1/userProblem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
     #모든 문제 리턴 (pagenation)
-    path("v1/allproblem", ProblemViewSet.as_view({"get" : "allProblem"}), name="allProblem"),
+    path("v1/allProblem", ProblemViewSet.as_view({"get" : "allProblem"}), name="allProblem"),
     #문제 이름 검색
     path("v1/searchNameProblem/<str:name>", ProblemViewSet.as_view({"get" : "searchNameProblem"}), name="searchNameProblem"),
     #문제 난이도로 검색
     path("v1/searchLevelProblem/<int:level>", ProblemViewSet.as_view({"get" : "searchLevelProblem"}), name="searchLevelProblem"),
     #문제추천해주기 
-    #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
+    #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),    
+    #모든 문제 리턴 (pagination)
+    path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
+    #문제 세부 정보 
+    path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     
 ]
