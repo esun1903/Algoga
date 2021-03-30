@@ -39,10 +39,12 @@ urlpatterns = [
 
     #사용자가 맞은 문제 불러오기
     path("v1/problem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
-    #모든 문제 리턴
+    #모든 문제 리턴 (pagenation)
     path("v1/allproblem", ProblemViewSet.as_view({"get" : "allProblem"}), name="allProblem"),
     #문제 이름 검색
     path("v1/searchNameProblem/<str:name>", ProblemViewSet.as_view({"get" : "searchNameProblem"}), name="searchNameProblem"),
+    #문제 난이도로 검색
+    path("v1/searchLevelProblem/<int:level>", ProblemViewSet.as_view({"get" : "searchLevelProblem"}), name="searchLevelProblem"),
     #문제추천해주기 
     #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),
     
