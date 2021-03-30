@@ -98,8 +98,8 @@ export default {
   position: fixed;
   justify-content: center;
   align-items: center;
-  bottom: 50px;
-  right: 50px;
+  bottom: 100px;
+  right: 100px;
   border-radius: 50%;
   padding: 6px;
   font-size: 1rem;
