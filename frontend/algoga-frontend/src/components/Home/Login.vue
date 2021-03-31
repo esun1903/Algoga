@@ -1,109 +1,139 @@
 <template>
     <div id='login'>
-        <div id='loginModal' class='modal'>
-            <div class='modalTitle'>
-                <h1>LOGIN</h1>
-                <div @click='closeLoginModal'><i class="closeModal far fa-times-circle"></i></div>
-            </div>
-            <div class='loginForm'>
-                <div>
-                    <label for="userEmail">Email</label>
-                    <input v-model="idInput" placeholder="UserEmail" id='userEmail' type="text">
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input v-model="passwordInput" placeholder="Password" id='password' type="password">
-                </div>
-                <div>
-                    <label for="remember">Remember</label>
-                    <input id='remember' type="checkbox">
-                </div>
-                <div>
-                    <button @click='Login'>Login</button>
-                </div>
-            </div>
+        <div class="login-page">
+          <h2 :class="fadein">SignIn</h2>
+          <div>
+            <i :class='user'></i>
+            <input type="text" v-model='idInput' @input="statusChange" placeholder="User email"><br>
+          </div>
+          <div>
+            <i :class='pw'></i>
+            <input type="password" v-model='passwordInput' @keydown.enter="Login" @input="statusChange" placeholder="Password"><br>
+          </div>
+          <div :class='shake' v-if='loginStatus===false'> 
+            <p>{{mes}}</p>
+          </div>
+          <div v-else>
+            <button @click='Login'>SignIn</button>
+          </div>
         </div>
-        <div @click='closeLoginModal' id='modalBack'>
-        </div>
+        <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
 
 export default {
-    name : 'Login',
-    data : function(){
-      return{
-        idInput : '',
-        passwordInput : '',
-      }
-    },
-    methods :{
-        closeLoginModal : function(){
-            this.$emit('closed')
-        },
-        Login:function(){
-            axios.get(`${SERVER_URL}apps/v1/login/${this.idInput}/${this.passwordInput}`)
-                .then(res => {
-                    console.log(res)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        }
-
+  name : 'Login',
+  data : function(){
+    return{
+      idInput : '',
+      passwordInput : '',
+      fadein: "animate__animated animate__fadeIn center",
+      user: 'fas fa-user',
+      pw: 'fas fa-lock',
+      shake:'animate__animated animate__headShake',
+      loginStatus:true,
+      mes:'',
     }
+  },
+  methods :{
+    closeLoginModal : function(){
+      this.$emit('closed')
+    },
+    Login:function(){      
+      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+        .then(res => {
+          console.log(res)
+          if (res.status !== 200){
+            this.loginStatus = false
+            this.mes = "관리자에게 문의해주세요."
+            return
+          }
+          
+          // sessionStorage.setItem('email',this.idInput)
+          // this.$router.push({name:'Main',params:{nickname:this.idInput}})
+        })
+        .catch(() => {
+            this.loginStatus = false
+            this.err = "로그인 정보를 확인해주세요."
+        })
+    },
+    statusChange:function(){
+      this.loginStatus =true
+    }
+  },
+  created(){
+    const that = this
+    window.addEventListener('keydown',function(event){
+      if (event.key === 'Escape') {
+        that.closeLoginModal()
+      }
+    })
+  }
 }
 </script>
 
 <style>
-.modal{
-  display: block;
-  position: fixed;
-  z-index: 10000;
-  left: 50%;
-  top: 50%;
-  height: 500px;
-  transform: translate(-50%,-50%);
+.login-page {
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width: 300px;  height: 400px;
+  background-color: white;  
+  z-index: 10000;   
+  border-radius: 10px;
+  overflow: hidden;  
+  padding:50px;
 }
-#loginModal{
-  background-color: #fefefe;
-  border: 1px solid #888;
-  width: 50%;
+
+.login-page > div:nth-child(2), .login-page>div:nth-child(3) {
+  display:flex; justify-content: left;align-items: center;
+  }
+.login-page > div:nth-child(4) {
+  display: flex;
+  width: 90%;
+  justify-content: flex-end;
+  font-size: 0.5em;
+  color:red;
 }
-.closeModal{
-  position: absolute;
-  color: black;
-  top: 15px;
-  right: 20px;
-  font-size: 20px;
+.center { text-align: center;}
+
+#login input {
+  width: 0; height: 25px;
+  margin: 30px 0;
+  border: none; border-bottom: 1px solid grey;
+  animation: inputLoginAni 0.3s ease-in forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+  outline:none;
+  vertical-align: bottom;
 }
-.closeModal:hover,
-.closeModal:focus{
-  color: red;
-  text-decoration: none;
-  cursor: pointer;
+
+#login button {
+  margin-top: -25px;
+  border:none; outline:none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #00bfff;
+  color:white;
+  cursor:pointer;
+  font-family: Hack;
+  font-size: 0.8rem;
 }
-#modalBack{
-  display: block;
-  background-color: var(--shadow-color);
-  z-index: 9999;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
+@keyframes inputLoginAni {
+  to {
+    width: 80%;
+    opacity: 1;
+  } 
 }
-.modalTitle{
-    border-bottom: 1px solid var(--shadow-color);
-}
-.modalTitle > h1{
-    margin: 20px 0 20px 0;
-    text-align: center;
-}
-.loginForm{
-    padding: 40px 80px;
+
+#login svg {
+  display:inline-block;  
+  margin-right: 10px;
+  
 }
 </style>

@@ -33,8 +33,17 @@ export default {
     },
   },
   mounted(){
-    
+   
+  },
+  created(){
+    const that = this
+    window.addEventListener('keydown',function(event){
+      if (event.key === 'Escape') {
+        that.closeSignup()
+      }
+    })
   }
+
 
 }
 </script>

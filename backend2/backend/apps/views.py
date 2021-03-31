@@ -29,7 +29,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
     def sessionCheck(self, request):
-        
+        print(request.session,'???')
         userSession = request.session.get('email')
         
         if userSession :
