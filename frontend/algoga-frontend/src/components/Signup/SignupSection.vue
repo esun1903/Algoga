@@ -15,6 +15,11 @@ import BojForm from "@/components/Signup/BojForm"
 import UserForm from "@/components/Signup/UserForm"
 import StartForm from "@/components/Signup/StartForm"
 
+import axios from "axios"
+
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+
 export default {
   name:"SignupSection",
   components:{
@@ -50,10 +55,47 @@ export default {
         this.data.bake_id = data.boj
       } else if (this.nowIdx === 6) {
         this.data.nickname = data.nickname
+        if (idx === 2) {
+          this.signUp()
+        }
       }
-      console.log(this.data)
+      if (idx === 2 && this.nowIdx === 6) {
+        return
+      }
       this.$emit('nextStage',idx) 
     },
+    signUp:function(){
+      axios.post(`${SERVER_URL}/apps/v1/signUp`,this.data)
+        .then(res => {
+          if (res.status === 201) {
+            this.$emit('nextStage',2) 
+            this.login()
+          }
+        })
+        .catch(err=>{
+          alert(err.data)
+        })
+    },
+    login: function(){
+      
+      axios.get(`${SERVER_URL}/apps/v1/login/${this.data.email}/${this.data.password}`)
+        .then(res=>{
+          if(res.status !== 200) {
+            alert('로그인실패')
+            return
+          }
+          setTimeout(() => {
+            this.$router.push({name:'Main',params:{nickname:this.data.nickname}})
+            
+          }, 3000);
+        })
+        .catch(err => {
+          alert(err.data)
+        })
+
+
+      
+    }
   }
   
 }
