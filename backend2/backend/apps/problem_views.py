@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from bs4 import BeautifulSoup
 from django.core.paginator import Paginator
-from .pagination import PostPageNumberPagination
+#from .pagination import PostPageNumberPagination
 import pandas as pd
 import requests
 import os
