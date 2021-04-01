@@ -6,14 +6,16 @@ import Codemirror from 'vue-codemirror'
 import "codemirror/lib/codemirror.css"
 import AOS from "aos"
 import "aos/dist/aos.css"
+import VueCookies from "vue-cookies";
 
 
 Vue.config.productionTip = false
 
 
-
-
+Vue.use(VueCookies)
 Vue.use(Codemirror)
+
+Vue.$cookies.config('1d')
 
 new Vue({
   created(){
