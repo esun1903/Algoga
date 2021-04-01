@@ -51,5 +51,6 @@ urlpatterns = [
     path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
     #문제 세부 정보 
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
-    
+    #모든 문제를 유형별로 리턴 
+    # path("v1/allProblem", ProblemViewSet.as_view({"get" : "allProblem"}), name="allProblem"),
 ]
