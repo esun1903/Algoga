@@ -69,7 +69,7 @@ class Language(models.Model):
 
 
 class Problem(models.Model):
-    seq = models.AutoField(primary_key=True)
+    seq = models.IntegerField(primary_key=True)
     number = models.IntegerField()
     name = models.CharField(max_length=100)
     correct_user = models.IntegerField()
@@ -77,12 +77,47 @@ class Problem(models.Model):
     correct_rate = models.FloatField()
     level = models.IntegerField()
     avg_try = models.FloatField()
+    time_limit = models.CharField(max_length=50)
+    memory_limit = models.CharField(max_length=50)
+    algorithms = models.CharField(max_length=200, blank=True, null=True)
+    algorithm_ids = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'problem'
 
+class Problem_Custom(models.Model):
+    seq = models.IntegerField(primary_key=True)
+    number = models.IntegerField()
+    name = models.CharField(max_length=100)
+    correct_user = models.IntegerField()
+    submission_cnt = models.IntegerField()
+    correct_rate = models.FloatField()
+    level = models.IntegerField()
+    avg_try = models.FloatField()
+    time_limit = models.CharField(max_length=50)
+    memory_limit = models.CharField(max_length=50)
+    algorithms = models.CharField(max_length=200, blank=True, null=True)
+    algorithm_ids = models.CharField(max_length=100, blank=True, null=True)
+    review_count = models.IntegerField()
 
+    class Meta:
+        managed = False
+
+# class Problem_Custom(models.Model):
+#     seq = models.AutoField(primary_key=True)
+#     number = models.IntegerField()
+#     name = models.CharField(max_length=100)
+#     correct_user = models.IntegerField()
+#     submission_cnt = models.IntegerField()
+#     correct_rate = models.FloatField()
+#     level = models.IntegerField()
+#     avg_try = models.FloatField()
+#     review_count = models.IntegerField()
+
+#     class Meta:
+#         managed = False
+        
 class RecommendProblem(models.Model):
     seq = models.AutoField(primary_key=True)
     recommend_user_seq = models.ForeignKey('RecommendUser', models.DO_NOTHING, db_column='recommend_user_seq')
@@ -144,3 +179,5 @@ class UserProblem(models.Model):
         managed = False
         db_table = 'user_problem'
         unique_together = (('problem_seq', 'user_seq'),)
+
+
