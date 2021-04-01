@@ -114,9 +114,12 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         for problem in totalProblem :
             print(problem.seq)    
             test = CodeBoard.objects.filter(problem_seq = problem.seq)
-            one_problem = {'seq' : int(problem.seq) , 'number' : int(problem.number) ,'name' : problem.name ,'correct_user': int(problem.correct_user), 'submission_cnt' : int(problem.submission_cnt), 'correct_rate' : int(problem.correct_rate),'level' : int(problem.level) , 'avg_try' : int(problem.avg_try), 'review_count': len(test)}
-            # list.append( ProblemCustomSerializer(data = one_problem , many = True))
-            # print(one_problem)
+            one_problem = {'seq' : int(problem.seq) , 'number' : int(problem.number) ,'name' : problem.name ,
+            'correct_user': int(problem.correct_user), 'submission_cnt' : int(problem.submission_cnt), 
+            'correct_rate' : int(problem.correct_rate),'level' : int(problem.level) , 
+            'avg_try' : int(problem.avg_try), 'time_limit' : problem.time_limit , 'memory_limit' : problem.memory_limit ,
+            'algorithms' : problem.algorithms , 'algorithm_ids' : problem.algorithm_ids , 'review_count': len(test) }
+            
             print(one_problem)
             serializer = ProblemCustomSerializer(data = one_problem)
             List.append(one_problem)
