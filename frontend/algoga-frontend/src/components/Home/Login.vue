@@ -24,9 +24,11 @@
 
 <script>
 import axios from 'axios'
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
-// const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
-// axios.defaults.withCredentials = true;
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+axios.defaults.withCredentials = true;
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export default {
   name : 'Login',
@@ -61,6 +63,8 @@ export default {
         .catch(err=>{alert(err)})
       
       // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+      //   .then(res => {return res.json()})
+      //   .then(res => {return JSON.stringify(res)})
 
       // const request = new XMLHttpRequest();
       // function ttt(){
@@ -75,17 +79,24 @@ export default {
 
     },
     test:function(){
-      // const user = localStorage.getItem('email')
-      // axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
-      //   .then(res=>{
+      const user = localStorage.getItem('email')
+      axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
+        .then(res=>{
           
-      //     console.log(res)
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
       axios.get(`${SERVER_URL}/apps/v1/codeBoardAll`)
         .then(res => console.log(res))
+      // fetch(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
+      //   .then(res=>{
+      //     return res.json()
+      //   })
+      //   .then(res =>{
+      //     JSON.stringify(res)
+      //   })
     },
     statusChange:function(){
       this.loginStatus =true
