@@ -23,9 +23,6 @@ export default {
     }
   },
   created(){
-    setTimeout(() => {
-      this.$router.push('main')
-    }, 3000);
   }
   
 }
