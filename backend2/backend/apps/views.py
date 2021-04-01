@@ -23,24 +23,25 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         loginUser =  User.objects.filter(email =email , password = password)
         
         if loginUser.exists():
-            request.session['email'] = email
-            return Response("로그인성공",status=status.HTTP_200_OK)
+            request.session[email] = email
+            serializer = UserSerializer(loginUser, many=True) 
+            return Response(serializer.data,status=status.HTTP_200_OK)
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def sessionCheck(self, request):
+    def sessionCheck(self, request ,email):
         
-        userSession = request.session.get('email')
+        userSession = request.session.get(email)
         
         if userSession :
             user = User.objects.get(email = userSession)
-            return Response(user.email)
+            return Response(user.email,status=status.HTTP_200_OK)
        
         return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def logout(self, request):
+    def logout(self, request, email):
         
-        request.session.clear();
+        del request.session[email]
         return Response("로그 아웃",status=status.HTTP_200_OK)
         
     def signUp(self, request): 
@@ -92,7 +93,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         boardcodes = CodeBoard.objects.all();
         serializer = CodeBoardSerializer(boardcodes, many=True)
 
-        return Response(serializer.data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
     def codeBoardPage(self, request , codeBoard_seq):
        

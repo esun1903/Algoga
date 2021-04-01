@@ -26,7 +26,7 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-class UserProblemserializers(serializers.ModelSerializer):
+class UserProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProblem
         fields = '__all__'

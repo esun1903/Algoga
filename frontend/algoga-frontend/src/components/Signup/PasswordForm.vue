@@ -2,11 +2,11 @@
   <div id="password-form">
     <div>
       <label for=""><i class='fas fa-key'></i> Password</label><br>
-      <input type="password" v-model='data.password' placeholder="영문 2자이상, 특수문자 및 숫자 1자 이상, 총 8자이상" @input='pwInput($event,0)'>
+      <input type="password" v-model='data.password' placeholder="영문 2자이상, 특수문자 및 숫자 1자 이상, 총 8자이상" @input='pwInput($event,0)' @keypress.enter='nextStage(2)'>
       <p :class="{'check-ok':check.password,'check-no':!check.password}">{{mes.password}}</p>
 			<br>
       <label for=""><i class='fas fa-key'></i> Confirm Password</label><br>
-      <input type="password" v-model='data.passwordConfirm' placeholder="비밀번호를 입력해주세요" @input='pwInput($event,1)'>
+      <input type="password" v-model='data.passwordConfirm' placeholder="비밀번호를 입력해주세요" @input='pwInput($event,1)' @keypress.enter='nextStage(2)'>
       <p :class="{'check-ok':check.passwordConfirm,'check-no':!check.passwordConfirm}">{{mes.passwordConfirm}}</p>
     </div>
     <div class='signup-btn-div'>
@@ -70,7 +70,7 @@ export default {
       
     },
     nextStage:function(idx){
-      if (this.check.email === false) {return}
+      if ((!this.check.password || !this.check.passwordConfirm) && idx >0){return}
       this.$emit('nextStage',idx,this.data)
     },
 

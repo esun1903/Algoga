@@ -2,10 +2,10 @@
   <div id="email-form">
     <div>
       <label for=""><i class='far fa-envelope-open'></i> E-mail</label><br>
-      <input type="text" v-model='data.email' placeholder="ex) alroha@algoga.com" @input='emailInput'>
+      <input type="text" v-model='data.email' placeholder="ex) alroha@algoga.com" @input='emailInput' @keydown.enter="nextStage(2)">
       <p :class="{'check-ok':check.email,'check-no':!check.email}">{{mes.email}}</p>
     </div>
-    <div class='signup-btn-div'>
+    <div class='signup-btn-div '>
       <button style='visibility:hidden'>PREV</button>
       <button @click='nextStage(2)' :class="{'btn-check-ok':check.email}">NEXT</button>
     </div>

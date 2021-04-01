@@ -2,7 +2,7 @@
   <div id="boj-form">
     <div>
       <label for=""><i class='fas'></i> BOJ</label><br>
-      <input v-model='data.boj' type="text" placeholder="BOJ아이디를 등록해주세요!" @input='bojInput'>
+      <input v-model='data.boj' type="text" placeholder="BOJ아이디를 등록해주세요!" @input='bojInput' @keypress.enter='nextStage(2)'>
       <p :class="{'check-ok':check.boj,'check-no':!check.boj}">{{mes.boj}}</p>
       <br>
     </div>
@@ -33,7 +33,7 @@ export default {
   },
   methods:{
     nextStage:function(idx){
-      if (this.check.email === false) {return}
+      if (this.check.boj === false && idx >0) {return}
       this.$emit('nextStage',idx,this.data)
     },
     bojInput:function(event){

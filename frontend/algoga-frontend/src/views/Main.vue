@@ -31,6 +31,7 @@
           <History />
 
           <button @click='test'>TEST Button router to problemSolving</button>
+          <button @click='test1'>TEST Button Login</button>
 
         </section>
         
@@ -48,6 +49,10 @@ import History from "@/components/Main/History"
 import MainAside from "@/components/Main/MainAside"
 import Feed from "@/components/Main/Feed"
 
+import axios from "axios"
+
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
 export default {
   name:"Main",
   components: {
@@ -59,7 +64,16 @@ export default {
   },
   methods:{
     test:function(){
-      this.$router.push('register')
+      this.$router.push({name:'Register'})
+    },
+    test1:function(){
+      axios.get(`${SERVER_URL}/apps/v1/sessionCheck`)
+        .then(res=>{
+          console.log(res)
+        })
+        .catch(err=>{
+          console.log(err,'eroreorkaork')
+        })
     }
   },
   data : function(){
@@ -98,8 +112,8 @@ export default {
   position: fixed;
   justify-content: center;
   align-items: center;
-  bottom: 50px;
-  right: 50px;
+  bottom: 100px;
+  right: 100px;
   border-radius: 50%;
   padding: 6px;
   font-size: 1rem;

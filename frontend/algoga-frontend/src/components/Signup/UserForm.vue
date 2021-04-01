@@ -2,7 +2,7 @@
   <div id="user-form">
     <div>
       <label for=""><i class='fas fa-user'></i> Nickname</label><br>
-      <input v-model='data.nickname' type="text" placeholder="닉네임을 입력해주세요" @input='nicknameInput'>
+      <input v-model='data.nickname' type="text" placeholder="닉네임을 입력해주세요" @input='nicknameInput' @keypress.enter='nextStage(2)'>
       <p :class="{'check-ok':check.nickname,'check-no':!check.nickname}">{{mes.nickname}}</p>
       <br>
     </div>
@@ -33,7 +33,7 @@ export default {
   },
   methods:{
     nextStage:function(idx){
-      if (this.check.email === false) {return}
+      if (this.check.nicknmae === false && idx >0) {return}
       this.$emit('nextStage',idx,this.data)
     },
     nicknameInput:function(event){
