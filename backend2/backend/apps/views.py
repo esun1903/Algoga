@@ -24,7 +24,8 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         if loginUser.exists():
             request.session[email] = email
-            return Response("로그인성공",status=status.HTTP_200_OK)
+            serializer = UserSerializer(loginUser, many=True) 
+            return Response(serializer.data,status=status.HTTP_200_OK)
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
