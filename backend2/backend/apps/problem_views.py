@@ -1,8 +1,6 @@
 from django.contrib.auth.models import *
 from rest_framework import permissions
 from .serializers import *
-from .Userproblemserializers import *
-from .Problemserializers import *
 from .models import *
 from rest_framework import status, viewsets, mixins 
 from rest_framework.response import Response 
@@ -13,7 +11,6 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from bs4 import BeautifulSoup
 from django.core.paginator import Paginator
-from .pagination import PostPageNumberPagination
 import pandas as pd
 import requests
 import os
@@ -70,11 +67,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         for problem in user_problems[0]: 
                 if int (problem) in mySet: 
                     solveProblemList.append(problem)
-                    
-        #  만약. user.seq
-        # if usersProblems.exists(): 
-        #     for Problem_one in usersProblems :
-        #         Problem_one.delete() 
+
 
         users =  UserProblem.objects.filter(user_seq = user.seq)
         if  users.exists():
@@ -99,7 +92,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
                 if int (problem) in mySet: 
                     solveProblemList.append(problem)
                     
-        # 디비에 있는 맞은 문제 번호 리스트 
+        # 디비에 있는 틀린 문제 번호 리스트 
         for num in solveProblemList:
                 for problem in totalProblem :
                         if int (num) == int (problem.number): 
@@ -111,27 +104,37 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("갱신되었습니다 !", status=status.HTTP_201_CREATED)
     
 
-
-
     @permission_classes([AllowAny])
     def allProblem(self, request): 
         #모든 문제 주기
+        #모든 문제를 줄 때 
         totalProblem = Problem.objects.all()
-        serializer = Problemserializers(totalProblem, many=True)    
-        return  Response(serializer.data, status=status.HTTP_200_OK)
+        List = list()
+        serializer = ProblemCustomSerializer
+        for problem in totalProblem :
+            print(problem.seq)    
+            test = CodeBoard.objects.filter(problem_seq = problem.seq)
+            one_problem = {'seq' : int(problem.seq) , 'number' : int(problem.number) ,'name' : problem.name ,'correct_user': int(problem.correct_user), 'submission_cnt' : int(problem.submission_cnt), 'correct_rate' : int(problem.correct_rate),'level' : int(problem.level) , 'avg_try' : int(problem.avg_try), 'review_count': len(test)}
+            # list.append( ProblemCustomSerializer(data = one_problem , many = True))
+            # print(one_problem)
+            print(one_problem)
+            serializer = ProblemCustomSerializer(data = one_problem)
+            List.append(one_problem)
+
+        return  Response(List, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
     def searchNameProblem(self, request,name): 
         #이름 검색해서 나온 값 주기
         totalProblem = Problem.objects.filter(name = name)
-        serializer = Problemserializers(totalProblem, many=True)    
+        serializer = ProblemSerializer(totalProblem, many=True)    
         return  Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
     def searchLevelProblem(self, request,level): 
         #난이도 검색해서 나온 값 주기
         totalProblem = Problem.objects.filter(level= level)
-        serializer = Problemserializers(totalProblem, many=True)    
+        serializer = ProblemSerializer(totalProblem, many=True)    
         return  Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -140,92 +143,12 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         #모든 문제를 (problem_seq를 정렬해서 두기)
         totalProblem = UserProblem.objects.all().order_by('problem_seq')
         serializer_class = UserProblemserializers(totalProblem,many=True)
-        pagination_class = PostPageNumberPagination
+        # pagination_class = PostPageNumberPagination
         return  super().get_queryset().filter()
 
     @permission_classes([AllowAny])
     def Problem(self, request ,seq ): 
         #문제의 seq를 받아 그 문제에 대한 정보를 모두 리턴 
         totalProblem = Problem.objects.get(seq=seq)
-        serializer_class = Problemserializers(totalProblem)
+        serializer_class = ProblemSerializer(totalProblem)
         return  Response(serializer_class.data, status=status.HTTP_200_OK)
-
-
-        # # 시도했지만 맞지 못한 문제 
-        #     for problem in user_problems[1] :
-        #     problem_list = UserProblem()
-        #     problem_list.problem_seq = problem
-        #     problem_list.correct = 1
-        #     problem_list.user_seq = user.seq
-        #     UserProblem.problem_seq 
-        #     problem_list.save()
-        #TINYINT : 0 ~ 255 까지의 범위를 갖고있다. 
-        #correct : 맞은 문제 : 0
-        #        : 시도했지만  맞지 못한 문제 : 1 
-        #        : 맞았지만 만점을 받지 못한 문제 : 2
-        # 맞은문제
-        # problem2 = Problem.objects.filter(number = two_problem ) # 모든 문제에서 검색해서 
-
-                #List<Problem> list  = new LinkedList<>(); 
-        # Set<Integer> set = 갖고와
-        # for (int i : user_problem[0]) :
-            # if(set.__contains__(i)) {
-                # list.add (new Proble(i, userId, 0));
-            # }
-        # for(Problem problem : list) {
-            # db.save(problem);
-        # }    
-
-        # print("시도했지만  맞지 못한 문제") 
-        # print(user_problems[-1])
-        # print("*******************")
-        
-
-        # 얘에 대한 처리 나중에 꼭 해줘야함 
-        # print("맞았지만 만점을 받지 못한 문제")  
-        # print(user_problems[1])
-        # print("*******************")
-
-        
-        # 만약, user_problem 테이블에 사용자 seq가 있는 컬럼들을 검색해서 
-        # 다 삭제하고 
-        # 넣어주기 
-        # print("유저의 번호:")
-        # print(user.seq)
-        # usersProblems = UserProblem.objects.filter(user_seq = user.seq)
-        
-        # # # 다 삭제하기 ~
-        
-        # if usersProblems.exists(): 
-        #     for Problem_one in usersProblems :
-        #         Problem_one.delete() 
-
-        # for one_problem in user_problems[0] :
-        #     print("문제")
-        #     print(one_problem)
-
-        #     temp = Problem.objects.get(number = int(one_problem))
-        #     print(temp)
-        # if Problem.objects.get(number = int(one_problem))  == None :
-        #     print("==============")
-        #     continue
-        # else :
-        #     test = Problem.objects.get(number = int(one_problem))
-            
-        #     print(test)
-        #     if test != None:
-        #         test3 = {'problem_seq' : int(test.seq) , 'user_seq' : int(user.seq), 'correct': 0}
-        #         problem_list =  UserProblemserializers(data = test3) 
-        #         new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=test.seq), user_seq = User.objects.get(seq=user.seq), correct = 0)
-            
-        #     else :
-        #         continue
-
-
-        #     # print("문제의 seq")
-        #     # # print(test.seq)
-        #     # print("유저의 seq")
-        #     # print(user.seq)
-            
-        #     # print("내가 이걸 체크해")
-        #     # # print(test.seq)]

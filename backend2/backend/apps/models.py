@@ -78,11 +78,25 @@ class Problem(models.Model):
     level = models.IntegerField()
     avg_try = models.FloatField()
 
+
     class Meta:
         managed = False
         db_table = 'problem'
 
+class Problem_Custom(models.Model):
+    seq = models.AutoField(primary_key=True)
+    number = models.IntegerField()
+    name = models.CharField(max_length=100)
+    correct_user = models.IntegerField()
+    submission_cnt = models.IntegerField()
+    correct_rate = models.FloatField()
+    level = models.IntegerField()
+    avg_try = models.FloatField()
+    review_count = models.IntegerField()
 
+    class Meta:
+        managed = False
+        
 class RecommendProblem(models.Model):
     seq = models.AutoField(primary_key=True)
     recommend_user_seq = models.ForeignKey('RecommendUser', models.DO_NOTHING, db_column='recommend_user_seq')
@@ -144,3 +158,5 @@ class UserProblem(models.Model):
         managed = False
         db_table = 'user_problem'
         unique_together = (('problem_seq', 'user_seq'),)
+
+

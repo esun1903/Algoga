@@ -11,6 +11,11 @@ class ProblemSerializer(serializers.ModelSerializer):
         model = Problem
         fields = '__all__'
 
+class ProblemCustomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Problem_Custom
+        fields = '__all__'
+
 class CodeBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = CodeBoard
@@ -19,4 +24,9 @@ class CodeBoardSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
+        fields = '__all__'
+
+class UserProblemserializers(serializers.ModelSerializer):
+    class Meta:
+        model = UserProblem
         fields = '__all__'
