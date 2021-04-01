@@ -8,7 +8,6 @@
 <script>
 import ModeBtn from "@/components/ModeBtn"
 
-
 export default {
   name: 'App',
   components: {
