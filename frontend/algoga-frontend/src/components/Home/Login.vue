@@ -16,6 +16,7 @@
           <div v-else>
             <button @click='Login'>SignIn</button>
           </div>
+          <button @click='test'>testsetsetsetsetetess</button>
         </div>
         <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
@@ -25,6 +26,7 @@
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 // const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+// axios.defaults.withCredentials = true;
 
 export default {
   name : 'Login',
@@ -46,21 +48,44 @@ export default {
     },
     Login:function(){      
       axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
-        .then(res => {
+        .then(res => { 
+          if(res.status !== 200){
+            alert('로그인실패')
+            return;
+          }          
           console.log(res)
-          if (res.status !== 200){
-            this.loginStatus = false
-            this.mes = "관리자에게 문의해주세요."
-            return
-          }
-          
-          // sessionStorage.setItem('email',this.idInput)
+          localStorage.setItem('email',this.idInput)
           // this.$router.push({name:'Main',params:{nickname:this.idInput}})
+          
         })
-        .catch(() => {
-            this.loginStatus = false
-            this.err = "로그인 정보를 확인해주세요."
-        })
+        .catch(err=>{alert(err)})
+      
+      // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+
+      // const request = new XMLHttpRequest();
+      // function ttt(){
+      //   console.log(request.responseText)
+      // }
+
+      // request.addEventListener('load',ttt);
+      // request.open('GET',`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+      // request.send()
+
+
+
+    },
+    test:function(){
+      // const user = localStorage.getItem('email')
+      // axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
+      //   .then(res=>{
+          
+      //     console.log(res)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
+      axios.get(`${SERVER_URL}/apps/v1/codeBoardAll`)
+        .then(res => console.log(res))
     },
     statusChange:function(){
       this.loginStatus =true

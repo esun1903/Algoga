@@ -2,7 +2,7 @@
   <div id="register-problem">
     <header>
       <div>
-        <input type="text" placeholder="Input Problem No or Title">
+        <input type="text" placeholder="Input Problem No or Title" >
         <select>
           <option value="" selected hidden>Select Your Language</option>
           <option value="cpp">C++</option>
@@ -22,7 +22,7 @@
     <section>
       <div>
         <div class="code-mirror">
-          <codemirror id = "codemirror" v-model="inputCode" :options="codeMirrorOptions"/>
+          <codemirror id = "codemirror" v-model='data.code' :options="codeMirrorOptions"/>
         </div>
         
         <div class='edit-mark' >
@@ -35,10 +35,14 @@
 
             <button @click="previewMark">{{editBtnText}}</button>
           </div>
-          <textarea id="" v-model="inputComment" v-if="editBtnText === 'Preview'" >
+          <textarea id="" v-model="inputComment">
 
           </textarea>
-          <div v-html="compileMarkdown"  v-else ></div>
+          <div v-html="compileMarkdown"></div>
+          <!-- <textarea id="" v-model="inputComment" v-if="editBtnText === 'Preview'"  >
+
+          </textarea>
+          <div v-html="compileMarkdown"  v-else></div> -->
         </div>
       </div>
     
@@ -61,8 +65,13 @@ import "codemirror/mode/javascript/javascript.js"
 import "codemirror/theme/material.css"
 
 import marked from "marked"
-
 import _ from "lodash"
+// import axios from "axios"
+
+// v1/codeBoardRegiste // post
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
+
 
 export default {
   name:'RegisterProblem',
@@ -115,13 +124,23 @@ export default {
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       },
-      inputCode: "SELECT YOUT LANGUAGE!",
       inputComment: "",
       editBtnText:"Preview",
       ctrlCheck:false,
       algoSolvedCategory: ['DP','DFS','BFS','GREEDY','MATH','GRAPH']      ,
       btnClicked: [],
       hiddenStatus: "Public",
+      data:{
+        "code": "SELECT YOUT LANGUAGE!",
+        "explanation": "자바자바g",
+        "free_write": "자바바바바자",
+        "public": 0,
+        "register_date": "2021-03-27T12:17:00.332Z",
+        "like_cnt": 0,
+        "user_seq": 1,
+        "problem_seq": 1,
+        "language_seq": 3
+      }
 
     }
   },
@@ -136,11 +155,11 @@ export default {
     const that = this
     select.addEventListener("change",function(){      
       if (select.value === "cpp") {
-        that.inputCode = '#include <iostream> \n\nint main() {\n\tstd::cout << "Welcome Algoga";\n\treturn 0;\n}'
+        that.data.code = '#include <iostream> \n\nint main() {\n\tstd::cout << "Welcome Algoga";\n\treturn 0;\n}'
       } else if (select.value === "java") {
-        that.inputCode = 'public class Algoga {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Welcome, Algoga");\n\t}\n}'
+        that.data.code = 'public class Algoga {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Welcome, Algoga");\n\t}\n}'
       } else if (select.value === "python") {
-        that.inputCode = 'def main(): \n	print("Welcome Algoga") \n\n\nif __name__ =="__main__": \n\tmain()'
+        that.data.code = 'def main(): \n	print("Welcome Algoga") \n\n\nif __name__ =="__main__": \n\tmain()'
       }
       
     })
