@@ -18,12 +18,10 @@
       </div>
       <div id='main-content'>
         <div>
-        <!-- 여기는 status가들어가겠조? -->
           <MainAside />
         </div>
         <section>
-          <!-- challenge -->
-          here / challenge components 
+          챌린지 디브          
 
           <LogStudy />
           <!-- history -->
@@ -31,8 +29,8 @@
           <History />
 
           <button @click='test'>TEST Button router to problemSolving</button>
-          <button @click='test1'>TEST Button Login</button>
-
+          <button @click='test1'>SESSIONCHECK</button>
+          {{teststring}}
         </section>
         
     
@@ -51,6 +49,7 @@ import Feed from "@/components/Main/Feed"
 
 import axios from "axios"
 
+
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
@@ -67,18 +66,23 @@ export default {
       this.$router.push({name:'Register'})
     },
     test1:function(){
-      axios.get(`${SERVER_URL}/apps/v1/sessionCheck`)
+      const user = localStorage.getItem('email')
+      console.log(user)
+      axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
         .then(res=>{
           console.log(res)
+          this.teststring = res.data
         })
         .catch(err=>{
-          console.log(err,'eroreorkaork')
+          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
+          this.teststring = err.data
         })
     }
   },
   data : function(){
     return{
       feedOpened: false,
+      teststring:'',
     }
   }
 
@@ -89,7 +93,7 @@ export default {
 #main > div:nth-child(2){
   display: flex;
 }
-#main > div > div:nth-child(2) > section {
+#main-content > section {
   width: 1000px;    
   margin: 20px 20px 20px 50px;
   
@@ -138,4 +142,14 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
+
+@media screen and (max-width:1100px) {
+  #main-content {
+    display: block;
+  }
+  #main-content > section{
+    margin: 0 auto;
+  }
+}
+
 </style>
