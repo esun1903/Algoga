@@ -156,3 +156,11 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         totalProblem = Problem.objects.get(seq=seq)
         serializer_class = ProblemSerializer(totalProblem)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+    @permission_classes([AllowAny])
+    def codeBoardProblem(self, request, seq):
+        # 문제의 seq를 받아 그 문제에 codeBoard 정보를 리턴 
+        print(seq)
+        codeBoard =  CodeBoard.objects.filter(problem_seq = seq)
+        serializer_class = CodeBoardSerializer(codeBoard, many=True)   
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
