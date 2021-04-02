@@ -73,21 +73,21 @@
       <thead>
         <tr>
           <th>No.</th>
-          <th>Lv</th>
+          <th :class='{sorted : levelSort !== 0}' class="sort-area" @click='lvChange'>Level <span class='sort-icon' id='lvString'></span></th>
           <th>Type</th>
           <th>Title</th>
-          <th>Answer rate</th>
+          <th :class='{sorted : answerRateSort !== 0}' class="sort-area" @click='arChange'>Answer rate <span class='sort-icon' id='answerRateSort'></span></th>
           <th>Reviews</th>
         </tr>
       </thead>
       <tbody>
-        <tr class='algo' v-for="(algo, idx) in algoListParsed" :key='idx'>
-          <th>{{algo.no}}</th>
-          <th>{{algo.level}}</th>
-          <th>{{algo.type}}</th>
-          <th>{{algo.title}}</th>
-          <th>{{algo.answerrate}}%</th>
-          <th>{{algo.reviews}}</th>
+        <tr @click='goToAlgo(algo)' class='algo' v-for="(algo, idx) in algoListParsed" :key='idx'>
+          <th><span>no.</span>{{algo.seq}}</th>
+          <th><span>lv.</span>{{algo.level}}</th>
+          <th>type</th>
+          <th>{{algo.name}}</th>
+          <th>{{algo.correct_rate | round}}%</th>
+          <th>{{algo.correct_user}}</th>
         </tr>
       </tbody>
     </table>
@@ -108,6 +108,9 @@
 
 <script>
 import MainNavbar from '@/components/Main/MainNavbar'
+import axios from 'axios'
+import _ from "lodash"
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
     name : 'List',
@@ -133,11 +136,13 @@ export default {
           reviewNum : 0,
         },
         algoList : [],
-        algoPerPage : 20,
+        algoPerPage : 17,
         pageCount : 5,
         blockStart : 1,
         lastBlock : 0,
         algoListParsed : [],
+        levelSort : 0,
+        answerRateSort :0,
       }
     },
     methods: {
@@ -184,29 +189,101 @@ export default {
           this.blockStart = newB +5
           this.changePage(newB +5)
         }
-      }
+      },
+      lvChange : function(){
+        let lvposition = document.querySelector('#lvString')
+        if(this.levelSort ===0){
+          this.levelSort +=1
+          lvposition.innerHTML='<i class="fas fa-sort-up"></i>'
+          if(this.answerRateSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'level')
+          }else if(this.answerRateSort == 1){
+            this.algoList= _.orderBy(this.algoList, ['correct_rate','level'],['asc','asc'])
+          }else{
+            this.algoList= _.orderBy(this.algoList, ['correct_rate','level'],['desc','asc'])
+          }
+        }else if(this.levelSort === 1){
+          this.levelSort +=1
+          lvposition.innerHTML='<i class="fas fa-sort-down"></i>'
+          if(this.answerRateSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'level').reverse()
+          }else if(this.answerRateSort === 1){
+            this.algoList= _.orderBy(this.algoList, ['correct_rate','level'],['asc','desc'])
+          }else{
+            this.algoList= _.orderBy(this.algoList, ['correct_rate','level'],['desc','desc'])
+          }
+        }else{
+          this.levelSort = 0
+          lvposition.innerHTML=''
+          if(this.answerRateSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'seq')
+          }else if(this.answerRateSort === 1){
+            this.algoList= _.orderBy(this.algoList,'correct_rate')
+          }else{
+            this.algoList= _.orderBy(this.algoList, 'correct_rate').reverse()
+          }
+        }
+        this.changePage(1)
+      },
+      arChange : function(){
+        let arposition = document.querySelector('#answerRateSort')
+        if(this.answerRateSort ===0){
+          this.answerRateSort +=1
+          arposition.innerHTML='<i class="fas fa-sort-up"></i>'
+          if(this.levelSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'correct_rate')
+          }else if(this.levelSort === 1){
+            this.algoList= _.orderBy(this.algoList, ['level','correct_rate'],['asc','asc'])
+          }else{
+            this.algoList= _.orderBy(this.algoList, ['level','correct_rate'],['desc','asc'])
+          }
+        }else if(this.answerRateSort === 1){
+          this.answerRateSort +=1
+          arposition.innerHTML='<i class="fas fa-sort-down"></i>'
+          if(this.levelSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'level').reverse()
+          }else if(this.levelSort === 1){
+            this.algoList= _.orderBy(this.algoList, ['level','correct_rate'],['asc','desc'])
+          }else{
+            this.algoList= _.orderBy(this.algoList, ['level','correct_rate'],['desc','desc'])
+          }
+        }else{
+          this.answerRateSort = 0
+          arposition.innerHTML=''
+          if(this.levelSort ===0){
+            this.algoList= _.orderBy(this.algoList, 'seq')
+          }else if(this.levelSort === 1){
+            this.algoList= _.orderBy(this.algoList,'level')
+          }else{
+            this.algoList= _.orderBy(this.algoList, 'level').reverse()
+          }
+        }
+        this.changePage(1)
+      },
+      goToAlgo : function(algo){
+        this.$router.push({
+          name : 'Problem',
+          params : algo,
+          query : {no : algo.seq}
+        })
+      },
     },
     created(){
-
-      const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
-      let sample = range(0,100,1)
-
-      sample.forEach(s => {
-        var a = {
-              'no' : s,
-              'level' : 2,
-              'type' : '트리',
-              'title' : '동희야 점심 뭐 먹어'+String(s),
-              'answerrate' : 100,
-              'reviews' : 23
-            }
-
-        this.algoList.push(a)
-        
-      })
-      this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
-      this.changePage(1)
+      axios.get(`http://127.0.0.1:8000/apps/v1/allProblem`)
+        .then(res =>{
+          this.algoList = res.data
+          this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+          this.changePage(1)
+        })  
+        .catch(err => {
+          console.log(err)
+        })
     },
+    filters :{
+      round : function(v){
+        return Math.ceil(10*v) / 10;
+      }
+    }
 
 
 }
@@ -448,20 +525,32 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 table{
   margin : 0 10%;
   width: 80%;
-  border: 1px solid rgba(0, 0, 0, 0.486);
-  border-radius: 4px;
+  /* border: 1px solid rgba(0, 0, 0, 0.486); */
   border-collapse: collapse;
-  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 10%);
+  box-shadow: 0px 0.5px 2px 0.5px rgb(0 0 0 / 100%);
+}
+table > thead > tr{
+  height: 30px;
+  font-size: 1.2rem;
+}
+.sorted{
+  background-color: rgba(103, 169, 255, 0.253);
+}
+tbody > tr:nth-child(even){
+  background-color: rgba(91, 143, 255, 0.048);
+}
+table > tbody > tr > th > span{
+  font-size: 0.8rem;
 }
 table > thead > tr{
   border-bottom: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(1){
-  width: 4%;
+  width: 6%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(2){
-  width: 4%;
+  width: 6%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(3){
@@ -469,7 +558,7 @@ table > thead > tr > th:nth-child(3){
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(4){
-  width: 64%;
+  width: 58%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(5){
@@ -478,11 +567,13 @@ table > thead > tr > th:nth-child(5){
 }
 table > thead > tr > th:nth-child(6){
   width: 10%;
-  border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 .algo{
-  height: 30px;
-  box-shadow : 0 1px 0 0 rgb(37 40 47 / 40%) ;
+  height: 35px;
+  box-shadow : 0 1px 0 0 rgb(37 40 47 / 30%) ;
+}
+table > tbody > tr:nth-child(17){
+  box-shadow: none;
 }
 .algo:hover{
   background-color: rgba(224, 221, 221, 0.247);
@@ -507,14 +598,29 @@ table > thead > tr > th:nth-child(6){
 }
 
 .pagination span.active {
-  background-color: #555755e7;
+  background-color: #051066;
   color: white;
-  border: 1px solid #555755;
+  border: 1px solid #051066;
 }
 .pagination span:hover:not(.active){
   background-color: #ddd;
 }
 .btnClicked{
   color: red;
+}
+.sort-area{
+  position: relative;
+}
+.sort-area:hover{
+  cursor: pointer;
+  background-color: rgba(103, 169, 255, 0.253);
+}
+.sort-icon{
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  transform: translate(-50%, -50%);
+  margin:auto 0;
+  font-size : 1rem
 }
 </style>
