@@ -31,7 +31,7 @@ urlpatterns = [
     #codBoard page
     path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
     #commnet 등록
-    path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
+    path("v1/commentRegister", commentViewSet.as_view({"post": "commentRegister"})),
     #commnet 수정
     path("v1/commentUpdate/<int:comment_seq>", commentViewSet.as_view({"put": "commentUpdate"})),
     #commnet 삭제
@@ -50,7 +50,7 @@ urlpatterns = [
     path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
     #문제 세부 정보 
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
-    #문제 세부 정보 
+    #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
     
 ]
