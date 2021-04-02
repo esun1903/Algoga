@@ -21,7 +21,7 @@ urlpatterns = [
     #이메일전송
     path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
     #codBoard 등록
-    path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
+    path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
     path("v1/codeBoardUpdate/<int:codeBoard_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
     #codBoard 삭제
