@@ -32,6 +32,9 @@ urlpatterns = [
     path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
     #codBoard page
     path("v1/codeBoardUser/<str:email>", codeBoardViewSet.as_view({"get": "codeBoardUser"})),
+
+    #사용자가 푼 알고리즘 분류 수 가져오기
+    path('v1/userTypeInfo/<int:seq>', UserViewSet.as_view({"get": "UserTypeInfo"})),
     
     #commnet 등록
     path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
