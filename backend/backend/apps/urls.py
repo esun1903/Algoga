@@ -18,6 +18,8 @@ urlpatterns = [
     path("v1/userInfoUpdate/<str:email>", UserViewSet.as_view({"put": "userInfoUpdate"})),
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
+    #이메일전송
+    path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
     #codBoard 등록
     path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
     #codBoard 수정
@@ -36,7 +38,6 @@ urlpatterns = [
     path("v1/commentDelete/<int:comment_seq>", commentViewSet.as_view({"delete": "commentDelete"})),
     #commentList
     path("v1/commentList/<int:codeBoard_seq>", commentViewSet.as_view({"get": "commentList"})),
-
     #사용자가 맞은 문제 불러오기
     path("v1/userProblem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
     #모든 문제 리턴 (pagenation)
@@ -45,8 +46,6 @@ urlpatterns = [
     path("v1/searchNameProblem/<str:name>", ProblemViewSet.as_view({"get" : "searchNameProblem"}), name="searchNameProblem"),
     #문제 난이도로 검색
     path("v1/searchLevelProblem/<int:level>", ProblemViewSet.as_view({"get" : "searchLevelProblem"}), name="searchLevelProblem"),
-    #문제추천해주기 
-    #path("v1/problem", viewSet.as_view({"put" : "update"}), name="userSeq"),    
     #모든 문제 리턴 (pagination)
     path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
     #문제 세부 정보 
