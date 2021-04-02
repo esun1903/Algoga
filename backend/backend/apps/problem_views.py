@@ -25,7 +25,7 @@ userpage = "https://www.acmicpc.net/user/"
 @permission_classes([AllowAny])
 class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
-    serializer_class = UserProblemserializers
+    serializer_class = UserProblemSerializer
     # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
@@ -75,12 +75,12 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             for userProblem in users :
                 userProblem.delete()
     
-        # 디비에 있는 맞은 문제 번호 리스트 
+        # 디비에 있는 맞은 문제 번호 리스트  
         for num in solveProblemList:
                 for problem in totalProblem :
-                        if int (num) == int (problem.number): 
+                        if int (num) == int (problem.number):  
                                 test3 = {'problem_seq' : int(problem.seq) , 'user_seq' : int(problem.seq),'correct': 0}
-                                problem_list =  UserProblemserializers(data = test3 ) 
+                                problem_list = UserProblemSerializer(data = test3 ) 
                                 new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=problem.seq), user_seq = User.objects.get(seq=user.seq),correct = 0)
         
         mySet = set()
@@ -98,7 +98,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
                 for problem in totalProblem :
                         if int (num) == int (problem.number): 
                                 test3 = {'problem_seq' : int(problem.seq) , 'user_seq' : int(problem.seq),'correct': 1}
-                                problem_list =  UserProblemserializers(data = test3 ) 
+                                problem_list =  UserProblemSerializer(data = test3 ) 
                                 new_post = UserProblem.objects.create(problem_seq = Problem.objects.get(seq=problem.seq), user_seq = User.objects.get(seq=user.seq),correct = 1)
                 
 
@@ -146,7 +146,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     def allPaginationProblem(self, request): 
         #모든 문제를 (problem_seq를 정렬해서 두기)
         totalProblem = UserProblem.objects.all().order_by('problem_seq')
-        serializer_class = UserProblemserializers(totalProblem,many=True)
+        serializer_class = UserProblemSerializer(totalProblem,many=True)
         # pagination_class = PostPageNumberPagination
         return  super().get_queryset().filter()
 
