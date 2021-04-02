@@ -10,17 +10,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from bs4 import BeautifulSoup
-from django.core.paginator import Paginator 
+from django.core.paginator import Paginator
+from .get_data import *
 #from .pagination import PostPageNumberPagination
-import pandas as pd
+from collections import Counter
 import requests
 import os
-import time
 
-DATA_DIR = "./data"
-rankpage = "https://www.acmicpc.net/ranklist/"
-userpage = "https://www.acmicpc.net/user/"
-
+USER_PAGE = "https://www.acmicpc.net/user/"
 
 @permission_classes([AllowAny])
 class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
@@ -29,82 +26,125 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
-   # 사용자가 '문제 불러오기'를 클릭하면
-   # 1. db에서 user테이블에서 그 사용자의 백준아이디와 seq를 가져온다.
+    # 사용자가 '문제 불러오기'를 클릭하면
     def callProblem(self, request, seq):
-
-        print("******************")
-        print("입력받은 email : ")
-        print(seq)
+        
         user = User.objects.get(seq=seq)
-        print("입력받은 email에 대한 백준 id는 ?" + user.baek_id)
-        print("입력받은 email에 대한 백준 seq는 ?")
-        print(user.seq)
 
-        userURL = userpage + user.baek_id
+        # 1. 백준에서 사용자 아이디가 푼 문제 가져오기
+        userURL = USER_PAGE + user.baek_id
         webpage = requests.get(userURL)
         bs = BeautifulSoup(webpage.content, "html.parser")
 
-        level = bs.find('div', {'class': 'page-header'}).h1.img
-        if level is None:
+        level_img = bs.find('div', {'class': 'page-header'})
+
+        # 백준아이디가 잘못된 경우
+        if level_img is None:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            
+        level = level_img.h1.img
+
+        if level is None :
             level = 999
-        else:
-            level = level['src'].split('/')[-1].split('.')[0]
+        else :
+            level = int(level['src'].split('/')[-1].split('.')[0])
 
         divs = bs.findAll('div', {'class': 'panel-body'})
 
+        # 1) 맞은 문제, 틀린 문제 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
         user_problems = []
-        for div in divs:
-            problems = list(map(lambda x: x.text, div.find_all('a')))
+        for div in divs :
+            problems = list(map(lambda x: int(x.text), div.find_all('a')))
             user_problems.append(problems)
-
+        
+        # 2) 디비에 있는 문제 중 맞은 문제, 틀린 문제만 가져오기
         totalProblem = Problem.objects.all()
-        mySet = set()
-        for problem in totalProblem:
-            mySet.add(problem.number)
 
-        solveProblemList = list()
+        totalProblem_number = list(map(lambda x: x.number, totalProblem))
+        totalProblem_seq = list(map(lambda x: x.seq, totalProblem))
 
-        for problem in user_problems[0]:
-            if int(problem) in mySet:
-                solveProblemList.append(problem)
+        problem2seq = dict(zip(totalProblem_number, totalProblem_seq))
 
-        users = UserProblem.objects.filter(user_seq=user.seq)
-        if users.exists():
-            for userProblem in users:
-                userProblem.delete()
+        correct_problems = list(set(totalProblem_number) & set(user_problems[0]))
+        incorrect_problems = list(set(totalProblem_number) & set(user_problems[-1]))
 
-        # 디비에 있는 맞은 문제 번호 리스트
-        for num in solveProblemList:
-            for problem in totalProblem:
-                if int(num) == int(problem.number):
-                    test3 = {'problem_seq': int(problem.seq), 'user_seq': int(
-                        problem.seq), 'correct': 0}
-                    problem_list = UserProblemSerializer(data=test3)
-                    new_post = UserProblem.objects.create(problem_seq=Problem.objects.get(
-                        seq=problem.seq), user_seq=User.objects.get(seq=user.seq), correct=0)
+        # 푼 문제가 적을 경우 브론즈5문제 중 제출 많은 애들 추천
+        if len(correct_problems) + len(incorrect_problems) < 10:
+            recommend_problem = totalProblem.filter(level=1).order_by('-submission_cnt')[:20]
+            serializer = ProblemSerializer(recommend_problem, many=True)
+        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        # 3) 기존 DB에 있는 사용자가 푼 문제들 삭제
+        UserProblem.objects.filter(user_seq=user.seq).all().delete()
+        
+        # 4) DB에 푼 문제들 넣기, 맞으면 0, 틀리면 1
+        # bulk_create??
+        for number in correct_problems:
+            problem_seq = problem2seq[number]
+            UserProblem.objects.create(problem_seq = totalProblem.get(seq = problem_seq), user_seq = user, correct = 0)
+        
+        for number in incorrect_problems:
+            problem_seq = problem2seq[number]
+            UserProblem.objects.create(problem_seq = totalProblem.get(seq = problem_seq), user_seq = user, correct = 1)
 
-        mySet = set()
-        for problem in totalProblem:
-            mySet.add(problem.number)
+        # 5) 사용자 레벨 다시 구하기
+        problem_exp = make_problem_exp_dict()
+        level_exp = make_level_exp_dict()
 
-        solveProblemList = list()
+        exp = sum(list(map(lambda x : problem_exp[x], correct_problems)))
 
-        for problem in user_problems[1]:
-            if int(problem) in mySet:
-                solveProblemList.append(problem)
+        # 경험치에 맞는 레벨 계산
+        calc_level = 0
+        for cur_level in range(30, 0, -1) :
+            if level_exp[cur_level - 1] <= exp :
+                calc_level = cur_level
+                break
 
-        # 디비에 있는 틀린 문제 번호 리스트 
-        for num in solveProblemList:
-            for problem in totalProblem:
-                if int(num) == int(problem.number):
-                    test3 = {'problem_seq': int(problem.seq), 'user_seq': int(
-                        problem.seq), 'correct': 1}
-                    problem_list = UserProblemSerializer(data=test3)
-                    new_post = UserProblem.objects.create(problem_seq=Problem.objects.get(
-                        seq=problem.seq), user_seq=User.objects.get(seq=user.seq), correct=1)
+        # 계산한 레벨과 solved 레벨의 차이가 4,5 이상이면 계산한 레벨을 사용한다
+        diff = calc_level - level
+        if diff < -5 or diff > 5 :
+            level = calc_level
 
-        return Response("갱신되었습니다 !", status=status.HTTP_201_CREATED)
+        # 6) 문제 추천해주기
+        proble_type_dict = make_problem_type_dict()
+
+        correct_algo = []
+        incorrect_algo = []
+
+        # 맞은 문제들의 알고리즘 분류
+        for problem in correct_problems :
+            correct_algo += list(map(int, proble_type_dict[problem].split(',')))
+
+        # 틀린 문제들의 알고리즘 분류
+        for problem in incorrect_problems :
+            incorrect_algo += list(map(int, proble_type_dict[problem].split(',')))
+
+        # 알고리즘 분류별 개수
+        correct_algo_dict = Counter(correct_algo)
+        incorrect_algo_dict = Counter(incorrect_algo)
+
+        # 추천할 알고리즘 목록들
+        accept_alogithm_list = [
+            124, 25, 102, 7, 175, 33, 158, 11, 125, 65, 120, 97, 12, 100, 95, 126, 6, 121, 139,
+            127, 22, 141, 14, 81, 5, 24, 128, 106, 92, 45, 71, 59, 96, 80, 87, 74,
+            9, 140, 39, 13, 49, 62, 8, 67, 31, 28, 78, 40, 148, 73, 43]
+
+        # 맞은 문제에서 뽑은 추천해줄 알고리즘, 틀린 문제에서 뽑은 추천해줄 알고리즘
+        recommend_algo_id_list = list(map(lambda x : x[0] , correct_algo_dict.most_common()[-10:])) + list(map(lambda x : x[0] , incorrect_algo_dict.most_common()[:10]))
+        recommend_algo_id_list = list(set(recommend_algo_id_list) & set(accept_alogithm_list))
+
+        # id로 seq 검색
+        algo_seq = list(map(lambda x: x['seq'], Type.objects.filter(id__in = recommend_algo_id_list).values('seq')))
+
+        problem_seq = list(map(lambda x: x['problem_seq'], TypeOfProblem.objects.filter(type_seq__in=algo_seq).values('problem_seq').distinct()))
+
+        # 추천할 문제 중 나의 레벨과 유사한 문제면서 내가 풀어보지 못한 문제를 제출수와 난이도 내림차순으로 정렬해서 20개만 보여주자
+        recommend_problem = totalProblem.filter(seq__in=problem_seq).filter(level__range=(level - 5, level + 5)).exclude(number__in=correct_problems + incorrect_problems).order_by('-submission_cnt', '-level')[:20]
+        
+        serializer = ProblemSerializer(recommend_problem, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @permission_classes([AllowAny])
     def allProblem(self, request):
