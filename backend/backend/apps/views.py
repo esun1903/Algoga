@@ -36,14 +36,15 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def sessionCheck(self, request):
-        
+    def sessionCheck(self, request):        
+        print(request.session.session_key,'sadfasdf')
         userSession = request.session.get('email')
+        print(userSession)
         
         if userSession :
             user = User.objects.get(email = userSession)
             return Response(user.email,status=status.HTTP_200_OK)
-       
+        
         return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
     
     def logout(self, request):
@@ -163,6 +164,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
         if not codeBoardSerializer.is_valid():
+            print(request.data)
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoardSerializer.save()
