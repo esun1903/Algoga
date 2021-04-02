@@ -15,15 +15,19 @@
           </div>
           <div v-else>
             <button @click='Login'>SignIn</button>
-          </div>
-          <button @click='test'>testsetsetsetsetetess</button>
+          </div>          
+          <button @click='test'>testsets</button>
         </div>
         <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+// import Cookies from "universal-cookie"
+
+// const cookies = new Cookies()
+
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 // const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
 // axios.defaults.withCredentials = true;
@@ -49,54 +53,58 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
-      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
-        .then(res => { 
-          if(res.status !== 200){
-            alert('로그인실패')
-            return;
-          }          
-          console.log(res)
-          localStorage.setItem('email',this.idInput)
-          // this.$router.push({name:'Main',params:{nickname:this.idInput}})
+      // axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{},{
+      //   headers:{
+      //     "Content-Type":"application/json",
+      //     "X-CSRFToken":cookies.get('csrftoken')
+      //   },
+      //   credentials:"same-origin",
+      // })
+      //   .then(res => { 
+      //     if(res.status !== 200){
+      //       alert('로그인실패')
+      //       return;
+      //     }                    
+      //     // console.log(res)
+      //     localStorage.setItem('email',res.data[0].email)
+      //     localStorage.setItem('userNo',res.data[0].seq)
+      //     this.$router.push({name:'Main',params:{nickname:this.idInput}})
           
-        })
-        .catch(err=>{alert(err)})
-      
+      //   })
+      //   .catch(err=>{alert(err)})
       // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
-      //   .then(res => {return res.json()})
-      //   .then(res => {return JSON.stringify(res)})
+      //   .then(res => {
+      //     return res.json()
+      //   })
+      //   .then(res=>{
+      //     console.log(JSON.stringify(res))
+      //   })
+     
 
-      // const request = new XMLHttpRequest();
-      // function ttt(){
-      //   console.log(request.responseText)
-      // }
-
-      // request.addEventListener('load',ttt);
-      // request.open('GET',`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
-      // request.send()
-
-
+      fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
+        credentials:'same-origin',
+      })
+        .then(res => {
+          return res.json()
+        })
+        .then(res => {
+          console.log(JSON.stringify(res))
+          // this.$router.push({name:'Main',params:{nickname:this.idInput}})
+        })
 
     },
     test:function(){
-      const user = localStorage.getItem('email')
-      axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
+      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
         .then(res=>{
-          
-          console.log(res)
+          return res.json()
         })
-        .catch(err => {
-          console.log(err)
+        .then(res=>{
+          console.log(JSON.stringify(res))
         })
-      axios.get(`${SERVER_URL}/apps/v1/codeBoardAll`)
-        .then(res => console.log(res))
-      // fetch(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
-      //   .then(res=>{
-      //     return res.json()
-      //   })
-      //   .then(res =>{
-      //     JSON.stringify(res)
-      //   })
+        .catch(err=>{
+          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
+          this.teststring = err.data
+        })
     },
     statusChange:function(){
       this.loginStatus =true
