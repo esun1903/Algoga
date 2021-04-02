@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from bs4 import BeautifulSoup
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator 
 #from .pagination import PostPageNumberPagination
 import pandas as pd
 import requests
@@ -94,7 +94,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             if int(problem) in mySet:
                 solveProblemList.append(problem)
 
-        # 디비에 있는 틀린 문제 번호 리스트
+        # 디비에 있는 틀린 문제 번호 리스트 
         for num in solveProblemList:
             for problem in totalProblem:
                 if int(num) == int(problem.number):

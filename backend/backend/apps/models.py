@@ -164,6 +164,7 @@ class User(models.Model):
     nickname = models.CharField(unique=True, max_length=50)
     profile_image = models.CharField(max_length=500, blank=True, null=True)
     register_date = models.DateTimeField(auto_now_add=True)
+    # is_active = models.BooleanField(default=False)
 
     class Meta:
         managed = False
