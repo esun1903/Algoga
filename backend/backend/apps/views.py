@@ -63,15 +63,15 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         userSerializer.save()
-        print(users.seq)
-        current_site = get_current_site(request)
-        domain = current_site.domain
-        uidb64 = urlsafe_base64_encode(force_bytes(users.seq))
-        message_data = message(domain, uidb64)
-        mail_title = "이메일 인증을 완료해주세요"
-        mail_to = data['email']
-        email = EmailMessage(mail_title, message_data, to=[mail_to])
-        email.send()
+        # print(users.seq)
+        # current_site = get_current_site(request)
+        # domain = current_site.domain
+        # uidb64 = urlsafe_base64_encode(force_bytes(users.seq))
+        # message_data = message(domain, uidb64)
+        # mail_title = "이메일 인증을 완료해주세요"
+        # mail_to = data['email']
+        # email = EmailMessage(mail_title, message_data, to=[mail_to])
+        # email.send()
 
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
