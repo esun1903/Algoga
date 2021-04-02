@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 // import Cookies from "universal-cookie"
 
 // const cookies = new Cookies()
@@ -53,44 +53,33 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
-      // axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{},{
-      //   headers:{
-      //     "Content-Type":"application/json",
-      //     "X-CSRFToken":cookies.get('csrftoken')
-      //   },
-      //   credentials:"same-origin",
-      // })
-      //   .then(res => { 
-      //     if(res.status !== 200){
-      //       alert('로그인실패')
-      //       return;
-      //     }                    
-      //     // console.log(res)
-      //     localStorage.setItem('email',res.data[0].email)
-      //     localStorage.setItem('userNo',res.data[0].seq)
-      //     this.$router.push({name:'Main',params:{nickname:this.idInput}})
+      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{},{
+        credentials:"same-origin",
+      })
+        .then(res => { 
+          if(res.status !== 200){
+            alert('로그인실패')
+            return;
+          }                    
+          // console.log(res)
+          localStorage.setItem('email',res.data[0].email)
+          localStorage.setItem('userNo',res.data[0].seq)
+          this.$router.push({name:'Main',params:{nickname:this.idInput}})
           
-      //   })
-      //   .catch(err=>{alert(err)})
-      // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+        })
+        .catch(err=>{alert(err)})
+
+
+      // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
+      //   credentials:'same-origin',
+      // })
       //   .then(res => {
       //     return res.json()
       //   })
-      //   .then(res=>{
+      //   .then(res => {
       //     console.log(JSON.stringify(res))
+      //     // this.$router.push({name:'Main',params:{nickname:this.idInput}})
       //   })
-     
-
-      fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
-        credentials:'same-origin',
-      })
-        .then(res => {
-          return res.json()
-        })
-        .then(res => {
-          console.log(JSON.stringify(res))
-          // this.$router.push({name:'Main',params:{nickname:this.idInput}})
-        })
 
     },
     test:function(){

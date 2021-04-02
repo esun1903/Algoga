@@ -2,7 +2,7 @@
   <div id="register-problem">
     <header>
       <div>
-        <input type="text" placeholder="Input Problem No or Title" >
+        <input type="text" placeholder="Input Problem No" >
         <select>
           <option value="" selected hidden>Select Your Language</option>
           <option value="3">C</option>
@@ -85,25 +85,55 @@ export default {
   components:{
     codemirror,    
   },
+  data:function(){ 
+    return {
+      codeMirrorOptions:{
+        tabSize: 2,
+        mode: "application/json",
+        theme: "material",
+        lineNumbers: true,
+        line: true,
+        lint: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      },   
+      addCateg:true,
+      newCateg:'',   
+      editBtnText:"Preview",
+      algoSolvedCategory: ['DP','DFS','BFS','GREEDY','MATH','GRAPH']      ,
+      btnClicked: [],
+      hiddenStatus: "PUBLIC",
+      hiddenBool:true,
+      ctrlCheck:false,
+      data:{
+        "code": "SELECT YOUT LANGUAGE!",
+        "explanation": "# Write yout explanation \n ## ctrl+/",
+        "free_write": "",
+        "public": 0,        
+        "like_cnt": 0,
+        "user_seq": 1,
+        "problem_seq": 1,
+        "language_seq": 1
+      }
+
+    }
+  },
   methods:{
     registerProblem:function(){
-      const lang = document.querySelector('#register-problem select').value
-      const hidden = document.querySelector('#hiddenCheck')
-      
-      if (hidden.checked) {
-        this.data.public = 1
-      } else { this.data.public = 0}
-
-
+      if (this.btnClicked.length < 1) {
+        alert('어떤 방식으로 풀었는지 알려주세요!')
+        return
+        }
       if (!lang) {
         alert('언어를 선택해주세요')
         return
       }
-
+      this.categoryToString()
+      const lang = document.querySelector('#register-problem select').value
       this.data.language_seq = lang
       this.data.user_seq = localStorage.set
 
-      console.log(this.data)
       axios.post(`${SERVER_URL}/apps/v1/codeBoardRegiste`,this.data)
         .then(res => {
           console.log(res)
@@ -111,6 +141,14 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    categoryToString:function(){
+      for (let i=0;i<this.btnClicked.length;i++){
+        this.data.free_write += this.algoSolvedCategory[this.btnClicked[i]]
+        if (i === this.btnClicked.length-1) {return}
+        this.data.free_write += '/'
+      }
+      
     },
     previewMark:function(){
       if (this.editBtnText === 'Preview') {
@@ -162,46 +200,14 @@ export default {
       if (this.hiddenStatus === 'PUBLIC') {
         this.hiddenStatus = 'PRIVATE'
         this.hiddenBool = false
+        this.data.public = 1
       } else {
         this.hiddenStatus = 'PUBLIC'
         this.hiddenBool=true
+        this.data.public = 0
       }      
     }
     
-  },
-  data:function(){ 
-    return {
-      codeMirrorOptions:{
-        tabSize: 2,
-        mode: "application/json",
-        theme: "material",
-        lineNumbers: true,
-        line: true,
-        lint: true,
-        lineWrapping: true,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-      },   
-      addCateg:true,
-      newCateg:'',   
-      editBtnText:"Preview",
-      ctrlCheck:false,
-      algoSolvedCategory: ['DP','DFS','BFS','GREEDY','MATH','GRAPH']      ,
-      btnClicked: [],
-      hiddenStatus: "PUBLIC",
-      hiddenBool:true,
-      data:{
-        "code": "SELECT YOUT LANGUAGE!",
-        "explanation": "# Write yout explanation \n ## ctrl+/",
-        "free_write": "",
-        "public": 0,        
-        "like_cnt": 0,
-        "user_seq": 1,
-        "problem_seq": 1,
-        "language_seq": 1
-      }
-
-    }
   },
   computed:{
     compileMarkdown:function(){
@@ -253,7 +259,7 @@ export default {
   margin-bottom: 10px;
 }
 #register-problem > header >div:nth-child(1) > input {
-  width: 75%;
+  width: 25%;
   height: 100%;
   outline:none;
   border: none;
