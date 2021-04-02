@@ -86,6 +86,7 @@ export default {
 }
 #problem > div > h1 + div:hover{
   color: red;
+  cursor: pointer;
 }
 #problem > div > h1 + div:active{
   box-shadow: -1px 0px 4px 0 rgb(0 0 0 / 40%);
