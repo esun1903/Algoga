@@ -84,8 +84,7 @@ export default {
       feedOpened: false,
       teststring:'',
     }
-  }
-
+  },
 }
 </script>
 
