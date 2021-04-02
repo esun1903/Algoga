@@ -18,6 +18,7 @@ from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text
 from .get_data import *
 from collections import Counter
+from django.shortcuts import get_object_or_404
 # from .text import message
 
 
@@ -237,7 +238,16 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         codeBoard.delete()
         
-        return  Response("삭제성공", status=status.HTTP_200_OK)
+        return Response("삭제성공", status=status.HTTP_200_OK)
+        
+    def codeBoardList(self, request, problem_seq):
+
+        get_object_or_404(Problem, seq=problem_seq)
+
+        codeBoard = CodeBoard.objects.filter(problem_seq = problem_seq)
+        serializer = CodeBoardSerializer(codeBoard, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
