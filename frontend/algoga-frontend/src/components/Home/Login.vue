@@ -24,11 +24,11 @@
 
 <script>
 import axios from 'axios'
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
-const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+// axios.defaults.withCredentials = true;
+// axios.defaults.xsrfCookieName = 'csrftoken'
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export default {
   name : 'Login',
