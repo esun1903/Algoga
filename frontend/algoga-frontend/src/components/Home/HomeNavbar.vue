@@ -1,8 +1,7 @@
 <template>
   <div id='home-navbar'>
     <nav>
-      <div>
-        <!-- <img src="../../assets/2.jpg" alt="" height="60px">         -->
+      <div>        
         <h1><span>//</span>ALGOGA</h1>
         <div>
           <div>first link</div>
