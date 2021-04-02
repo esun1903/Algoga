@@ -16,6 +16,8 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text
+from .get_data import *
+from collections import Counter
 # from .text import message
 
 
@@ -117,7 +119,32 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         except ValidationError:
             return JsonResponse({'message':'type_error'}, status=400)
         except KeyError:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return JsonResponse({'message': 'INVALID_KEY'}, status=400)
+    
+    # 사용자가 푼 알고리즘 수
+    def UserTypeInfo(self, request, seq): 
+        
+        users = User.objects.filter(seq = seq)
+        if not users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # 맞은 문제만 리턴
+        user_problems = UserProblem.objects.filter(user_seq = seq).filter(correct = 0).values_list('problem_seq')
+        user_problems = list(map(lambda x : x[0], user_problems))
+
+        # 맞은 문제 번호로 문제별 알고리즘 가져오기
+        user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
+        user_type = list(map(lambda x: x[0].split(","), user_type))
+        
+        type_dict = make_type_dict()
+
+        user_type = Counter([type_dict[int(type_id)] for types in user_type for type_id in types]).most_common()
+
+        List = []
+        for key, value in user_type:
+            List.append({'type_name': key, 'type_cnt': value})
+
+        return Response(List, status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class Activate(View):
