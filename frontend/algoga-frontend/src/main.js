@@ -11,8 +11,6 @@ Vue.config.productionTip = false;
 
 Vue.use(Codemirror);
 
-Vue.$cookies.config('1d');
-
 new Vue({
     created() {
         AOS.init();
