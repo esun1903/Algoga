@@ -73,7 +73,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users =  UserProblem.objects.filter(user_seq = user.seq)
         if  users.exists():
             for userProblem in users :
-                userProblem.delete()
+                userProblem.delete()    
     
         # 디비에 있는 맞은 문제 번호 리스트  
         for num in solveProblemList:
@@ -132,7 +132,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         #이름 검색해서 나온 값 주기
         totalProblem = Problem.objects.filter(name = name)
         serializer = ProblemSerializer(totalProblem, many=True)    
-        return  Response(serializer.data, status=status.HTTP_200_OK)
+        return  Response(serializer.data, status=status.HTTP_200_OK) 
 
     @permission_classes([AllowAny])
     def searchLevelProblem(self, request,level): 

@@ -30,15 +30,15 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         loginUser =  User.objects.filter(email =email , password = password)
         
         if loginUser.exists():
-            request.session[email] = email
+            request.session['email'] = email
             serializer = UserSerializer(loginUser, many=True) 
             return Response(serializer.data,status=status.HTTP_200_OK)
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def sessionCheck(self, request ,email):
+    def sessionCheck(self, request):
         
-        userSession = request.session.get(email)
+        userSession = request.session.get('email')
         
         if userSession :
             user = User.objects.get(email = userSession)
@@ -46,9 +46,9 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
        
         return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def logout(self, request, email):
+    def logout(self, request):
         
-        del request.session[email]
+        del request.session['email']
         return Response("로그 아웃",status=status.HTTP_200_OK)
         
     def signUp(self, request): 

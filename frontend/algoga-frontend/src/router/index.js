@@ -4,6 +4,7 @@ import Home from '@/views/Home';
 import Main from '@/views/Main';
 import Register from '@/views/Register';
 import List from '@/views/List';
+import Problem from '@/views/Problem';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,15 @@ const routes = [
         path: '/list',
         name: 'List',
         component: List,
+    },
+    {
+        path: '/problem/:no',
+        name: 'Problem',
+        component: Problem,
+        props: (route) => ({
+            no: route.seq,
+            ...route.params,
+        }),
     },
 ];
 
