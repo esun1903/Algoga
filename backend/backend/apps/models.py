@@ -138,7 +138,8 @@ class RecommendUser(models.Model):
 
 
 class Type(models.Model):
-    seq = models.AutoField(primary_key=True)
+    seq = models.IntegerField(primary_key=True)
+    id = models.IntegerField(unique=True)
     name = models.CharField(max_length=100)
 
     class Meta:
