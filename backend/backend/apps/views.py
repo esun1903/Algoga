@@ -150,6 +150,17 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+    def codeBoardUser(self, request, email):
+
+        seq = User.objects.get(email=email);
+        userseq = seq.seq;
+        print(userseq)
+        codeBoards =  CodeBoard.objects.filter(user_seq =userseq)
+        serializer = CodeBoardSerializer(codeBoards, many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
     def codeBoardPage(self, request , codeBoard_seq):
        
         codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
@@ -235,4 +246,6 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         serializer = CommentSerializer(comments, many=True)    
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
       
