@@ -151,22 +151,9 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # 모든 문제 주기
         # 모든 문제를 줄 때
         totalProblem = Problem.objects.all()
-        List = list()
-        serializer = ProblemCustomSerializer
-        for problem in totalProblem:
-            print(problem.seq)
-            test = CodeBoard.objects.filter(problem_seq=problem.seq)
-            one_problem = {'seq': int(problem.seq), 'number': int(problem.number), 'name': problem.name,
-                           'correct_user': int(problem.correct_user), 'submission_cnt': int(problem.submission_cnt),
-                           'correct_rate': int(problem.correct_rate), 'level': int(problem.level),
-                           'avg_try': int(problem.avg_try), 'time_limit': problem.time_limit, 'memory_limit': problem.memory_limit,
-                           'algorithms': problem.algorithms, 'algorithm_ids': problem.algorithm_ids, 'review_count': len(test)}
-
-            print(one_problem)
-            serializer = ProblemCustomSerializer(data=one_problem)
-            List.append(one_problem)
-
-        return Response(List, status=status.HTTP_200_OK)
+        serializer = ProblemSerializer(totalProblem, many = True)
+        print(serializer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
     def searchNameProblem(self, request, name):
@@ -204,3 +191,26 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         codeBoard =  CodeBoard.objects.filter(problem_seq = seq)
         serializer_class = CodeBoardSerializer(codeBoard, many=True)   
         return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+
+    #         @permission_classes([AllowAny])
+    # def allProblem(self, request):
+    #     # 모든 문제 주기
+    #     # 모든 문제를 줄 때
+    #     totalProblem = Problem.objects.all()
+    #     List = list()
+    #     serializer = ProblemCustomSerializer
+    #     for problem in totalProblem:
+    #         print(problem.seq)
+    #         test = CodeBoard.objects.filter(problem_seq=problem.seq)
+    #         one_problem = {'seq': int(problem.seq), 'number': int(problem.number), 'name': problem.name,
+    #                        'correct_user': int(problem.correct_user), 'submission_cnt': int(problem.submission_cnt),
+    #                        'correct_rate': int(problem.correct_rate), 'level': int(problem.level),
+    #                        'avg_try': int(problem.avg_try), 'time_limit': problem.time_limit, 'memory_limit': problem.memory_limit,
+    #                        'algorithms': problem.algorithms, 'algorithm_ids': problem.algorithm_ids, 'review_count': len(test)}
+
+    #         print(one_problem)
+    #         serializer = ProblemCustomSerializer(data=one_problem)
+    #         List.append(one_problem)
+
+    #     return Response(List, status=status.HTTP_200_OK)
