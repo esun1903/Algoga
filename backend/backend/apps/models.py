@@ -81,6 +81,7 @@ class Problem(models.Model):
     memory_limit = models.CharField(max_length=50)
     algorithms = models.CharField(max_length=200, blank=True, null=True)
     algorithm_ids = models.CharField(max_length=100, blank=True, null=True)
+    review_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
