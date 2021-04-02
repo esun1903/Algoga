@@ -2,27 +2,30 @@
   <div id="register-problem">
     <header>
       <div>
-        <input type="text" placeholder="Input Problem No or Title">
+        <input type="text" placeholder="Input Problem No or Title" >
         <select>
           <option value="" selected hidden>Select Your Language</option>
-          <option value="cpp">C++</option>
-          <option value="java">JAVA</option>
-          <option value="python">PYTHON</option>        
+          <option value="3">C</option>
+          <option value="4">C++</option>
+          <option value="1">JAVA</option>
+          <option value="2">PYTHON</option>        
         </select><br>
       </div>
       <div class='algo-category'>
         <button @click="testCheck($event,idx)" v-for="(algoName,idx) in algoSolvedCategory" :key='idx'>
           {{algoName}}
-        </button>
-        <!-- 여기 인풋은 등록하면 버튼으로 추가 되게할 예정 -->
-        <input type="text">
+        </button>     
+        <button @click='categBtnAdd'>
+          <p v-if='addCateg'>+</p>
+          <input type="text" class='input_underline' v-model='newCateg' @keydown.enter="categBtnAdd" v-else>
+        </button>           
       </div>
 
     </header>
     <section>
       <div>
         <div class="code-mirror">
-          <codemirror id = "codemirror" v-model="inputCode" :options="codeMirrorOptions"/>
+          <codemirror id = "codemirror" v-model='data.code' :options="codeMirrorOptions"/>
         </div>
         
         <div class='edit-mark' >
@@ -33,23 +36,32 @@
               <div class="circle circle-green"></div>
             </div>
 
-            <button @click="previewMark">{{editBtnText}}</button>
+            <button @click="previewMark" class='status-btn'>{{editBtnText}}</button>
           </div>
-          <textarea id="" v-model="inputComment" v-if="editBtnText === 'Preview'" >
+          <textarea id="" v-model="data.explanation" v-if="editBtnText === 'Preview'"  >
 
           </textarea>
-          <div v-html="compileMarkdown"  v-else ></div>
+          <div v-html="compileMarkdown"  v-else></div>
         </div>
       </div>
     
     </section>
     <footer id='register-footer'>
+      <button @click='registerProblem' class='regist-btn'>CREATE</button>
       <label for="hiddenCheck">
         <input type="checkbox" id="hiddenCheck">
-        <div></div>
-        <span>{{hiddenStatus}}</span>        
+        <div></div>        
+        <button class='regist-btn-private' @click='changPrivate'>
+          {{hiddenStatus}}
+          <!-- <span v-if ='hiddenBool'>
+            <i class='fas fa-lock-open'></i>
+          </span>
+          <span v-else>            
+            <i class='fas fa-lock'></i>
+          </span> -->
+          
+        </button>
       </label>
-      <button>등록</button>
     </footer>
   </div>
 </template>
@@ -61,8 +73,12 @@ import "codemirror/mode/javascript/javascript.js"
 import "codemirror/theme/material.css"
 
 import marked from "marked"
+import axios from "axios"
 
-import _ from "lodash"
+// v1/codeBoardRegiste // post
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
+
 
 export default {
   name:'RegisterProblem',
@@ -70,6 +86,32 @@ export default {
     codemirror,    
   },
   methods:{
+    registerProblem:function(){
+      const lang = document.querySelector('#register-problem select').value
+      const hidden = document.querySelector('#hiddenCheck')
+      
+      if (hidden.checked) {
+        this.data.public = 1
+      } else { this.data.public = 0}
+
+
+      if (!lang) {
+        alert('언어를 선택해주세요')
+        return
+      }
+
+      this.data.language_seq = lang
+      this.data.user_seq = localStorage.set
+
+      console.log(this.data)
+      axios.post(`${SERVER_URL}/apps/v1/codeBoardRegiste`,this.data)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     previewMark:function(){
       if (this.editBtnText === 'Preview') {
         this.editBtnText = 'Edit'
@@ -100,6 +142,31 @@ export default {
       event.target.style.color = 'black'
       event.target.style.backgroundColor = "red"
     },    
+    focusTextarea:function(){
+      const textarea = document.querySelector('.edit-mark > textarea')
+      textarea.select()
+      
+    },
+    categBtnAdd:function(){
+      if (this.addCateg) {
+        this.addCateg = !this.addCateg;
+        return
+      } else if (!this.newCateg) {
+        return
+      }
+      this.algoSolvedCategory.push(this.newCateg)
+      this.newCateg = ""
+      this.addCateg = true
+    },
+    changPrivate:function(){
+      if (this.hiddenStatus === 'PUBLIC') {
+        this.hiddenStatus = 'PRIVATE'
+        this.hiddenBool = false
+      } else {
+        this.hiddenStatus = 'PUBLIC'
+        this.hiddenBool=true
+      }      
+    }
     
   },
   data:function(){ 
@@ -114,20 +181,31 @@ export default {
         lineWrapping: true,
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-      },
-      inputCode: "SELECT YOUT LANGUAGE!",
-      inputComment: "",
+      },   
+      addCateg:true,
+      newCateg:'',   
       editBtnText:"Preview",
       ctrlCheck:false,
       algoSolvedCategory: ['DP','DFS','BFS','GREEDY','MATH','GRAPH']      ,
       btnClicked: [],
-      hiddenStatus: "Public",
+      hiddenStatus: "PUBLIC",
+      hiddenBool:true,
+      data:{
+        "code": "SELECT YOUT LANGUAGE!",
+        "explanation": "# Write yout explanation \n ## ctrl+/",
+        "free_write": "",
+        "public": 0,        
+        "like_cnt": 0,
+        "user_seq": 1,
+        "problem_seq": 1,
+        "language_seq": 1
+      }
 
     }
   },
   computed:{
     compileMarkdown:function(){
-      return marked(this.inputComment,{sanitize:true})
+      return marked(this.data.explanation,{sanitize:true})
     }
   },
   mounted() {
@@ -135,12 +213,12 @@ export default {
     const select = document.querySelector('#register-problem > header >div> select')
     const that = this
     select.addEventListener("change",function(){      
-      if (select.value === "cpp") {
-        that.inputCode = '#include <iostream> \n\nint main() {\n\tstd::cout << "Welcome Algoga";\n\treturn 0;\n}'
-      } else if (select.value === "java") {
-        that.inputCode = 'public class Algoga {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Welcome, Algoga");\n\t}\n}'
-      } else if (select.value === "python") {
-        that.inputCode = 'def main(): \n	print("Welcome Algoga") \n\n\nif __name__ =="__main__": \n\tmain()'
+      if (select.value === "4") {
+        that.data.code = '#include <iostream> \n\nint main() {\n\tstd::cout << "Welcome Algoga";\n\treturn 0;\n}'
+      } else if (select.value === "1") {
+        that.data.code = 'public class Algoga {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Welcome, Algoga");\n\t}\n}'
+      } else if (select.value === "2") {
+        that.data.code = 'def main(): \n	print("Welcome Algoga") \n\n\nif __name__ =="__main__": \n\tmain()'
       }
       
     })
@@ -148,37 +226,8 @@ export default {
     const inputBox = document.querySelector("#register-problem > header > div:nth-child(1) > input")
     // const inputwidth = document.querySelector("#register-problem > header > div").clientWidth - document.querySelector("#register-problem > header > div > select").clientWidth - 15
     const inputHeight =  document.querySelector("#register-problem>header>div:nth-child(1)>select").clientHeight
-    const lineColor = ['red','blue','yellow','black','white']
     // inputBox.style.width = `${inputwidth}px`
     inputBox.style.height = `${inputHeight}px`    
-    inputBox.addEventListener('focusin',function(){
-      inputBox.style.width = "75%"
-      inputBox.style.borderBottom = "1px solid red"
-    })
-    inputBox.addEventListener('focusout',function(){
-      if (inputBox.value){return}
-      inputBox.style.width = "25%"
-      inputBox.style.borderBottom = "1px solid black"
-    })
-    inputBox.addEventListener('keypress',function(){
-      const color = _.random(5)
-      inputBox.style.borderBottom = `1px solid ${lineColor[color]}`
-    })
-
-    // 공개 비공개 버튼의 활성화에 따른 것
-    const hiddenBox = document.querySelector('#register-footer > label > input')
-    const hiddenLabel = document.querySelector('#register-footer>label')
-    hiddenBox.addEventListener('click',function(){
-      if (hiddenBox.checked) {
-
-        that.hiddenStatus = "Private"
-        hiddenLabel.style.textAlign = "left"
-      } else {
-        that.hiddenStatus = "Public"
-        hiddenLabel.style.textAlign = "right"
-      }
-    })
-
 
   },
   created(){
@@ -204,7 +253,7 @@ export default {
   margin-bottom: 10px;
 }
 #register-problem > header >div:nth-child(1) > input {
-  width: 20%;
+  width: 75%;
   height: 100%;
   outline:none;
   border: none;
@@ -217,12 +266,12 @@ export default {
   width: 24%;
   font-family: Hack, monospace;    
   font-size: 1rem;
-  border-radius: 0 15px 0 15px;
+  border-radius: 15px;
   outline:none;
   border:none;
   text-align-last: center;
-  color:white;
-  background-color: rgb(63, 156, 86);
+  color:var(--back-color);
+  background-color: var(--font-color);
   cursor:pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -230,8 +279,6 @@ export default {
   text-overflow: '';
   transition: 0.3s;
 }
-
-#register-problem > header >div:nth-child(1)> select:hover { border-radius: 15px;}
 
 #register-problem > header >div:nth-child(1)> select::-ms-expand{display:none;}
 
@@ -252,10 +299,6 @@ export default {
   padding: 15px;
   margin: 5px;
 }
-
-
-
-
 
 
 #register-problem > section > div:nth-child(1) {
@@ -285,8 +328,10 @@ export default {
   font-family: Hack, monospace;
   font-size: 0.9rem;  
 }
-
-#register-problem > section > div > div:nth-child(2) > textarea {
+.edit-mark {
+  background-color: 	#F0F8FF;
+}
+.edit-mark > textarea {
   width:100%;
   padding:0;
   height: 94%;
@@ -297,7 +342,7 @@ export default {
   color: var(--font-color);
   outline: none;
   border:none;
-  background-color: bisque;
+  background-color: 	#F0F8FF;
  
 }
 
@@ -322,42 +367,39 @@ export default {
 }
 
 #register-footer {
-  display: flex-end;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row-reverse;
   align-items: center;
+  
 }
 
 #register-footer > label {
-  display:inline-block;
-  position:relative;
-  cursor:pointer;
-  width:100px;
-  margin: 0 10px;
-  border:1px solid black;
-  border-radius: 10px;
-  height: 32px;
+  margin-right: 20px;
 }
 
 #register-footer > label > input {
   display: none;
 }
-#register-footer > label > div {
-  position:absolute;
-  width: 30px;
-  height: 30px;
+
+.regist-btn {
+  border:none;outline: none;
+  width:100px;height:50px;
   border-radius: 10px;
-  
-  background-color: aqua;
-  transform:translateY(-50%);
-  top: 50%;
-  left:0;
-  transition: 0.3s;
+  background-color: #FF6F61;
+  color:white;
+  cursor:pointer;
+  font-family: Hack;
 }
 
-
-#register-footer > label >input:checked + div {
-  left: 100%;
-  transform: translate(-100%,-50%);
-  
+.regist-btn-private {
+  border:none;outline: none;
+  width:100px;height:50px;
+  border-radius: 10px;
+  background-color: #DD4124;
+  color:white;
+  cursor:pointer;
+  font-family: Hack;
 }
 
 
@@ -381,9 +423,19 @@ export default {
   background-color: yellow;
 }
 
+.input_underline {
+  border:none;
+  outline: none;
+  border-bottom: 1px solid white;
+  background-color: black;
+  color:white;
+}
 
-
-
+.status-btn {
+  border:none;outline: none;
+  color:white; background-color: rgba(0,0,0,0);
+  cursor:pointer; font-weight: bold;
+}
 
 
 

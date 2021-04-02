@@ -4,8 +4,8 @@ module.exports = {
     },
     // devServer options dont belong into `configureWebpack`
     devServer: {
-    host: "0.0.0.0",
-    hot: true,
-    disableHostCheck: true
+        host: "0.0.0.0",
+        hot: true,
+        disableHostCheck: true,      
     },
 }
