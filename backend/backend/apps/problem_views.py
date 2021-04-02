@@ -36,11 +36,13 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         webpage = requests.get(userURL)
         bs = BeautifulSoup(webpage.content, "html.parser")
 
-        level_div = bs.find('div', {'class': 'page-header'}).h1.img
+        level_img = bs.find('div', {'class': 'page-header'})
 
-        # if level_div is None:
+        # 백준아이디가 잘못된 경우
+        if level_img is None:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
             
-
+        level = level_img.h1.img
 
         if level is None :
             level = 999
@@ -66,10 +68,13 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         correct_problems = list(set(totalProblem_number) & set(user_problems[0]))
         incorrect_problems = list(set(totalProblem_number) & set(user_problems[-1]))
 
-        if len(correct_problems) == 0 & len(incorrect_problems) == 0:
-            print("Sdfd")
+        # 푼 문제가 적을 경우 브론즈5문제 중 제출 많은 애들 추천
+        if len(correct_problems) + len(incorrect_problems) < 10:
+            recommend_problem = totalProblem.filter(level=1).order_by('-submission_cnt')[:20]
+            serializer = ProblemSerializer(recommend_problem, many=True)
+        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
             
-
         # 3) 기존 DB에 있는 사용자가 푼 문제들 삭제
         UserProblem.objects.filter(user_seq=user.seq).all().delete()
         
@@ -128,13 +133,6 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # 맞은 문제에서 뽑은 추천해줄 알고리즘, 틀린 문제에서 뽑은 추천해줄 알고리즘
         recommend_algo_id_list = list(map(lambda x : x[0] , correct_algo_dict.most_common()[-10:])) + list(map(lambda x : x[0] , incorrect_algo_dict.most_common()[:10]))
         recommend_algo_id_list = list(set(recommend_algo_id_list) & set(accept_alogithm_list))
-
-        # 추천해줄 알고리즘이 적은 경우 그냥 필수 유형들 리턴
-
-
-
-
-
 
         # id로 seq 검색
         algo_seq = list(map(lambda x: x['seq'], Type.objects.filter(id__in = recommend_algo_id_list).values('seq')))
