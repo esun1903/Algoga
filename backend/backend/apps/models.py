@@ -8,7 +8,7 @@ class CodeBoard(models.Model):
     explanation = models.TextField()
     free_write = models.TextField()
     public = models.IntegerField()
-    register_date = models.DateTimeField()
+    register_date = models.DateTimeField( default=timezone.now(), null=True)
     like_cnt = models.IntegerField()
     user_seq = models.ForeignKey('User', models.DO_NOTHING, db_column='user_seq')
     problem_seq = models.ForeignKey('Problem', models.DO_NOTHING, db_column='problem_seq')       
@@ -164,6 +164,7 @@ class User(models.Model):
     nickname = models.CharField(unique=True, max_length=50)
     profile_image = models.CharField(max_length=500, blank=True, null=True)
     register_date = models.DateTimeField(auto_now_add=True)
+    # is_active = models.BooleanField(default=False)
 
     class Meta:
         managed = False
