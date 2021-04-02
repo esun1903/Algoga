@@ -9,7 +9,14 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
-
+#이메일 인증을 위해 추가로 import 
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text
+# from .text import message
 
 
 
@@ -29,14 +36,15 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def sessionCheck(self, request):
-        
+    def sessionCheck(self, request):        
+        print(request.session.session_key,'sadfasdf')
         userSession = request.session.get('email')
+        print(userSession)
         
         if userSession :
             user = User.objects.get(email = userSession)
             return Response(user.email,status=status.HTTP_200_OK)
-       
+        
         return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
     
     def logout(self, request):
@@ -45,8 +53,9 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("로그 아웃",status=status.HTTP_200_OK)
         
     def signUp(self, request): 
-        
+        #회원가입 시 
         users =  User.objects.filter(email =request.data["email"])
+
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -55,8 +64,18 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         userSerializer.save()
-        
+        # print(users.seq)
+        # current_site = get_current_site(request)
+        # domain = current_site.domain
+        # uidb64 = urlsafe_base64_encode(force_bytes(users.seq))
+        # message_data = message(domain, uidb64)
+        # mail_title = "이메일 인증을 완료해주세요"
+        # mail_to = data['email']
+        # email = EmailMessage(mail_title, message_data, to=[mail_to])
+        # email.send()
+
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
+
 
     def userInfoUpdate(self,request, email):
 
@@ -82,6 +101,42 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users.delete()
         
         return  Response("삭제성공", status=status.HTTP_200_OK)
+    
+    #이메일 인증
+    def get(self, request, uidb64, seq, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = Users.objects.get(pk=seq)
+            # user_dic = jwt.decode(token,SECRET_KEY,algorithm='HS256')
+            if user.seq == user_dic["user"]:
+                user.is_active = True
+                user.save()  
+                return "아주 잘 됨"
+
+            return JsonResponse({'message':'auth fail'}, status=400)
+        except ValidationError:
+            return JsonResponse({'message':'type_error'}, status=400)
+        except KeyError:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
+@permission_classes([AllowAny])
+class Activate(View):
+    def get(self, request, uidb64, token):
+        try:
+            # uid = force_text(urlsafe_base64_decode(uidb64))
+            # user = Users.objects.get(pk=seq)
+            # if user.id == user_dic["user"]:
+            #     user.is_active = True
+            #     user.save()
+            #     return "완료"
+
+            return "완료"
+            # return JsonResponse({'message':'auth fail'}, status=400)
+        except ValidationError:
+            return JsonResponse({'message':'type_error'}, status=400)
+        except KeyError:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
 
 @permission_classes([AllowAny])
 class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
@@ -90,7 +145,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
    
     def codeBoardAll(self, request):
 
-        boardcodes = CodeBoard.objects.all();
+        boardcodes = CodeBoard.objects.all()
         serializer = CodeBoardSerializer(boardcodes, many=True)
 
         return Response(serializer.data,status=status.HTTP_200_OK)
@@ -105,10 +160,11 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def codeBoardRegiste(self, request):
+    def codeBoardRegister(self, request):
         
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
         if not codeBoardSerializer.is_valid():
+            print(request.data)
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoardSerializer.save()

@@ -47,7 +47,7 @@ import History from "@/components/Main/History"
 import MainAside from "@/components/Main/MainAside"
 import Feed from "@/components/Main/Feed"
 
-import axios from "axios"
+// import axios from "axios"
 
 
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
@@ -65,13 +65,13 @@ export default {
     test:function(){
       this.$router.push({name:'Register'})
     },
-    test1:function(){
-      const user = localStorage.getItem('email')
-      console.log(user)
-      axios.get(`${SERVER_URL}/apps/v1/sessionCheck/${user}`)
+    test1:function(){     
+      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
         .then(res=>{
-          console.log(res)
-          this.teststring = res.data
+          return res.json()
+        })
+        .then(res=>{
+          console.log(JSON.stringify(res))
         })
         .catch(err=>{
           console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
