@@ -8,7 +8,7 @@ class CodeBoard(models.Model):
     explanation = models.TextField()
     free_write = models.TextField()
     public = models.IntegerField()
-    register_date = models.DateTimeField()
+    register_date = models.DateTimeField(default=timezone.now, null=True)
     like_cnt = models.IntegerField()
     user_seq = models.ForeignKey('User', models.DO_NOTHING, db_column='user_seq')
     problem_seq = models.ForeignKey('Problem', models.DO_NOTHING, db_column='problem_seq')       
