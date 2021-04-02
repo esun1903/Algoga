@@ -11,7 +11,7 @@ urlpatterns = [
     #로그아웃
     path('v1/logout', UserViewSet.as_view({"get": "logout"})),
     #세션확인
-    path('v1/sessionCheck>', UserViewSet.as_view({"get": "sessionCheck"})),
+    path('v1/sessionCheck', UserViewSet.as_view({"get": "sessionCheck"})),
     #회원가입
     path("v1/signUp", UserViewSet.as_view({"post": "signUp"})),
     #회원수정
@@ -30,6 +30,9 @@ urlpatterns = [
     path("v1/codeBoardAll", codeBoardViewSet.as_view({"get": "codeBoardAll"})),
     #codBoard page
     path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
+    #codBoard page
+    path("v1/codeBoardUser/<str:email>", codeBoardViewSet.as_view({"get": "codeBoardUser"})),
+    
     #commnet 등록
     path("v1/commentRegiste", commentViewSet.as_view({"post": "commentRegiste"})),
     #commnet 수정
