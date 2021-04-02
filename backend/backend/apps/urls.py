@@ -21,7 +21,7 @@ urlpatterns = [
     #이메일전송
     path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
     #codBoard 등록
-    path("v1/codeBoardRegiste", codeBoardViewSet.as_view({"post": "codeBoardRegiste"})),
+    path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
     path("v1/codeBoardUpdate/<int:codeBoard_seq>", codeBoardViewSet.as_view({"put": "codeBoardUpdate"})),
     #codBoard 삭제
@@ -50,5 +50,7 @@ urlpatterns = [
     path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
     #문제 세부 정보 
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
+    #문제 세부 정보 
+    path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
     
 ]
