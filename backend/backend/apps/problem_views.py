@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from bs4 import BeautifulSoup
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator 
 #from .pagination import PostPageNumberPagination
 import pandas as pd
 import requests
@@ -23,10 +23,10 @@ userpage = "https://www.acmicpc.net/user/"
 
 
 @permission_classes([AllowAny])
-class ProblemViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, View):
-
+class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
+    
     serializer_class = UserProblemSerializer
-    # serializer_problem_class =
+    # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
    # 사용자가 '문제 불러오기'를 클릭하면
@@ -94,7 +94,7 @@ class ProblemViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, View):
             if int(problem) in mySet:
                 solveProblemList.append(problem)
 
-        # 디비에 있는 틀린 문제 번호 리스트
+        # 디비에 있는 틀린 문제 번호 리스트 
         for num in solveProblemList:
             for problem in totalProblem:
                 if int(num) == int(problem.number):
@@ -146,7 +146,7 @@ class ProblemViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, View):
     def allPaginationProblem(self, request):
         # 모든 문제를 (problem_seq를 정렬해서 두기)
         totalProblem = UserProblem.objects.all().order_by('problem_seq')
-        serializer_class = UserProblemSerializer(totalProblem, many=True)
+        serializer_class = UserProblemSerializer(totalProblem,many=True)
         # pagination_class = PostPageNumberPagination
         return super().get_queryset().filter()
 
@@ -155,4 +155,12 @@ class ProblemViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, View):
         # 문제의 seq를 받아 그 문제에 대한 정보를 모두 리턴
         totalProblem = Problem.objects.get(seq=seq)
         serializer_class = ProblemSerializer(totalProblem)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+    @permission_classes([AllowAny])
+    def codeBoardProblem(self, request, seq):
+        # 문제의 seq를 받아 그 문제에 codeBoard 정보를 리턴 
+        print(seq)
+        codeBoard =  CodeBoard.objects.filter(problem_seq = seq)
+        serializer_class = CodeBoardSerializer(codeBoard, many=True)   
         return Response(serializer_class.data, status=status.HTTP_200_OK)
