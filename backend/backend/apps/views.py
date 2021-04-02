@@ -150,6 +150,17 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+    def codeBoardUser(self, request, email):
+
+        seq = User.objects.get(email=email);
+        userseq = seq.seq;
+        print(userseq)
+        codeBoards =  CodeBoard.objects.filter(user_seq =userseq)
+        serializer = CodeBoardSerializer(codeBoards, many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
     def codeBoardPage(self, request , codeBoard_seq):
        
         codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
@@ -162,7 +173,12 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
     def codeBoardRegister(self, request):
         
+        print(request.data['problem_seq'])
+        
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
+        test = Problem.objects.get(seq = request.data['problem_seq'])
+        test.review_count =  test.review_count + 1
+        test.save()
         if not codeBoardSerializer.is_valid():
             print(request.data)
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -183,7 +199,12 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     def codeBoardDelete(self, request, codeBoard_seq):
 
+
         codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
+        test = Problem.objects.get(seq =codeBoard_seq)
+        test.review_count =  test.review_count - 1
+        print(test.review_count)
+        test.save()
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -196,7 +217,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = CommentSerializer
 
-    def commentRegiste(self, request):
+    def commentRegister(self, request):
 
         commentSerializer = CommentSerializer(data=request.data, partial=True)
         if not commentSerializer.is_valid():
@@ -235,4 +256,6 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         serializer = CommentSerializer(comments, many=True)    
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
       
