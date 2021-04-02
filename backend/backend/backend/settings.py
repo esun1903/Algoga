@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'apps',
+    'corsheaders',
     
 ]
 
@@ -55,7 +56,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000' ,'http://localhost:8080'] 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -128,6 +135,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -147,9 +157,24 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
 }
 
+# CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
+
+EMAIL_BACKEND = my_settings.EMAIL['EMAIL_BACKEND']
+EMAIL_USE_TLS = my_settings.EMAIL['EMAIL_USE_TLS']
+EMAIL_PORT = my_settings.EMAIL['EMAIL_PORT']
+EMAIL_HOST = my_settings.EMAIL['EMAIL_HOST']
+EMAIL_HOST_USER = my_settings.EMAIL['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']

@@ -15,16 +15,24 @@
           </div>
           <div v-else>
             <button @click='Login'>SignIn</button>
-          </div>
+          </div>          
+          <button @click='test'>testsets</button>
         </div>
         <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+// import Cookies from "universal-cookie"
+
+// const cookies = new Cookies()
+
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 // const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+// axios.defaults.withCredentials = true;
+// axios.defaults.xsrfCookieName = 'csrftoken'
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export default {
   name : 'Login',
@@ -45,21 +53,57 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
-      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
-        .then(res => {
-          console.log(res)
-          if (res.status !== 200){
-            this.loginStatus = false
-            this.mes = "관리자에게 문의해주세요."
-            return
-          }
+      // axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{},{
+      //   headers:{
+      //     "Content-Type":"application/json",
+      //     "X-CSRFToken":cookies.get('csrftoken')
+      //   },
+      //   credentials:"same-origin",
+      // })
+      //   .then(res => { 
+      //     if(res.status !== 200){
+      //       alert('로그인실패')
+      //       return;
+      //     }                    
+      //     // console.log(res)
+      //     localStorage.setItem('email',res.data[0].email)
+      //     localStorage.setItem('userNo',res.data[0].seq)
+      //     this.$router.push({name:'Main',params:{nickname:this.idInput}})
           
-          // sessionStorage.setItem('email',this.idInput)
+      //   })
+      //   .catch(err=>{alert(err)})
+      // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`)
+      //   .then(res => {
+      //     return res.json()
+      //   })
+      //   .then(res=>{
+      //     console.log(JSON.stringify(res))
+      //   })
+     
+
+      fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
+        credentials:'same-origin',
+      })
+        .then(res => {
+          return res.json()
+        })
+        .then(res => {
+          console.log(JSON.stringify(res))
           // this.$router.push({name:'Main',params:{nickname:this.idInput}})
         })
-        .catch(() => {
-            this.loginStatus = false
-            this.err = "로그인 정보를 확인해주세요."
+
+    },
+    test:function(){
+      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
+        .then(res=>{
+          return res.json()
+        })
+        .then(res=>{
+          console.log(JSON.stringify(res))
+        })
+        .catch(err=>{
+          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
+          this.teststring = err.data
         })
     },
     statusChange:function(){
