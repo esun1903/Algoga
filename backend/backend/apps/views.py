@@ -159,7 +159,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def codeBoardRegiste(self, request):
+    def codeBoardRegister(self, request):
         
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
         if not codeBoardSerializer.is_valid():
