@@ -25,7 +25,7 @@ userpage = "https://www.acmicpc.net/user/"
 @permission_classes([AllowAny])
 class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
-    serializer_class = UserProblemserializers
+    serializer_class = UserProblemSerializer
     # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
@@ -146,7 +146,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     def allPaginationProblem(self, request): 
         #모든 문제를 (problem_seq를 정렬해서 두기)
         totalProblem = UserProblem.objects.all().order_by('problem_seq')
-        serializer_class = UserProblemserializers(totalProblem,many=True)
+        serializer_class = UserProblemSerializer(totalProblem,many=True)
         # pagination_class = PostPageNumberPagination
         return  super().get_queryset().filter()
 
