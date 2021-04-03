@@ -30,3 +30,9 @@ class UserProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProblem
         fields = '__all__'
+
+class FollowUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FollowUser
+        fields = '__all__'
+
