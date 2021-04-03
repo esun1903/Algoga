@@ -36,3 +36,12 @@ class FollowUserSerializer(serializers.ModelSerializer):
         model = FollowUser
         fields = '__all__'
 
+class FollowingListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FollowUser
+        fields = '__all__'
+
+class FollowerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FollowUser
+        fields = '__all__'
