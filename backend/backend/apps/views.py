@@ -165,7 +165,28 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         )
 
         return  Response("팔로우 성공", status=status.HTTP_200_OK)
+    
+    #user가 팔로잉하는 사람들의 List
+    def FollowingList(self,request,user_follower_seq): 
+        followingusers = FollowUser.objects.filter(user_follower_seq = user_follower_seq)
+    
+        if not followingusers.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+        serializer = FollowingListSerializer(followingusers, many=True)
+        
+        return  Response(serializer.data, status=status.HTTP_200_OK)
+    
+    #user를 팔로워하는 사람들의 List
+    def FollowerList(self,request,user_following_seq): 
+        followerusers = FollowUser.objects.filter(user_following_seq = user_following_seq)
+    
+        if not followerusers.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = FollowerListSerializer(followerusers, many=True)
+        
+        return  Response(serializer.data, status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class Activate(View):
