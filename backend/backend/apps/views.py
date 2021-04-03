@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+#from django.contrib.auth.models import User, Group
 from rest_framework import permissions
 from .serializers import *
 from .models import User
@@ -16,10 +16,14 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text
-from .get_data import *
-from collections import Counter
-from django.shortcuts import get_object_or_404
 # from .text import message
+import datetime
+import jwt
+from django.conf import settings
+from .utils import *
+
+from rest_framework.authentication import BaseAuthentication
+from rest_framework import exceptions
 
 
 
@@ -27,28 +31,50 @@ from django.shortcuts import get_object_or_404
 class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View): 
 
     serializer_class = UserSerializer				
-
-    def login(self, request, email, password):
+    
+    def login(self, request):
          
-        loginUser =  User.objects.filter(email =email , password = password)
+        loginUser =  User.objects.filter(email =request.data["email"] , password = request.data["password"])
         
         if loginUser.exists():
-            request.session['email'] = email
             serializer = UserSerializer(loginUser, many=True) 
-            return Response(serializer.data,status=status.HTTP_200_OK)
-        
+            access_token= generate_access_token(request.data["email"])
+            ##refresh_token=generate_refresh_token(request.data["email"])
+
+                        #serializer.data
+           # Response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+            Response.data = {
+                'access_token': access_token,
+                'userInfo': serializer.data,
+                     }
+
+            return Response(Response.data,status=status.HTTP_200_OK)
+    
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
     def sessionCheck(self, request):        
-        print(request.session.session_key,'sadfasdf')
-        userSession = request.session.get('email')
-        print(userSession)
         
-        if userSession :
-            user = User.objects.get(email = userSession)
-            return Response(user.email,status=status.HTTP_200_OK)
-        
-        return Response("로그인 필요",status=status.HTTP_406_NOT_ACCEPTABLE)
+        print(request.data)
+        try:
+            access_token = request.data["access_token"]
+            payload = jwt.decode(
+                access_token, settings.SECRET_KEY, algorithms=['HS256'])
+
+        except jwt.ExpiredSignatureError:
+            raise exceptions.AuthenticationFailed('access_token expired')
+        except IndexError:
+            raise exceptions.AuthenticationFailed('Token prefix missing')
+
+        user = User.objects.filter(email=payload['user_id']).first()
+        if user is None:
+            raise exceptions.AuthenticationFailed('User not found')
+
+        # if not user.is_active:
+        #     raise exceptions.AuthenticationFailed('user is inactive')
+        access_token= generate_access_token(request.data["email"])
+       
+
+        return Response(access_token,status=status.HTTP_200_OK)
     
     def logout(self, request):
         
@@ -120,32 +146,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         except ValidationError:
             return JsonResponse({'message':'type_error'}, status=400)
         except KeyError:
-            return JsonResponse({'message': 'INVALID_KEY'}, status=400)
-    
-    # 사용자가 푼 알고리즘 수
-    def UserTypeInfo(self, request, seq): 
-        
-        users = User.objects.filter(seq = seq)
-        if not users.exists():
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
-        # 맞은 문제만 리턴
-        user_problems = UserProblem.objects.filter(user_seq = seq).filter(correct = 0).values_list('problem_seq')
-        user_problems = list(map(lambda x : x[0], user_problems))
-
-        # 맞은 문제 번호로 문제별 알고리즘 가져오기
-        user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
-        user_type = list(map(lambda x: x[0].split(","), user_type))
-        
-        type_dict = make_type_dict()
-
-        user_type = Counter([type_dict[int(type_id)] for types in user_type for type_id in types]).most_common()
-
-        List = []
-        for key, value in user_type:
-            List.append({'type_name': key, 'type_cnt': value})
-
-        return Response(List, status=status.HTTP_200_OK)
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
 @permission_classes([AllowAny])
 class Activate(View):
@@ -201,12 +202,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
     def codeBoardRegister(self, request):
         
-        print(request.data['problem_seq'])
-        
         codeBoardSerializer = CodeBoardSerializer(data=request.data, partial=True)
-        test = Problem.objects.get(seq = request.data['problem_seq'])
-        test.review_count =  test.review_count + 1
-        test.save()
         if not codeBoardSerializer.is_valid():
             print(request.data)
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -227,34 +223,20 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     def codeBoardDelete(self, request, codeBoard_seq):
 
-
         codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
-        test = Problem.objects.get(seq =codeBoard_seq)
-        test.review_count =  test.review_count - 1
-        print(test.review_count)
-        test.save()
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoard.delete()
         
-        return Response("삭제성공", status=status.HTTP_200_OK)
-        
-    def codeBoardList(self, request, problem_seq):
-
-        get_object_or_404(Problem, seq=problem_seq)
-
-        codeBoard = CodeBoard.objects.filter(problem_seq = problem_seq)
-        serializer = CodeBoardSerializer(codeBoard, many=True)
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return  Response("삭제성공", status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = CommentSerializer
 
-    def commentRegister(self, request):
+    def commentRegiste(self, request):
 
         commentSerializer = CommentSerializer(data=request.data, partial=True)
         if not commentSerializer.is_valid():
