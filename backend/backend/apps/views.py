@@ -188,6 +188,20 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         return  Response(serializer.data, status=status.HTTP_200_OK)
 
+    def DeletefollowingUser(self,request,user_follower_seq, user_delete_following_seq): 
+        users = FollowUser.objects.get(user_follower_seq = user_follower_seq , user_following_seq = user_delete_following_seq )
+
+        users.delete()
+
+        return  Response("팔로잉 삭제 성공", status=status.HTTP_200_OK)
+    
+    def DeletefollowerUser(self,request,user_following_seq, user_delete_follower_seq): 
+        users = FollowUser.objects.get(user_following_seq = user_following_seq , user_follower_seq = user_delete_follower_seq )
+
+        users.delete()
+
+        return  Response("팔로워 삭제 성공", status=status.HTTP_200_OK)
+
 @permission_classes([AllowAny])
 class Activate(View):
     def get(self, request, uidb64, token):
