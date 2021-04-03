@@ -33,11 +33,14 @@ class Comment(models.Model):
 
 
 class FollowUser(models.Model):
-    seq = models.AutoField(primary_key=True)
+    seq = models.AutoField(primary_key=True) # , related_name = 'follower_seq'  related_name = 'following_seq'
+    user_follower_seq = models.IntegerField()
+    user_following_seq = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'follow_user'
+
 
 
 class Information(models.Model):

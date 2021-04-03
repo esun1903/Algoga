@@ -146,6 +146,26 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             List.append({'type_name': key, 'type_cnt': value})
 
         return Response(List, status=status.HTTP_200_OK)
+    
+    def FollowUser(self,request,user_follower_seq, user_following_seq): 
+        users = FollowUser.objects.filter(user_follower_seq = user_follower_seq)
+
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_user in users :
+            if one_user.user_follower_seq == user_follower_seq and one_user.user_following_seq == user_following_seq :
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        
+        follower_id = User.objects.get(seq = user_follower_seq)
+        following_id = User.objects.get(seq = user_following_seq)
+
+        FollowUser.objects.create(
+             user_follower_seq = follower_id.seq,
+             user_following_seq = following_id.seq
+        )
+
+        return  Response("팔로우 성공", status=status.HTTP_200_OK)
+
 
 @permission_classes([AllowAny])
 class Activate(View):
@@ -180,8 +200,8 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     def codeBoardUser(self, request, email):
 
-        seq = User.objects.get(email=email);
-        userseq = seq.seq;
+        seq = User.objects.get(email=email)
+        userseq = seq.seq
         print(userseq)
         codeBoards =  CodeBoard.objects.filter(user_seq =userseq)
         serializer = CodeBoardSerializer(codeBoards, many=True)

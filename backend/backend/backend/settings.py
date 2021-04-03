@@ -99,6 +99,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 # }
 DATABASES = my_settings.DATABASES
 
+# AUTH_USER_MODEL = 'apps.FollowUser'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
