@@ -12,10 +12,10 @@
     <!-- 타입 버튼 필터링 -->
     <div id='filterByType'>
       <button
-        @click='btnPress(type)'
+        @click='btnPress(idx)'
         class='typeIcon'
-        v-for="(idx, type) in types" :key="idx"
-        :class="{btnPressed :types[type]}">
+        v-for="(type, idx) in types" :key="idx"
+        :class="{btnPressed :typesClicked[idx]}">
         {{type}}
       </button>
     </div>
@@ -23,27 +23,32 @@
     <transition name='slide'>
       <div v-show="filtered" id='filterSection'>
         <p>Filter</p>
+        <div id='filterClose' @click='filter'>
+          <span>
+              <i class="fas fa-times"></i>
+          </span>
+        </div>
         <!-- 레벨 -->
         <div class='filterContent'>
           <p>Level</p>
           <div>
-            <button class='manulBtn' :class='{manulBtnUnable : detailFilter.level == 0 }' @click='levelChange(1)'><span>-</span></button>
-            <span>{{detailFilter.level}}</span>
-            <button :class='{manulBtnUnable : detailFilter.level == 9 }' class='manulBtn' @click='levelChange(2)'><span>+</span></button>
+            <button class='manulBtn' :class='{manulBtnUnable : selectedLv == 0 }' @click='levelChange(1)'><span>-</span></button>
+              <span>{{selectedLv}}</span>
+            <button :class='{manulBtnUnable : selectedLv == 9 }' class='manulBtn' @click='levelChange(2)'><span>+</span></button>
           </div>
         </div>
         <!-- 타입 -->
         <div class='filterContent'>
           <p>Type</p>
-          <label v-for="(idx,type) in types" :key='idx' >
-            <input class='checkbox' :value='type' type="checkbox">
+          <label v-for="(type, idx) in types" :key='idx' >
+            <input v-model="selectedType[idx]" class='checkbox' :value='type' type="checkbox">
             {{type}}
           </label>
         </div>
         <!-- 정답률 -->
         <div class='filterContent'>
           <p>Answer Rate(min)</p>
-          <input list="tickmarks" id='answerRateBar' type="range">
+          <input v-model="selectedCr" list="tickmarks" id='answerRateBar' type="range">
           <datalist id="tickmarks">
             <option value="0" label="0%"></option>
             <option value="10" label="10%"></option>
@@ -58,12 +63,13 @@
             <option value="100" label="100%"></option>
         </datalist>
         </div>
-        <!-- 리뷰 수 -->
+        <!-- 리뷰 언어 -->
         <div class='filterContent'>
-          <p>Reviews Number(min)</p>
-            <button class='manulBtn' :class='{manulBtnUnable : detailFilter.reviewNum == 0 }' @click='revieNumChange(1)'><span>-</span></button>
-            <span>{{detailFilter.reviewNum}}</span>
-            <button :class='{manulBtnUnable : detailFilter.reviewNum == 9 }' class='manulBtn' @click='revieNumChange(2)'><span>+</span></button>
+          <p>Reviews Language</p>
+          <label v-for="(lang, idx) in pLang" :key='idx' >
+            <input v-model="selectedPl[idx]" class='checkbox' :value='lang' type="checkbox">
+            {{lang}}
+          </label>
         </div>
         <button @click='applyFilter' id='setFilter'>Apply</button>
       </div>
@@ -76,26 +82,19 @@
           <th :class='{sorted : levelSort !== 0}' class="sort-area" @click='lvChange'>Level <span class='sort-icon' id='lvString'></span></th>
           <th>Type</th>
           <th>Title</th>
+          <th>Submission</th>
           <th :class='{sorted : answerRateSort !== 0}' class="sort-area" @click='arChange'>Answer rate <span class='sort-icon' id='answerRateSort'></span></th>
           <th>Reviews</th>
         </tr>
       </thead>
       <tbody>
         <ListOneLine
-          v-for="(algo, idx) in algoListParsed2"
+          v-for="(algo, idx) in algoListParsed"
           :key='idx'
           :algo = algo
           
           class='algo'
         />
-        <!-- <tr  > -->
-          <!-- <th><span>no.</span>{{algo.seq}}</th>
-          <th><span>lv.</span>{{algo.level}}</th>
-          <th>type</th>
-          <th>{{algo.name}}</th>
-          <th>{{algo.correct_rate | round}}%</th>
-          <th>{{algo.correct_user}}</th> -->
-        <!-- </tr> -->
       </tbody>
     </table>
     <!-- 페이지네이션 -->
@@ -115,10 +114,9 @@
 
 <script>
 import MainNavbar from '@/components/Main/MainNavbar'
-// import axios from 'axios'
 import _ from "lodash"
 import ListOneLine from '@/components/Algo/ListOneLine'
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// import { mapState } from 'vuex'
 
 export default {
     name : 'List',
@@ -129,15 +127,34 @@ export default {
     data : function(){
       return{
         currentPage : 1,
-        types : {
-          'Math' : false,
-          'Simulation' : false,
-          'DfS' : false,
-          'Bfs' : false,
-          'Tree' : false,
-          'Search' : false,
-          'DP' : false
-        },
+        types : [
+          'Math',
+          'Simulation',
+          'String',
+          'Sort',
+          'Greedy',
+          'Search',
+          'DP'
+        ],
+        typesClicked : [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+        typeDetail : [
+          ['사칙연산','정수론','유클리디언','정수론','조합론','기하학','수치해석','누적 합','선형대수학'],
+          ['구현','시뮬레이션','부르트포스'],
+          ['문자열'],
+          ['정렬','분할정복'],
+          ['그리디','그리디 알고리즘'],
+          ['이분 탐색'],
+          ['다이나믹 프로그래밍']
+        ]
+        ,
         filtered : false,
         detailFilter : {
           level : 0,
@@ -149,66 +166,52 @@ export default {
         pageCount : 5,
         blockStart : 1,
         lastBlock : 0,
+        algoListAll : [],
         algoListParsed : [],
-        algoListParsed2 : [
-      {'seq': 9250, 'number': 3018, 'name': '캠프파이어', 'correct_user': 164, 'submission_cnt': 480, 'correct_rate': 42, 'level': 6, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '128 MB', 'algorithms': '비트 집합', 'algorithm_ids': '152', 'review_count': 0},{'seq': 9251, 'number': 20501, 'name': 'Facebook', 'correct_user': 73, 'submission_cnt': 286, 'correct_rate': 40, 'level': 14, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '1024 MB', 'algorithms': '비트 집합', 'algorithm_ids': '152', 'review_count': 0},
-      {'seq': 9252, 'number': 11588, 'name': 'GEPPETTO', 'correct_user': 46, 'submission_cnt': 60, 'correct_rate': 83, 'level': 9, 'avg_try': 1, 'time_limit': '1 초', 'memory_limit': '64 MB', 'algorithms': '비트 집합', 'algorithm_ids': '152', 'review_count': 0},
-      {'seq': 9253, 'number': 17464, 'name': '알파벳 문자열', 'correct_user': 17, 'submission_cnt': 78, 'correct_rate': 27, 'level': 19, 'avg_try': 3, 'time_limit': '1 초', 'memory_limit': '256 MB', 'algorithms': '비트 집합', 'algorithm_ids': '152', 'review_count': 0},
-      {'seq': 9254, 'number': 14851, 'name': '해밍 거리와 쿼리', 'correct_user': 7, 'submission_cnt': 66, 'correct_rate': 26, 'level': 18, 'avg_try': 3, 'time_limit': '6 초', 'memory_limit': '512 MB', 'algorithms': '비트 집합', 'algorithm_ids': '152', 'review_count': 0},{'seq': 9255, 'number': 19102, 'name': 'Array Challenge', 'correct_user': 3, 'submission_cnt': 7, 'correct_rate': 75, 'level': 21, 'avg_try': 1, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '벌래캠프–매시', 'algorithm_ids': '110', 'review_count': 0},
-      {'seq': 9256, 'number': 18017, 'name': '총알의 속도', 'correct_user': 204, 'submission_cnt': 1404, 'correct_rate': 22, 'level': 0, 'avg_try': 4, 'time_limit': '0.5 초', 'memory_limit': '256 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9257, 'number': 16293, 'name': 'Appalling Architecture', 'correct_user': 27, 'submission_cnt': 58, 'correct_rate': 47, 'level': 6, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9258, 'number': 6545, 'name': 'Drink, on Ice', 'correct_user': 16, 'submission_cnt': 37, 'correct_rate': 50, 'level': 4, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '128 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9259, 'number': 12084, 'name': 'Captain Hammer (Small)', 'correct_user': 10, 'submission_cnt': 39, 'correct_rate': 50, 'level': 6, 'avg_try': 2, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9260, 'number': 12288, 'name': 'Captain Hammer (Small)', 'correct_user': 10, 'submission_cnt': 42, 'correct_rate': 41, 'level': 6, 'avg_try': 2, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9261, 'number': 12346, 'name': 'Captain Hammer (Small)', 'correct_user': 9, 'submission_cnt': 32, 'correct_rate': 50, 'level': 6, 'avg_try': 2, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9262, 'number': 19470, 'name': 'Physics', 'correct_user': 4, 'submission_cnt': 4, 'correct_rate': 100, 'level': 14, 'avg_try': 1, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '물리학', 'algorithm_ids': '116', 'review_count': 0},
-      {'seq': 9263, 'number': 10880, 'name': '내가 어디를 거쳐갔더라?', 'correct_user': 23, 'submission_cnt': 138, 'correct_rate': 20, 'level': 22, 'avg_try': 5, 'time_limit': '2 초', 'memory_limit': '256 MB', 'algorithms': '이중 연결 요소', 'algorithm_ids': '153', 'review_count': 0},
-      {'seq': 9264, 'number': 4385, 'name': 'Interpreter', 'correct_user': 13, 'submission_cnt': 53, 'correct_rate': 44, 'level': 12, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '128 MB', 'algorithms': '인터프리터', 'algorithm_ids': '156', 'review_count': 0},
-      {'seq': 9265, 'number': 12773, 'name': 'Road Times', 'correct_user': 9, 'submission_cnt': 35, 'correct_rate': 34, 'level': 25, 'avg_try': 2, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '선형 계획법', 'algorithm_ids': '103', 'review_count': 0},
-      {'seq': 9266, 'number': 19043, 'name': 'Balance', 'correct_user': 7, 'submission_cnt': 9, 'correct_rate': 77, 'level': 22, 'avg_try': 1, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '선형 계획법,헝가리안', 'algorithm_ids': '103,36', 'review_count': 0},
-      {'seq': 9267, 'number': 17854, 'name': 'Cheese, If You Please', 'correct_user': 5, 'submission_cnt': 17, 'correct_rate': 83, 'level': 24, 'avg_try': 1, 'time_limit': '2 초 (추가 시간 없음)', 'memory_limit': '512 MB', 'algorithms': '선형 계획법', 'algorithm_ids': '103', 'review_count': 0},
-      {'seq': 9268, 'number': 9208, 'name': '링월드', 'correct_user': 17, 'submission_cnt': 64, 'correct_rate': 35, 'level': 23, 'avg_try': 2, 'time_limit': '2 초', 'memory_limit': '128 MB', 'algorithms': '홀의 결혼 정리', 'algorithm_ids': '34', 'review_count': 0},
-      {'seq': 9269, 'number': 14216, 'name': '할 일 정하기 2', 'correct_user': 63, 'submission_cnt': 576, 'correct_rate': 26, 'level': 21, 'avg_try': 3, 'time_limit': '0.5 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9270, 'number': 16812, 'name': 'Laser Cutter', 'correct_user': 5, 'submission_cnt': 7, 'correct_rate': 71, 'level': 21, 'avg_try': 1, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9271, 'number': 17575, 'name': 'Kings', 'correct_user': 5, 'submission_cnt': 14, 'correct_rate': 35, 'level': 21, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9272, 'number': 15737, 'name': '일반 그래프 매칭', 'correct_user': 24, 'submission_cnt': 86, 'correct_rate': 47, 'level': 24, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '128 MB', 'algorithms': '일반적인 매칭', 'algorithm_ids': '15', 'review_count': 0},
-      {'seq': 9273, 'number': 15741, 'name': '일반 그래프 최대 가중치 매칭', 'correct_user': 13, 'submission_cnt': 27, 'correct_rate': 81, 'level': 28, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '일반적인 매칭', 'algorithm_ids': '15', 'review_count': 0},
-      {'seq': 9274, 'number': 16046, 'name': 'Rainbow Graph', 'correct_user': 9, 'submission_cnt': 19, 'correct_rate': 56, 'level': 27, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9275, 'number': 3836, 'name': 'Coin Collecting', 'correct_user': 8, 'submission_cnt': 43, 'correct_rate': 20, 'level': 27, 'avg_try': 4, 'time_limit': '2 초', 'memory_limit': '128 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9276, 'number': 18517, 'name': 'Pick Your Own Nim', 'correct_user': 6, 'submission_cnt': 8, 'correct_rate': 75, 'level': 26, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9277, 'number': 18588, 'name': 'Milk Candy', 'correct_user': 5, 'submission_cnt': 5, 'correct_rate': 100, 'level': 26, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9266, 'number': 19043, 'name': 'Balance', 'correct_user': 7, 'submission_cnt': 9, 'correct_rate': 77, 'level': 22, 'avg_try': 1, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '선형 계획법,헝가리안', 'algorithm_ids': '103,36', 'review_count': 0},
-      {'seq': 9267, 'number': 17854, 'name': 'Cheese, If You Please', 'correct_user': 5, 'submission_cnt': 17, 'correct_rate': 83, 'level': 24, 'avg_try': 1, 'time_limit': '2 초 (추가 시간 없음)', 'memory_limit': '512 MB', 'algorithms': '선형 계획법', 'algorithm_ids': '103', 'review_count': 0},
-      {'seq': 9268, 'number': 9208, 'name': '링월드', 'correct_user': 17, 'submission_cnt': 64, 'correct_rate': 35, 'level': 23, 'avg_try': 2, 'time_limit': '2 초', 'memory_limit': '128 MB', 'algorithms': '홀의 결혼 정리', 'algorithm_ids': '34', 'review_count': 0},
-      {'seq': 9269, 'number': 14216, 'name': '할 일 정하기 2', 'correct_user': 63, 'submission_cnt': 576, 'correct_rate': 26, 'level': 21, 'avg_try': 3, 'time_limit': '0.5 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9270, 'number': 16812, 'name': 'Laser Cutter', 'correct_user': 5, 'submission_cnt': 7, 'correct_rate': 71, 'level': 21, 'avg_try': 1, 'time_limit': '5 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9271, 'number': 17575, 'name': 'Kings', 'correct_user': 5, 'submission_cnt': 14, 'correct_rate': 35, 'level': 21, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '512 MB', 'algorithms': '헝가리안', 'algorithm_ids': '36', 'review_count': 0},
-      {'seq': 9272, 'number': 15737, 'name': '일반 그래프 매칭', 'correct_user': 24, 'submission_cnt': 86, 'correct_rate': 47, 'level': 24, 'avg_try': 2, 'time_limit': '1 초', 'memory_limit': '128 MB', 'algorithms': '일반적인 매칭', 'algorithm_ids': '15', 'review_count': 0},
-      {'seq': 9273, 'number': 15741, 'name': '일반 그래프 최대 가중치 매칭', 'correct_user': 13, 'submission_cnt': 27, 'correct_rate': 81, 'level': 28, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '일반적인 매칭', 'algorithm_ids': '15', 'review_count': 0},
-      {'seq': 9274, 'number': 16046, 'name': 'Rainbow Graph', 'correct_user': 9, 'submission_cnt': 19, 'correct_rate': 56, 'level': 27, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9275, 'number': 3836, 'name': 'Coin Collecting', 'correct_user': 8, 'submission_cnt': 43, 'correct_rate': 20, 'level': 27, 'avg_try': 4, 'time_limit': '2 초', 'memory_limit': '128 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9276, 'number': 18517, 'name': 'Pick Your Own Nim', 'correct_user': 6, 'submission_cnt': 8, 'correct_rate': 75, 'level': 26, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-      {'seq': 9277, 'number': 18588, 'name': 'Milk Candy', 'correct_user': 5, 'submission_cnt': 5, 'correct_rate': 100, 'level': 26, 'avg_try': 1, 'time_limit': '2 초', 'memory_limit': '512 MB', 'algorithms': '매트로이드', 'algorithm_ids': '104', 'review_count': 0},
-        ],
         levelSort : 0,
         answerRateSort :0,
+        pLang : [
+          'Java',
+          'Python',
+          'C','C++','C#',
+          'JavaScript',
+          'Ruby',
+          'Kotlin','Swift','Go','PHP'
+        ],
+        selectedLv : 0,
+        selectedCr : 0,
+        selectedPl : new Array(11).fill(false),
+        selectedType : new Array(7).fill(false),
       }
     },
     methods: {
       btnPress : function(idx){
-        this.types[idx] = !this.types[idx]
+        // 리스트 변경
+        // 1. selected
+        if(this.typesClicked[idx] === false){
+          this.algoList = this.algoListAll.filter(algo => {
+            return this.typeDetail[idx].some(type => algo.algorithms.indexOf(type) != -1)
+          })
+        }else{
+          this.algoList = this.algoListAll.filter(algo => {
+            return this.typeDetail[idx].some(type => algo.algorithms.indexOf(type) === -1)
+          })
+        }
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
+        this.typesClicked.splice(idx,1,!this.typesClicked[idx])
       },
       filter : function(){
         this.filtered = !this.filtered
       },
       levelChange : function(string){
         if(string === 1){
-          if(this.detailFilter.level != 0){
-            this.detailFilter.level -=1
+          if(this.selectedLv != 0){
+            this.selectedLv -=1
           }
         }else{
-          if(this.detailFilter.level != 9){
-            this.detailFilter.level +=1
+          if(this.selectedLv != 9){
+            this.selectedLv +=1
           }
         }
       },
@@ -224,6 +227,26 @@ export default {
         }
       },
       applyFilter : function(){
+        this.typesClicked = new Array(7).fill(false)
+        let merged = []
+        for(let i = 0; i < this.selectedType; i ++){
+          if(this.selectedType[i]=== true){
+            merged.concat(this.typeDetail[i])
+          }
+        }
+        let language_list = []
+        for(let i = 0; i < this.selectedPl; i ++){
+          if(this.selectedPl[i]===true){
+            language_list.push(this.pLang[i])
+          }
+        }
+        this.algoList = this.algoListAll.filter(function(algo){
+          return algo.level == this.selectedLv
+          && merged.some(type => algo.algorithms.indexOf(type) != -1)
+          && algo.correct_rate >= this.selectedCr
+          && language_list.some(lan => algo.language.indexOf(lan) != -1)
+        })
+
         this.filtered = !this.filtered
       },
       changePage : function(newP){
@@ -310,20 +333,16 @@ export default {
         this.changePage(1)
       },
     },
-    // created(){
-    //   axios.get(`http://127.0.0.1:8000/apps/v1/allProblem`)
-    //     .then(res =>{
-    //       this.algoList = res.data
-    //       this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
-    //       this.changePage(1)
-    //     })  
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    // },
-
-
-
+    created(){
+      this.$store.dispatch('getAlgo')
+      .then(() => {
+        this.algoListAll =  this.$store.state.algoList
+        this.algoList = this.algoListAll
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
+        })
+      .catch((err) => console.log(err))
+    },
 }
 </script>
 
@@ -404,7 +423,34 @@ export default {
   background-color:  rgba(180, 180, 180, 0.514);
 }
 /* 세부 필터 */
-
+#filterClose{
+    margin: 0;
+    color: rgba(37, 40, 47, 0.65);
+    border-radius: 22px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 25px;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+#filterClose > span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+#filterClose:hover{
+    cursor: pointer;
+}
+#filterClose:hover > span{
+    background-color: rgba(202, 202, 202, 0.822);
+    color: rgba(37, 40, 47, 0.411);
+}
 
 /* 세부필터 슬라이드 */
 .slide-enter-active {
@@ -445,6 +491,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
   padding: 2% 4%;
+  position: relative;
 }
 #filterSection > p:nth-child(1){
   text-align: center;
@@ -592,19 +639,23 @@ table > thead > tr > th:nth-child(2){
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(3){
-  width: 8%;
+  width: 10%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(4){
-  width: 58%;
+  width: 50%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(5){
-  width: 12%;
+  width: 10%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(6){
   width: 10%;
+  border-right: 1px solid rgba(0, 0, 0, 0.486);
+}
+table > thead > tr > th:nth-child(7){
+  width: 8%;
 }
 .algo{
   height: 35px;

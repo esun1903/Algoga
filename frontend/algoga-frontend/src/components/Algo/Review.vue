@@ -36,7 +36,6 @@ export default {
   methods : {
   },
   created(){
-    console.log(this.review.language)
     if(this.review.language ==='파이썬'){
       this.iconClass= 'fab fa-python'
     }else if(this.review.language === '자바'){
