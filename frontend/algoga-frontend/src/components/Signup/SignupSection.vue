@@ -38,8 +38,9 @@ export default {
       data:{
         email:'',
         password:'',
-        bake_id:'',
+        baek_id:'',
         nickname:'',
+        profile_image:'string'
       },
     }
   },
@@ -50,7 +51,7 @@ export default {
       } else if (this.nowIdx === 2) {
         this.data.password = data.password
       } else if (this.nowIdx === 4) {
-        this.data.bake_id = data.boj
+        this.data.baek_id = data.boj
       } else if (this.nowIdx === 6) {
         this.data.nickname = data.nickname
         if (idx === 2) {
@@ -63,11 +64,14 @@ export default {
       this.$emit('nextStage',idx) 
     },
     signUp:function(){
+      console.log(this.data)
       axios.post(`${SERVER_URL}/apps/v1/signUp`,this.data)
         .then(res => {
           if (res.status === 201) {
             this.$emit('nextStage',2) 
-            this.login()
+            setTimeout(() => {              
+              this.login()
+            }, 1000);
           }
         })
         .catch(err=>{
@@ -75,15 +79,21 @@ export default {
         })
     },
     login: function(){
-      axios.get(`${SERVER_URL}/apps/v1/login/${this.data.email}/${this.data.password}`)
+      axios.get(`${SERVER_URL}/apps/v1/login`,{
+        'email':this.data.email,
+        'password':this.data.password
+      })
         .then(res => { 
           if(res.status !== 200){
             alert('로그인실패')
             return;
           }
-          localStorage.setItem('email',this.idInput)
+          localStorage.setItem('email',res.data.userInfo[0].email)
+          localStorage.setItem('userNo',res.data.userInfo[0].seq)
+          localStorage.setItem('register_date',res.data.userInfo[0].register_date)
+          localStorage.setItem('JWT',res.data.access_token)          
           setTimeout(() => {
-            this.$router.push({name:'Main',params:{nickname:this.data.nickname}})
+            this.$router.push({name:'Main',params:{nickname:this.data.userInfo[0].email}})
             }, 3000);
           })
         .catch(err=>{alert(err)})

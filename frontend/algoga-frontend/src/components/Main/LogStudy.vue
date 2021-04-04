@@ -1,14 +1,13 @@
 <template>
   <div id="log-study">
     <header>
-      TITLE (ex. LOG of User's Study and Save)
+            
     </header>
     
     <div>
-      <div class="one-week" v-for = "(c,jdx) in data" :key="jdx">
-        <div v-for = "(d,idx) in [1,2,3,4,5,'cpp','python']" :key="idx">          
-          <div class = "one-day" :class="{'one-day-no-border':d<2&&jdx<10,'python':d==='python','cpp':d==='cpp'}" :title="message(d)">
-
+      <div class="one-week" v-for = "(one_week_data,jdx) in week_data" :key="jdx">
+        <div v-for = "(d,idx) in one_week_data" :key="idx">          
+          <div class = "one-day" :class="{'one-day-no-border':d==='not_day','solved_1':d===1,'solved_2':d===2,'solved_3':d===3, 'solved_4':d>=4}" :title="message(jdx,idx)">            
           </div>
         </div>
       </div>
@@ -33,6 +32,8 @@ export default {
       ],      
       allCodeBoard: [],
       data:[],
+      week_data:[],
+      first_day:-1,
     }
   },
   methods: {
@@ -63,13 +64,24 @@ export default {
       diff = Math.ceil(diff / (1000*3600*24))
 
       return diff+1
+    },
+    focusingLast:function(){
+      const allDay = document.querySelectorAll('.one-day')
+      console.log(allDay)
+      console.log(allDay[allDay.legnth-1])
     }
 
   },
   computed:{
     message(){
-      return lang => {
-        return `show message by using html title attribute and this lang is ${lang}`
+      return (jdx,idx)=> {
+        if (jdx === 40 && idx ===this.first_day) {
+          return 'You create this account'
+        } else if (jdx <40){
+          return 'You did not create account'
+        } else {  
+          return `You solved ${this.week_data[jdx][idx]} problems.`
+        }
       }
     }
   },
@@ -100,8 +112,12 @@ export default {
       const x = event.pageX - slider.offsetLeft
       const walk = (x-startX) * 1
       slider.scrollLeft = scrollLeft - walk
-    })
-  },
+    })  
+
+   
+
+  }
+  ,
   async created(){
     for (let i = 0; i<50;i++){
       this.check.push(i)
@@ -124,18 +140,12 @@ export default {
     const today = this.getToday()
     const DateDiff = this.getDayDiff(startDate,today)
 
-
-    this.data = new Array(DateDiff)
-    console.log(this.data)
-
-
-    console.log(startDate,registerDay,today,DateDiff)
+    this.data = new Array(DateDiff)   
 
     for (let i = 0; i<codeBoardUser.length; i++){
       console.log(codeBoardUser[i])
       let dateOfBoard = codeBoardUser[i].register_date
-      let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1
-      console.log(dateIdx)
+      let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
       if (this.data[dateIdx]) {
         this.data[dateIdx] += 1
       } else {
@@ -144,39 +154,55 @@ export default {
 
     
     }
-    console.log('okay the upper is done')
 
-    for (let i = 0; i<DateDiff-1 ; i++){
-      console.log(DateDiff[i])
+    for (let i = 0; i<DateDiff ; i++){     
       if (!this.data[i]) {
         this.data[i] = 0
       }
+    }    
+
+
+    for (let i = 0; i<40; i++) {
+      let weekArray = new Array(7).fill(0)
+      this.week_data.push(weekArray)
     }
-    console.log(this.data)
     
     
+    let register_week = new Array()
+    let first_week_last_idx = -1
+    for (let i = 0; i<registerDay[1];i++){
+      register_week.push(0)
+    }
+
+    for (let i=0; i<7-registerDay[1];i++){
+      register_week.push(this.data[i])
+      first_week_last_idx = i
+    }
+
+    this.week_data.push(register_week) // 첫주 저장
+    
+    let current_idx = first_week_last_idx+1
+    for (let i =0; i<parseInt((this.data.length-first_week_last_idx+1)/7)+1;i++){
+      let save_list = []
+      for (let j=0; j<7; j++){
+        if (this.data.length > current_idx+j){
+          save_list.push(this.data[current_idx+j])
+        } else {
+          save_list.push('not_day')
+        }
+      }
+      current_idx += 7
+      this.week_data.push(save_list)
+    }
     
 
+    this.first_day = registerDay[1]
 
-
-
+    this.$emit('userData',this.data)
 
     
-
 
   },
-
-
-
-
-
-
-
-
-
-
-
-
 }
 </script>
 
@@ -191,15 +217,13 @@ export default {
   display: flex;
   width: 1000px;
   overflow:auto;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 
 
 #log-study > div::-webkit-scrollbar {
   display:none;
 }
-
-
 
 .one-week {
   height: 194px;
@@ -214,14 +238,15 @@ export default {
 .one-day {
   width:19.6px;
   height:20px;
-  border: 0.1px solid black;
+  /* border: 0.1px solid black; */
   border-radius: 5px;
   cursor:pointer;
+  background-color: rgba(0,0,0,0.1);
 }
 
 
 .one-day-no-border {
-  border: none;
+  background-color: rgba(0,0,0,0);
 }
 
 .python {
@@ -234,6 +259,23 @@ export default {
 
 .java {
   background-color: hotpink;
+}
+
+.solved_1 {
+  background-color:chartreuse;
+  opacity: 0.25;
+}
+.solved_2 {
+  background-color:chartreuse;
+  opacity: 0.5;
+}
+.solved_3 {
+  background-color:chartreuse;
+  opacity: 0.75;
+}
+.solved_4 {
+  background-color:chartreuse;
+  opacity: 1;
 }
 
 

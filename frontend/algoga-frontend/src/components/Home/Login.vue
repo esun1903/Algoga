@@ -53,35 +53,25 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
-      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
-        withCredentials:true,
+      axios.post(`${SERVER_URL}/apps/v1/login`,{
+        'email': this.idInput,
+        'password': this.passwordInput
       })
         .then(res => { 
           if(res.status !== 200){
             alert('로그인실패')
             return;
           }                    
-          console.log(res)
-          localStorage.setItem('email',res.data[0].email)
-          localStorage.setItem('userNo',res.data[0].seq)
-          localStorage.setItem('register_date',res.data[0].register_date)
+          localStorage.setItem('email',res.data.userInfo[0].email)
+          localStorage.setItem('userNo',res.data.userInfo[0].seq)
+          localStorage.setItem('register_date',res.data.userInfo[0].register_date)
+          localStorage.setItem('JWT',res.data.access_token)
           this.$router.push({name:'Main',params:{nickname:this.idInput}})
           
         })
         .catch(err=>{alert(err)})
 
 
-      // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
-      //   credentials:'include',
-      // })
-      //   .then(res => {
-      //     return res.json()
-      //   })
-      //   .then(res => {
-      //     axios
-      //     console.log(JSON.stringify(res))
-      //     // this.$router.push({name:'Main',params:{nickname:this.idInput}})
-      //   })
 
     },
     test:function(){
