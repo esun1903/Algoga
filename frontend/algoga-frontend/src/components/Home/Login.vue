@@ -53,17 +53,18 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
-      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{},{
-        credentials:"same-origin",
+      axios.get(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
+        withCredentials:true,
       })
         .then(res => { 
           if(res.status !== 200){
             alert('로그인실패')
             return;
           }                    
-          // console.log(res)
+          console.log(res)
           localStorage.setItem('email',res.data[0].email)
           localStorage.setItem('userNo',res.data[0].seq)
+          localStorage.setItem('register_date',res.data[0].register_date)
           this.$router.push({name:'Main',params:{nickname:this.idInput}})
           
         })
@@ -71,12 +72,13 @@ export default {
 
 
       // fetch(`${SERVER_URL}/apps/v1/login/${this.idInput}/${this.passwordInput}`,{
-      //   credentials:'same-origin',
+      //   credentials:'include',
       // })
       //   .then(res => {
       //     return res.json()
       //   })
       //   .then(res => {
+      //     axios
       //     console.log(JSON.stringify(res))
       //     // this.$router.push({name:'Main',params:{nickname:this.idInput}})
       //   })

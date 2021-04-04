@@ -2,7 +2,8 @@
   <div id="register-problem">
     <header>
       <div>
-        <input type="text" placeholder="Input Problem No" >
+        <input type="number" placeholder="Input Problem No" @input="matchingTitle">
+        <input type="text" v-model='problemTitle' disabled>
         <select>
           <option value="" selected hidden>Select Your Language</option>
           <option value="3">C</option>
@@ -17,7 +18,7 @@
         </button>     
         <button @click='categBtnAdd'>
           <p v-if='addCateg'>+</p>
-          <input type="text" class='input_underline' v-model='newCateg' @keydown.enter="categBtnAdd" v-else>
+          <input type="text" class='input_underline' v-model='newCateg' @keydown.enter="categBtnAdd" v-else>          
         </button>           
       </div>
 
@@ -79,7 +80,6 @@ import axios from "axios"
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 
-
 export default {
   name:'RegisterProblem',
   components:{
@@ -115,7 +115,8 @@ export default {
         "user_seq": 1,
         "problem_seq": 1,
         "language_seq": 1
-      }
+      },
+      problemTitle:'A+B'
 
     }
   },
@@ -125,16 +126,17 @@ export default {
         alert('어떤 방식으로 풀었는지 알려주세요!')
         return
         }
+      
+      const lang = document.querySelector('#register-problem select').value
+      this.data.user_seq = localStorage.getItem('userNo')
+      this.data.language_seq = lang
       if (!lang) {
         alert('언어를 선택해주세요')
         return
       }
       this.categoryToString()
-      const lang = document.querySelector('#register-problem select').value
-      this.data.language_seq = lang
-      this.data.user_seq = localStorage.set
 
-      axios.post(`${SERVER_URL}/apps/v1/codeBoardRegiste`,this.data)
+      axios.post(`${SERVER_URL}/apps/v1/codeBoardRegister`,this.data)
         .then(res => {
           console.log(res)
         })
@@ -206,6 +208,16 @@ export default {
         this.hiddenBool=true
         this.data.public = 0
       }      
+    },
+    matchingTitle:function(event){
+      const probNo = event.target.value
+      axios.get(`${SERVER_URL}/apps/v1/Problem/${probNo}`)
+        .then(res=>{
+          console.log(res)
+        })
+        .catch(err=>{
+          alert(err)
+        })
     }
     
   },
@@ -229,11 +241,13 @@ export default {
       
     })
 
-    const inputBox = document.querySelector("#register-problem > header > div:nth-child(1) > input")
+    const inputBox = document.querySelector("#register-problem > header > div:nth-child(1) > input:nth-child(1)")
+    const inputBox2 = document.querySelector("#register-problem > header > div:nth-child(1) > input:nth-child(2)")
     // const inputwidth = document.querySelector("#register-problem > header > div").clientWidth - document.querySelector("#register-problem > header > div > select").clientWidth - 15
     const inputHeight =  document.querySelector("#register-problem>header>div:nth-child(1)>select").clientHeight
     // inputBox.style.width = `${inputwidth}px`
     inputBox.style.height = `${inputHeight}px`    
+    inputBox2.style.height = `${inputHeight}px`    
 
   },
   created(){
@@ -258,18 +272,34 @@ export default {
 #register-problem > header >div:nth-child(1) {
   margin-bottom: 10px;
 }
-#register-problem > header >div:nth-child(1) > input {
-  width: 25%;
+#register-problem > header >div:nth-child(1) > input:nth-child(1) {
+  width: 22%;
   height: 100%;
   outline:none;
   border: none;
   border-bottom: 1px solid black;
   font-size: 1rem;  
   transition: 0.3s;
+  margin-right: 10px;
 }
+
+#register-problem > header >div:nth-child(1) > input:nth-child(2){
+  width: 50%;
+  outline:none;
+  border: none;
+
+  border-bottom: 1px solid black;
+  font-size: 1rem;  
+  transition: 0.3s;
+}
+
+
+
+
+
 #register-problem > header >div:nth-child(1)> select{  
   padding: 10px 0;
-  width: 24%;
+  width: 25%;
   font-family: Hack, monospace;    
   font-size: 1rem;
   border-radius: 15px;
