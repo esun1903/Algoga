@@ -64,6 +64,8 @@ urlpatterns = [
     path("v1/searchNameProblem/<str:name>", ProblemViewSet.as_view({"get" : "searchNameProblem"}), name="searchNameProblem"),
     #문제 난이도로 검색
     path("v1/searchLevelProblem/<int:level>", ProblemViewSet.as_view({"get" : "searchLevelProblem"}), name="searchLevelProblem"),
+    #문제 번호로 검색
+    path("v1/searchNumberProblem/<int:number>", ProblemViewSet.as_view({"get" : "searchNumberProblem"}), name="searchNumberProblem"),
     #모든 문제 리턴 (pagination)
     path("v1/allPaginationProblem", ProblemViewSet.as_view({"get" : "allPaginationProblem"}), name="allPagenationProblem"),
     #문제 세부 정보 
