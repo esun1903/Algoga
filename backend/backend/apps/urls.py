@@ -25,6 +25,8 @@ urlpatterns = [
     path("v1/passEmailCheck/<str:email>", UserViewSet.as_view({"get": "passEmailCheck"})),
     #nickname 체크
     path("v1/nicknameCheck/<str:nickname>", UserViewSet.as_view({"get": "nicknameCheck"})),
+    #비밀번호 찾기
+    path("v1/findPassword/<str:email>", UserViewSet.as_view({"get": "findPassword"})),
     #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
