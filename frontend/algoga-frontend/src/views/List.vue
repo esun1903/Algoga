@@ -3,10 +3,17 @@
     <MainNavbar />
     <!-- 검색 -->
     <div id='search'>
-      <form>
-        <input id='keyword' type="text" maxlength="30">
+      <form v-on:submit.prevent>
+        <select v-model="findType" name="findType" id="findtype">
+          <option selected value="Title">Title</option>
+          <option value="No">No</option>
+          <option value="Type">Type</option>
+        </select>
       </form>
-      <button id='searchIcon'  class='searchBtn'><i class="fas fa-search"></i></button>
+      <form v-on:submit.prevent>
+        <input @keypress.enter="searchKeyword" v-model="findInput" id='keyword' type="text" maxlength="30">
+      </form>
+      <button @click='searchKeyword' id='searchIcon'  class='searchBtn'><i class="fas fa-search"></i></button>
       <button @click='filter' :class='{btnClicked : filtered}' id='filterIcon' class='searchBtn'><i class="fas fa-sort-amount-down"></i></button>
     </div>
     <!-- 타입 버튼 필터링 -->
@@ -182,6 +189,8 @@ export default {
         selectedCr : 0,
         selectedPl : new Array(11).fill(false),
         selectedType : new Array(7).fill(false),
+        findInput : '',
+        findType : 'Title',
       }
     },
     methods: {
@@ -332,6 +341,27 @@ export default {
         }
         this.changePage(1)
       },
+      searchKeyword : function(){
+        if(this.findInput ===''){
+          alert('검색어를 입력하세요')
+        }
+        else{
+          if(this.findType ==='Title'){
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.name.indexOf(this.findInput) != -1
+            })
+          }else if(this.findType ==='No'){
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.seq == this.findInput
+            })
+          }else{
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.algorithms.indexOf(this.findInput) != -1
+            })
+          }
+          this.changePage(1)
+        }
+      }
     },
     created(){
       this.$store.dispatch('getAlgo')
@@ -353,16 +383,36 @@ export default {
   position: relative;
 }
 /* 검색란 */
+#findtype{
+  position: absolute;
+  left: 31%;
+  top: 50%;
+  transform: translate(0,-50%);
+  border: none;
+  font-size: 1rem;
+}
+
+#findtype:focus{
+  border: none;
+}
+*:focus {
+    outline: none;
+}
 #search > form > input{
-  width: 40%;
+  width: 30%;
   height: 35px;
   border-radius: 20px;
   margin-right: 20px;
-  padding-left: 20px;
+  padding-left: 10%;
   font-size: 1rem;
   text-overflow: hidden;
 }
-
+@media (max-width : 782px) {
+  #search > form > input{
+    padding-left: 11%;
+    width: 25%;
+  }
+}
 #searchIcon{
   position: absolute;
   top: 50%;
