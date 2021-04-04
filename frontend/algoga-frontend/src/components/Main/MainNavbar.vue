@@ -25,18 +25,13 @@ export default {
     name : 'MainNavbar',
     methods:{
       signout:function(){
-        // axios.get(`${SERVER_URL}/apps/v1/logout`)
-        //   .then(res => {
-        //     console.log(res)
-        //   })
-        //   .catch(err=>{
-        //     console.log(err)
-        //   })
-
-        localStorage.removeItem('email')
-        localStorage.removeItem('userNo')
-
-
+        if (confirm('로그아웃 하시겠습니까?')===true){
+          localStorage.removeItem('email')
+          localStorage.removeItem('userNo')
+          localStorage.removeItem('register_date')
+          localStorage.removeItem('JWT')
+          this.$router.push({name:'Home'})
+        }
       },
       routerNav:function(idx){                
         if (idx === 0) {
