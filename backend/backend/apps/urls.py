@@ -7,11 +7,11 @@ from . import problem_views
 
 urlpatterns = [ 
     #로그인
-    path("v1/login/<str:email>/<str:password>", UserViewSet.as_view({"get": "login"})),
+    path("v1/login", UserViewSet.as_view({"post": "login"})),
     #로그아웃
     path('v1/logout', UserViewSet.as_view({"get": "logout"})),
-    #세션확인
-    path('v1/sessionCheck', UserViewSet.as_view({"get": "sessionCheck"})),
+    #로그인토큰검사 재발급
+    path('v1/token_verify', UserViewSet.as_view({"post": "token_verify"})),
     #회원가입
     path("v1/signUp", UserViewSet.as_view({"post": "signUp"})),
     #회원수정
@@ -20,6 +20,18 @@ urlpatterns = [
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
     #이메일전송
     path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
+    #===================================
+    #팔로잉걸기 
+    path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
+    #팔로잉보기 
+    path('v1/followingList/<int:user_follower_seq>', UserViewSet.as_view({"get": "FollowingList"})),
+    #팔로워보기 
+    path('v1/followerList/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowerList"})),
+    #팔로잉삭제 
+    path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
+    #팔로워삭제 
+    path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
+    #===================================
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
@@ -32,10 +44,10 @@ urlpatterns = [
     path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
     #codBoard page
     path("v1/codeBoardUser/<str:email>", codeBoardViewSet.as_view({"get": "codeBoardUser"})),
-
+    # 문제seq에 작성된 codeBoard들 리턴
+    path("v1/codeBoardList/<int:problem_seq>", codeBoardViewSet.as_view({"get": "codeBoardList"})),
     #사용자가 푼 알고리즘 분류 수 가져오기
     path('v1/userTypeInfo/<int:seq>', UserViewSet.as_view({"get": "UserTypeInfo"})),
-    
     #commnet 등록
     path("v1/commentRegister", commentViewSet.as_view({"post": "commentRegister"})),
     #commnet 수정
@@ -58,5 +70,6 @@ urlpatterns = [
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
+    
     
 ]
