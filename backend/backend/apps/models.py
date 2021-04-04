@@ -84,7 +84,7 @@ class Problem(models.Model):
     time_limit = models.CharField(max_length=50)
     memory_limit = models.CharField(max_length=50)
     languages = models.CharField(max_length=100)
-    language_ids = models.CharField(max_length=100)
+    language_seqs = models.CharField(max_length=100)
     algorithms = models.CharField(max_length=200, blank=True, null=True)
     algorithm_ids = models.CharField(max_length=100, blank=True, null=True)
     review_count = models.IntegerField(blank=True, null=True)

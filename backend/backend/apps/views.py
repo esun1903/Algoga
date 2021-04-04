@@ -24,7 +24,8 @@ from .utils import *
 
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
-
+from django.shortcuts import get_object_or_404
+from collections import Counter
 
 
 @permission_classes([AllowAny])
@@ -283,6 +284,22 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if not codeBoardSerializer.is_valid():
             print(request.data)
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        problem_seq = request.data['problem_seq']
+        language = request.data['language']
+        language_seq = request.data['language_seq']
+
+        problem = Problem.objects.filter(seq=problem_seq)
+
+        problem_languages = problem.values_list('languages', flat=True)[0].split(',')
+        problem_languages.append(language)
+        problem_languages = ','.join(list(set(problem_languages)))
+
+        problem_language_seqs = problem.values_list('language_seqs', flat=True)[0].split(',')
+        problem_language_seqs.append(str(language_seq))
+        problem_language_seqs = ','.join(list(set(problem_language_seqs)))
+
+        problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
 
         codeBoardSerializer.save()
 
@@ -300,9 +317,28 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     def codeBoardDelete(self, request, codeBoard_seq):
 
-        codeBoard =  CodeBoard.objects.filter(seq =codeBoard_seq)
+        codeBoard = CodeBoard.objects.filter(seq =codeBoard_seq)
         if not codeBoard.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        problem_seq = codeBoard.values('problem_seq')[0]['problem_seq']
+        language = codeBoard.values('language')[0]['language']
+        language_seq = codeBoard.values('language_seq')[0]['language_seq']
+
+        languages = CodeBoard.objects.filter(problem_seq=problem_seq).values_list('language', flat=True)
+        
+        if Counter(languages)[language] == 1:
+            problem = Problem.objects.filter(seq=problem_seq)
+
+            problem_languages = problem.values_list('languages', flat=True)[0].split(',')
+            problem_languages.remove(language)
+            problem_languages = ','.join(problem_languages)
+
+            problem_language_seqs = problem.values_list('language_seqs', flat=True)[0].split(',')
+            problem_language_seqs.remove(str(language_seq))
+            problem_language_seqs = ','.join(problem_language_seqs)
+
+            problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
 
         codeBoard.delete()
         
