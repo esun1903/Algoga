@@ -39,10 +39,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if loginUser.exists():
             serializer = UserSerializer(loginUser, many=True) 
             access_token= generate_access_token(request.data["email"])
-            ##refresh_token=generate_refresh_token(request.data["email"])
-
-                        #serializer.data
-           # Response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+          
             Response.data = {
                 'access_token': access_token,
                 'userInfo': serializer.data,
@@ -52,9 +49,8 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     
-    def sessionCheck(self, request):        
+    def token_verify(self, request):        
         
-        print(request.data)
         try:
             access_token = request.data["access_token"]
             payload = jwt.decode(
@@ -69,12 +65,13 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if user is None:
             raise exceptions.AuthenticationFailed('User not found')
 
-        # if not user.is_active:
-        #     raise exceptions.AuthenticationFailed('user is inactive')
         access_token= generate_access_token(request.data["email"])
-       
+        Response.data = {
+                'access_token': access_token,
+             
+                     }
 
-        return Response(access_token,status=status.HTTP_200_OK)
+        return Response(Response.data,status=status.HTTP_200_OK)
     
     def logout(self, request):
         
