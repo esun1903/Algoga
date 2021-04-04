@@ -20,7 +20,10 @@ from .get_data import *
 from collections import Counter
 from django.shortcuts import get_object_or_404
 # from .text import message
-
+# 이미지를 위해 추가한 import 
+import os
+from random import randint
+from django.utils.timezone import now
 
 
 @permission_classes([AllowAny])
@@ -349,5 +352,3 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
-      
