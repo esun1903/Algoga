@@ -20,6 +20,18 @@ urlpatterns = [
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
     #이메일전송
     path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
+    #===================================
+    #팔로잉걸기 
+    path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
+    #팔로잉보기 
+    path('v1/followingList/<int:user_follower_seq>', UserViewSet.as_view({"get": "FollowingList"})),
+    #팔로워보기 
+    path('v1/followerList/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowerList"})),
+    #팔로잉삭제 
+    path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
+    #팔로워삭제 
+    path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
+    #===================================
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
@@ -32,14 +44,10 @@ urlpatterns = [
     path("v1/codeBoardPage/<int:codeBoard_seq>", codeBoardViewSet.as_view({"get": "codeBoardPage"})),
     #codBoard page
     path("v1/codeBoardUser/<str:email>", codeBoardViewSet.as_view({"get": "codeBoardUser"})),
-
-    # 문제seq에 작성된 codBoard들 리턴
+    # 문제seq에 작성된 codeBoard들 리턴
     path("v1/codeBoardList/<int:problem_seq>", codeBoardViewSet.as_view({"get": "codeBoardList"})),
-
     #사용자가 푼 알고리즘 분류 수 가져오기
     path('v1/userTypeInfo/<int:seq>', UserViewSet.as_view({"get": "UserTypeInfo"})),
-    
-    
     #commnet 등록
     path("v1/commentRegister", commentViewSet.as_view({"post": "commentRegister"})),
     #commnet 수정
