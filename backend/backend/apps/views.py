@@ -90,8 +90,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
     def sendEmail(self, request, email):
-        
-        
+
         message = render_to_string('activation_email.html', {
                 'email': email,
                 'domain': 'localhost:8000',
@@ -136,8 +135,15 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         return Response(True,status=status.HTTP_200_OK)
+
+      
+    def nicknameCheck(self, request, nickname):
+
+        users =  User.objects.filter(nickname = nickname)
+        if users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
-         
+        return Response("닉네임사용가능",status=status.HTTP_200_OK)     
 
     def userInfoUpdate(self,request, email):
 
