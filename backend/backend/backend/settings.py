@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 SECRET_KEY = my_settings.SECRET_KEY
+REFRESH_TOKEN_SECRET =my_settings.REFRESH_TOKEN_SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -99,6 +100,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 # }
 DATABASES = my_settings.DATABASES
 
+# AUTH_USER_MODEL = 'apps.FollowUser'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
