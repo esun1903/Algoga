@@ -10,11 +10,9 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny,IsAuthenticated
 #이메일 인증을 위해 추가로 import 
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, message
 from django.utils.encoding import force_bytes, force_text
 # from .text import message
 import datetime
@@ -24,8 +22,10 @@ from .utils import *
 
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
+from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from collections import Counter
+
 
 
 @permission_classes([AllowAny])
@@ -74,11 +74,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(Response.data,status=status.HTTP_200_OK)
     
-    def logout(self, request):
-        
-        del request.session['email']
-        return Response("로그 아웃",status=status.HTTP_200_OK)
-        
     def signUp(self, request): 
         #회원가입 시 
         users =  User.objects.filter(email =request.data["email"])
@@ -89,20 +84,60 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userSerializer = UserSerializer(data=request.data, partial=True)
         if not userSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        
+
         userSerializer.save()
-        # print(users.seq)
-        # current_site = get_current_site(request)
-        # domain = current_site.domain
-        # uidb64 = urlsafe_base64_encode(force_bytes(users.seq))
-        # message_data = message(domain, uidb64)
-        # mail_title = "이메일 인증을 완료해주세요"
-        # mail_to = data['email']
-        # email = EmailMessage(mail_title, message_data, to=[mail_to])
-        # email.send()
 
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
+    def sendEmail(self, request, email):
+        
+        
+        message = render_to_string('activation_email.html', {
+                'email': email,
+                'domain': 'localhost:8000',
+                'token' : email_token(email)
+            })
+
+        email = EmailMessage(
+            'ALGOGA 회원가입 인증 메일입니다.',                # 제목
+            message,       # 내용
+            to=[email],  # 받는 이메일 리스트
+        )
+        email.send()   
+        return Response("인증메일을 보냈습니다.", status=status.HTTP_200_OK)
+    
+
+    def emailAuthenticate(self, request, email,token):
+        
+        try:
+            access_token = token
+            payload = jwt.decode(
+                access_token, settings.SECRET_KEY, algorithms=['HS256'])
+
+        except jwt.ExpiredSignatureError:
+            raise exceptions.AuthenticationFailed('access_token expired')
+        except IndexError:
+            raise exceptions.AuthenticationFailed('Token prefix missing')
+
+        user = User.objects.filter(email=payload['user_id']).first()
+        if user is None:
+            raise exceptions.AuthenticationFailed('User not found')
+
+        users =  User.objects.filter(email =email)
+        users.update(is_active =1)   
+        
+        return Response("인증성공",status=status.HTTP_200_OK)
+     
+    
+    def passEmailCheck(self, request, email):
+
+        users =  User.objects.filter(email =email,is_active =1)
+        if not users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        return Response(True,status=status.HTTP_200_OK)
+        
+         
 
     def userInfoUpdate(self,request, email):
 
@@ -129,22 +164,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         return  Response("삭제성공", status=status.HTTP_200_OK)
     
-    #이메일 인증
-    def get(self, request, uidb64, seq, token):
-        try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
-            user = Users.objects.get(pk=seq)
-            # user_dic = jwt.decode(token,SECRET_KEY,algorithm='HS256')
-            if user.seq == user_dic["user"]:
-                user.is_active = True
-                user.save()  
-                return "아주 잘 됨"
-
-            return JsonResponse({'message':'auth fail'}, status=400)
-        except ValidationError:
-            return JsonResponse({'message':'type_error'}, status=400)
-        except KeyError:
-            return JsonResponse({'message': 'INVALID_KEY'}, status=400)
     
     # 사용자가 푼 알고리즘 수
     def UserTypeInfo(self, request, seq): 
@@ -225,24 +244,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users.delete()
 
         return  Response("팔로워 삭제 성공", status=status.HTTP_200_OK)
-
-@permission_classes([AllowAny])
-class Activate(View):
-    def get(self, request, uidb64, token):
-        try:
-            # uid = force_text(urlsafe_base64_decode(uidb64))
-            # user = Users.objects.get(pk=seq)
-            # if user.id == user_dic["user"]:
-            #     user.is_active = True
-            #     user.save()
-            #     return "완료"
-
-            return "완료"
-            # return JsonResponse({'message':'auth fail'}, status=400)
-        except ValidationError:
-            return JsonResponse({'message':'type_error'}, status=400)
-        except KeyError:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
 
 @permission_classes([AllowAny])
