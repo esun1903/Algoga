@@ -5,11 +5,10 @@ from .problem_views import *
 from . import views
 from . import problem_views
 
+
 urlpatterns = [ 
     #로그인
     path("v1/login", UserViewSet.as_view({"post": "login"})),
-    #로그아웃
-    path('v1/logout', UserViewSet.as_view({"get": "logout"})),
     #로그인토큰검사 재발급
     path('v1/token_verify', UserViewSet.as_view({"post": "token_verify"})),
     #회원가입
@@ -19,7 +18,12 @@ urlpatterns = [
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
     #이메일전송
-    path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
+    path("v1/sendEmail/<str:email>", UserViewSet.as_view({"get": "sendEmail"})),
+    #이메일인증
+    path("v1/emailAuthenticate/<str:email>/<str:token>", UserViewSet.as_view({"get": "emailAuthenticate"})),
+    #이메일인증확인
+    path("v1/passEmailCheck/<str:email>", UserViewSet.as_view({"get": "passEmailCheck"})),
+    
     #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
@@ -70,6 +74,5 @@ urlpatterns = [
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
-    
     
 ]
