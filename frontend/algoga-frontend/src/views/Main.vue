@@ -23,14 +23,12 @@
         <section>
           챌린지 디브          
 
-          <LogStudy />
+          <LogStudy @userData='userData' />
           <!-- history -->
 
-          <History />
+          <History :dataHistory='dataHistory' />
 
-          <button @click='test'>TEST Button router to problemSolving</button>
-          <button @click='test1'>SESSIONCHECK</button>
-          {{teststring}}
+          <button @click='test'>TEST Button router to problemSolving</button>                    
         </section>
         
     
@@ -50,7 +48,7 @@ import Feed from "@/components/Main/Feed"
 // import axios from "axios"
 
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name:"Main",
@@ -65,24 +63,17 @@ export default {
     test:function(){
       this.$router.push({name:'Register'})
     },
-    test1:function(){     
-      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
-        .then(res=>{
-          return res.json()
-        })
-        .then(res=>{
-          console.log(JSON.stringify(res))
-        })
-        .catch(err=>{
-          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
-          this.teststring = err.data
-        })
-    }
+    userData:function(data){
+      
+      data.reverse()
+      this.dataHistory = data      
+    },
   },
   data : function(){
     return{
       feedOpened: false,
       teststring:'',
+      dataHistory:[],
     }
   },
 }

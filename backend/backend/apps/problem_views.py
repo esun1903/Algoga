@@ -16,6 +16,7 @@ from .get_data import *
 from collections import Counter
 import requests
 import os
+from django.shortcuts import get_object_or_404
 
 USER_PAGE = "https://www.acmicpc.net/user/"
 
@@ -167,6 +168,13 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # 난이도 검색해서 나온 값 주기
         totalProblem = Problem.objects.filter(level=level)
         serializer = ProblemSerializer(totalProblem, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @permission_classes([AllowAny])
+    def searchNumberProblem(self, request, number):
+        # 문제 번호 검색해서 나온 값 주기
+        problem = get_object_or_404(Problem, number=number)
+        serializer = ProblemSerializer(problem)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
