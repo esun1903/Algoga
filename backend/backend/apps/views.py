@@ -144,6 +144,22 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         return Response("닉네임사용가능",status=status.HTTP_200_OK)     
+    
+    def findPassword(self, request, email):
+        
+        users =  User.objects.filter(email = email)
+        if not users.exists():
+            return Response("이메일이 존재하지않습니다.",status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        user =  User.objects.get(email=email)
+        email = EmailMessage(
+            'ALGOGA의 비밀번호 입니다.',                # 제목
+            user.password,       # 내용
+            to=[email],  # 받는 이메일 리스트
+        )
+        email.send()
+        return Response("해당 이메일에 비밀번호 전송",status=status.HTTP_200_OK)  
+
 
     def userInfoUpdate(self,request, email):
 
