@@ -88,6 +88,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 ACCOUNT_LOGOUT_ON_GET = True
 
 
+
+###########################AWS
+AWS_ACCESS_KEY_ID = 'AKIARDKX6EPHIIW7ECGX' # .csv 파일에 있는 내용을 입력 Access key ID
+AWS_SECRET_ACCESS_KEY = 'UW7zu5XL/zY5HxoZ5cO6JRXlCHn1+r1X+ZL+RZ2F' # .csv 파일에 있는 내용을 입력 Secret access key
+AWS_REGION = 'ap-northeast-2'
+
+###S3 Storages
+AWS_STORAGE_BUCKET_NAME = 'algoga' # 설정한 버킷 이름
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 

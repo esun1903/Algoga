@@ -4,6 +4,7 @@ from .views import *
 from .problem_views import *
 from . import views
 from . import problem_views
+from .util import *
 
 urlpatterns = [ 
     #로그인
@@ -20,7 +21,6 @@ urlpatterns = [
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
     #이메일전송
     path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
-    #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
     #팔로잉보기 
@@ -31,7 +31,6 @@ urlpatterns = [
     path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
     #팔로워삭제 
     path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
-    #===================================
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
@@ -70,5 +69,6 @@ urlpatterns = [
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
+
     
 ]
