@@ -2,18 +2,16 @@
   <div id="history">
     
     <div>
-      <div v-for="(data,idx) in dummy" :key="idx">
-        <section style="display:flex; margin-left:-7px; margin-top:20px; align-items:center">
-          <div style='width:10px; height:10px; background-color:black;border-radius:10px; border: 1px solid black;margin-right: 5px'></div>
-          At {{data.data}} ... You solved {{data.solved}} .....
+      <div v-for="(data,idx) in datas" :key="idx">
+        <section class='history-section'>
+          <div class='pointer'></div>
           <div>
-            Show detail
+            {{data}}
           </div>
         </section>
         
-
       </div>
-    </div>
+    </div>    
   </div>
 </template>
 
@@ -23,14 +21,44 @@ export default {
     methods:{
 
     },
+    props:{
+      dataHistory:[Array]
+    },
     data:function(){
-        return { 
-            dummy: [
-              {'data':'2021-03-23 Tue','solved':'3problems'},
-              {'data':'2021-03-21 Sun','solved':'3problems'},
-              {'data':'2021-03-20 Sat','solved':'3problems'},
-            ]
+        return {
+            datas:[],
         }
+    },
+    watch:{
+      dataHistory:function(){        
+        this.datas = []
+        const reg_date = localStorage.getItem('register_date').split('T')[0]        
+        let week = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday')  
+        let month_name = new Array('January','February','March','April','May','June','July','August','September','October','November','December')
+        
+        let register_date = new Date(reg_date)
+
+        for (let i = 0; i<this.dataHistory.length;i++){
+          let new_date = new Date()
+          let string_date = ''
+          new_date.setDate(register_date.getDate()+this.dataHistory.length-i-1)
+
+          let year = new_date.getFullYear()
+          let month = new_date.getMonth()
+          let day = new_date.getDate()          
+          
+          var d = new Date(`${year}-${month+1}-${day}`).getDay()
+
+
+          
+          string_date = week[d]+' '+`${day}`+' ' +month_name[month]+' '+ year + ' '+', ' +`You solved ${this.dataHistory[i]} problems`
+          
+
+
+          this.datas.push(string_date)
+          
+        }
+      }
     },
     mounted(){
       let slider = document.querySelector('#history')
@@ -87,11 +115,11 @@ export default {
 <style>
 #history {  
   position:relative;
-  background-color:  pink;
+  background-color:  white;
   margin-top: 20px;  
   width: 100%;
   padding: 10px;
-  max-height: 200px;
+  max-height: 500px;
   overflow: auto;  
   scroll-behavior: smooth;
 }
@@ -102,8 +130,15 @@ export default {
 #history > div:nth-child(1) {
   text-align: left;
   margin-left:10px;
-  border-left: 3px solid greenyellow;
-  height: 1000px;
+  border-left: 3px solid rgba(0,0,0,0.5);  
+}
+
+
+.history-section {
+  display:flex; 
+  margin-left:-6px; 
+  margin-top:20px; 
+  align-items:center
 }
 
 .topBtn {
@@ -114,6 +149,14 @@ export default {
   border-radius: 100%;
   background-color: white;
   cursor:pointer;
+}
+
+.pointer {
+  width:10px; 
+  height:10px; 
+  background-color:rgb(94, 185, 41);
+  border-radius:10px;   
+  margin-right: 5px
 }
 
 </style>
