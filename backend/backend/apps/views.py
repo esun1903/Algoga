@@ -143,7 +143,87 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         except ValidationError:
             return JsonResponse({'message':'type_error'}, status=400)
         except KeyError:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return JsonResponse({'message': 'INVALID_KEY'}, status=400)
+    
+    # 사용자가 푼 알고리즘 수
+    def UserTypeInfo(self, request, seq): 
+        
+        users = User.objects.filter(seq = seq)
+        if not users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # 맞은 문제만 리턴
+        user_problems = UserProblem.objects.filter(user_seq = seq).filter(correct = 0).values_list('problem_seq')
+        user_problems = list(map(lambda x : x[0], user_problems))
+
+        # 맞은 문제 번호로 문제별 알고리즘 가져오기
+        user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
+        user_type = list(map(lambda x: x[0].split(","), user_type))
+        
+        type_dict = make_type_dict()
+
+        user_type = Counter([type_dict[int(type_id)] for types in user_type for type_id in types]).most_common()
+
+        List = []
+        for key, value in user_type:
+            List.append({'type_name': key, 'type_cnt': value})
+
+        return Response(List, status=status.HTTP_200_OK)
+    
+    def FollowUser(self,request,user_follower_seq, user_following_seq): 
+        users = FollowUser.objects.filter(user_follower_seq = user_follower_seq)
+
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_user in users :
+            if one_user.user_follower_seq == user_follower_seq and one_user.user_following_seq == user_following_seq :
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        
+        follower_id = User.objects.get(seq = user_follower_seq)
+        following_id = User.objects.get(seq = user_following_seq)
+
+        FollowUser.objects.create(
+             user_follower_seq = follower_id.seq,
+             user_following_seq = following_id.seq
+        )
+
+        return  Response("팔로우 성공", status=status.HTTP_200_OK)
+    
+    #user가 팔로잉하는 사람들의 List
+    def FollowingList(self,request,user_follower_seq): 
+        followingusers = FollowUser.objects.filter(user_follower_seq = user_follower_seq)
+    
+        if not followingusers.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = FollowingListSerializer(followingusers, many=True)
+        
+        return  Response(serializer.data, status=status.HTTP_200_OK)
+    
+    #user를 팔로워하는 사람들의 List
+    def FollowerList(self,request,user_following_seq): 
+        followerusers = FollowUser.objects.filter(user_following_seq = user_following_seq)
+    
+        if not followerusers.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = FollowerListSerializer(followerusers, many=True)
+        
+        return  Response(serializer.data, status=status.HTTP_200_OK)
+
+    def DeletefollowingUser(self,request,user_follower_seq, user_delete_following_seq): 
+        users = FollowUser.objects.get(user_follower_seq = user_follower_seq , user_following_seq = user_delete_following_seq )
+
+        users.delete()
+
+        return  Response("팔로잉 삭제 성공", status=status.HTTP_200_OK)
+    
+    def DeletefollowerUser(self,request,user_following_seq, user_delete_follower_seq): 
+        users = FollowUser.objects.get(user_following_seq = user_following_seq , user_follower_seq = user_delete_follower_seq )
+
+        users.delete()
+
+        return  Response("팔로워 삭제 성공", status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class Activate(View):
@@ -178,8 +258,8 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     def codeBoardUser(self, request, email):
 
-        seq = User.objects.get(email=email);
-        userseq = seq.seq;
+        seq = User.objects.get(email=email)
+        userseq = seq.seq
         print(userseq)
         codeBoards =  CodeBoard.objects.filter(user_seq =userseq)
         serializer = CodeBoardSerializer(codeBoards, many=True)
