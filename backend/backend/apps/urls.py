@@ -10,8 +10,8 @@ urlpatterns = [
     path("v1/login", UserViewSet.as_view({"post": "login"})),
     #로그아웃
     path('v1/logout', UserViewSet.as_view({"get": "logout"})),
-    #세션확인
-    path('v1/sessionCheck', UserViewSet.as_view({"post": "sessionCheck"})),
+    #로그인토큰검사 재발급
+    path('v1/token_verify', UserViewSet.as_view({"post": "token_verify"})),
     #회원가입
     path("v1/signUp", UserViewSet.as_view({"post": "signUp"})),
     #회원수정
