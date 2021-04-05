@@ -86,8 +86,7 @@ export default {
     }
   },
   mounted(){
-    // mosue drag
-    console.log('mounted dd')
+    // mosue drag    
     const slider = document.querySelector("#log-study > div")
     let isMouseDown = false
     let startX, scrollLeft;
@@ -132,7 +131,7 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-
+    
     const registerDate = localStorage.getItem('register_date')
     const startDate = registerDate.split('T')[0] //startDate mean the date of creat id
     const registerDay = this.getDay(startDate) // 가입한날의 요일 -> 이 데이터는 잔디심는거의 시작점을 잡아주는 역할
@@ -141,8 +140,9 @@ export default {
 
     this.data = new Array(DateDiff)   
 
-    for (let i = 0; i<codeBoardUser.length; i++){      
-      let dateOfBoard = codeBoardUser[i].register_date
+    for (let i = 0; i<codeBoardUser.length; i++){   
+      console.log(i,codeBoardUser)
+      let dateOfBoard = codeBoardUser[i].register_date.split('T')[0]
       let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
       if (this.data[dateIdx]) {
         this.data[dateIdx] += 1
@@ -151,7 +151,7 @@ export default {
       }
 
     
-    }
+    }    
 
     for (let i = 0; i<DateDiff ; i++){     
       if (!this.data[i]) {
@@ -194,8 +194,7 @@ export default {
     }
     
 
-    this.first_day = registerDay[1]
-
+    this.first_day = registerDay[1]    
     this.$emit('userData',this.data)
 
     
