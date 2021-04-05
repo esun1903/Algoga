@@ -85,6 +85,6 @@ urlpatterns = [
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
     #이미지(작업 중 )
-    path('image', Image.as_view(), name='image'),
+    path("v1/image", Image.as_view(), name="image"),
 
 ]
