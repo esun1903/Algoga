@@ -287,6 +287,26 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+    def codeBoardLike(self, request, codeBoard_seq, user_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        codeBoard =  CodeBoard.objects.get(seq =codeBoard_seq)
+    
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            if one_codeboardlike.code_board_seq == codeBoard_seq and one_codeboardlike.user_seq == user_seq :
+                codeBoard.like_cnt =  codeBoard.like_cnt-1
+                one_codeboardlike.delete()
+                return Response("좋아요 취소완료",status=status.HTTP_200_OK)
+        
+        CodeBoardLike.objects.create(
+             code_board_seq = codeBoard_seq,
+             user_seq = user_seq
+        )
+        codeBoard.like_cnt =  codeBoard.like_cnt + 1
+        codeBoard.save()
+        return Response("좋아요 완료",status=status.HTTP_200_OK)
+
     def codeBoardUser(self, request, email):
 
         seq = User.objects.get(email=email)
