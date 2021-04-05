@@ -92,10 +92,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response("회원가입완료", status=status.HTTP_201_CREATED)
 
     def sendEmail(self, request, email):
-
+        print(settings.DOMAIN)
         message = render_to_string('activation_email.html', {
                 'email': email,
-                'domain': 'localhost:8000',
+                'domain': settings.DOMAIN,
                 'token' : email_token(email)
             })
 
