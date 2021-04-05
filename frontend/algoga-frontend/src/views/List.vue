@@ -3,19 +3,29 @@
     <MainNavbar />
     <!-- 검색 -->
     <div id='search'>
-      <form>
-        <input id='keyword' type="text" maxlength="30">
+      <form v-on:submit.prevent>
+        <select v-model="findType" name="findType" id="findtype">
+          <option selected value="Title">Title</option>
+          <option value="No">No</option>
+          <option value="Type">Type</option>
+        </select>
       </form>
-      <button id='searchIcon'  class='searchBtn'><i class="fas fa-search"></i></button>
+      <form v-on:submit.prevent>
+        <input @keypress.enter="searchKeyword" v-model="findInput" id='keyword' type="text" maxlength="30">
+      </form>
+      <button @click='searchKeyword' id='searchIcon'  class='searchBtn'><i class="fas fa-search"></i></button>
       <button @click='filter' :class='{btnClicked : filtered}' id='filterIcon' class='searchBtn'><i class="fas fa-sort-amount-down"></i></button>
+      <button class='searchBtn' id='rmCondition' v-show="showBtn">
+        <span @click='rmCondition'>조건 초기화</span>
+      </button>
     </div>
     <!-- 타입 버튼 필터링 -->
     <div id='filterByType'>
       <button
-        @click='btnPress(type)'
+        @click='btnPress(idx)'
         class='typeIcon'
-        v-for="(idx, type) in types" :key="idx"
-        :class="{btnPressed :types[type]}">
+        v-for="(type, idx) in types" :key="idx"
+        :class="{btnPressed :typesClicked[idx]}">
         {{type}}
       </button>
     </div>
@@ -23,27 +33,32 @@
     <transition name='slide'>
       <div v-show="filtered" id='filterSection'>
         <p>Filter</p>
+        <div id='filterClose' @click='filter'>
+          <span>
+              <i class="fas fa-times"></i>
+          </span>
+        </div>
         <!-- 레벨 -->
         <div class='filterContent'>
           <p>Level</p>
           <div>
-            <button class='manulBtn' :class='{manulBtnUnable : detailFilter.level == 0 }' @click='levelChange(1)'><span>-</span></button>
-            <span>{{detailFilter.level}}</span>
-            <button :class='{manulBtnUnable : detailFilter.level == 9 }' class='manulBtn' @click='levelChange(2)'><span>+</span></button>
+            <button class='manulBtn' :class='{manulBtnUnable : selectedLv == 0 }' @click='levelChange(1)'><span>-</span></button>
+              <span>{{selectedLv}}</span>
+            <button :class='{manulBtnUnable : selectedLv == 9 }' class='manulBtn' @click='levelChange(2)'><span>+</span></button>
           </div>
         </div>
         <!-- 타입 -->
         <div class='filterContent'>
           <p>Type</p>
-          <label v-for="(idx,type) in types" :key='idx' >
-            <input class='checkbox' :value='type' type="checkbox">
+          <label v-for="(type, idx) in types" :key='idx' >
+            <input v-model="selectedType[idx]" class='checkbox' :value='type' type="checkbox">
             {{type}}
           </label>
         </div>
         <!-- 정답률 -->
         <div class='filterContent'>
           <p>Answer Rate(min)</p>
-          <input list="tickmarks" id='answerRateBar' type="range">
+          <input v-model="selectedCr" list="tickmarks" id='answerRateBar' type="range">
           <datalist id="tickmarks">
             <option value="0" label="0%"></option>
             <option value="10" label="10%"></option>
@@ -58,14 +73,15 @@
             <option value="100" label="100%"></option>
         </datalist>
         </div>
-        <!-- 리뷰 수 -->
+        <!-- 리뷰 언어 -->
         <div class='filterContent'>
-          <p>Reviews Number(min)</p>
-            <button class='manulBtn' :class='{manulBtnUnable : detailFilter.reviewNum == 0 }' @click='revieNumChange(1)'><span>-</span></button>
-            <span>{{detailFilter.reviewNum}}</span>
-            <button :class='{manulBtnUnable : detailFilter.reviewNum == 9 }' class='manulBtn' @click='revieNumChange(2)'><span>+</span></button>
+          <p>Reviews Language</p>
+          <label v-for="(lang, idx) in pLang" :key='idx' >
+            <input v-model="selectedPl[idx]" class='checkbox' :value='lang' type="checkbox">
+            {{lang}}
+          </label>
         </div>
-        <button @click='applyFilter' id='setFilter'>Apply</button>
+        <button @click='applyFilter()' id='setFilter'>Apply</button>
       </div>
     </transition>
     <!-- 알고리즘 문제 목록 -->
@@ -76,19 +92,19 @@
           <th :class='{sorted : levelSort !== 0}' class="sort-area" @click='lvChange'>Level <span class='sort-icon' id='lvString'></span></th>
           <th>Type</th>
           <th>Title</th>
+          <th>Submission</th>
           <th :class='{sorted : answerRateSort !== 0}' class="sort-area" @click='arChange'>Answer rate <span class='sort-icon' id='answerRateSort'></span></th>
           <th>Reviews</th>
         </tr>
       </thead>
       <tbody>
-        <tr @click='goToAlgo(algo)' class='algo' v-for="(algo, idx) in algoListParsed" :key='idx'>
-          <th><span>no.</span>{{algo.seq}}</th>
-          <th><span>lv.</span>{{algo.level}}</th>
-          <th>type</th>
-          <th>{{algo.name}}</th>
-          <th>{{algo.correct_rate | round}}%</th>
-          <th>{{algo.correct_user}}</th>
-        </tr>
+        <ListOneLine
+          v-for="(algo, idx) in algoListParsed"
+          :key='idx'
+          :algo = algo
+          
+          class='algo'
+        />
       </tbody>
     </table>
     <!-- 페이지네이션 -->
@@ -108,27 +124,46 @@
 
 <script>
 import MainNavbar from '@/components/Main/MainNavbar'
-import axios from 'axios'
 import _ from "lodash"
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import ListOneLine from '@/components/Algo/ListOneLine'
 
 export default {
     name : 'List',
     components : {
         MainNavbar,
+        ListOneLine,
     },
     data : function(){
       return{
         currentPage : 1,
-        types : {
-          'Math' : false,
-          'Simulation' : false,
-          'DfS' : false,
-          'Bfs' : false,
-          'Tree' : false,
-          'Search' : false,
-          'DP' : false
-        },
+        types : [
+          'Math',
+          'Simulation',
+          'String',
+          'Sort',
+          'Greedy',
+          'Search',
+          'DP'
+        ],
+        typesClicked : [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+        typeDetail : [
+          ['사칙연산','정수론','유클리디언','정수론','조합론','기하학','수치해석','누적 합','선형대수학'],
+          ['구현','시뮬레이션','부르트포스'],
+          ['문자열'],
+          ['정렬','분할정복'],
+          ['그리디','그리디 알고리즘'],
+          ['이분 탐색'],
+          ['다이나믹 프로그래밍']
+        ]
+        ,
         filtered : false,
         detailFilter : {
           level : 0,
@@ -140,26 +175,56 @@ export default {
         pageCount : 5,
         blockStart : 1,
         lastBlock : 0,
+        algoListAll : [],
         algoListParsed : [],
         levelSort : 0,
         answerRateSort :0,
+        pLang : [
+          'Java',
+          'Python',
+          'C','C++','C#',
+          'JavaScript',
+          'Ruby',
+          'Kotlin','Swift','Go','PHP'
+        ],
+        selectedLv : 0,
+        selectedCr : 0,
+        selectedPl : new Array(11).fill(false),
+        selectedType : new Array(7).fill(false),
+        findInput : '',
+        findType : 'Title',
+        isFiltered : false,
+        isSearched : false,
       }
     },
     methods: {
       btnPress : function(idx){
-        this.types[idx] = !this.types[idx]
+        // 리스트 변경
+        // 1. selected
+        if(this.typesClicked[idx] === false){
+          this.algoList = this.algoListAll.filter(algo => {
+            return this.typeDetail[idx].some(type => algo.algorithms.indexOf(type) != -1)
+          })
+        }else{
+          this.algoList = this.algoListAll.filter(algo => {
+            return this.typeDetail[idx].some(type => algo.algorithms.indexOf(type) === -1)
+          })
+        }
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
+        this.typesClicked.splice(idx,1,!this.typesClicked[idx])
       },
       filter : function(){
         this.filtered = !this.filtered
       },
       levelChange : function(string){
         if(string === 1){
-          if(this.detailFilter.level != 0){
-            this.detailFilter.level -=1
+          if(this.selectedLv != 0){
+            this.selectedLv -=1
           }
         }else{
-          if(this.detailFilter.level != 9){
-            this.detailFilter.level +=1
+          if(this.selectedLv != 9){
+            this.selectedLv +=1
           }
         }
       },
@@ -175,7 +240,30 @@ export default {
         }
       },
       applyFilter : function(){
+        this.typesClicked = new Array(7).fill(false)
+        let merged = []
+        for(let i = 0; i < this.selectedType.length; i ++){
+          if(this.selectedType[i]=== true){
+            merged = merged.concat(this.typeDetail[i])
+          }
+        }
+        let language_list = []
+        for(let i = 0; i < this.selectedPl.length; i ++){
+          if(this.selectedPl[i]===true){
+            language_list.push(this.pLang[i])
+          }
+        }
+        const that = this
+        this.algoList = this.algoListAll.filter(function(algo){
+          return algo.level === that.selectedLv
+          && merged.some(type => algo.algorithms.indexOf(type) != -1)
+          && algo.correct_rate >= that.selectedCr
+          && language_list.some(lan => algo.language.indexOf(lan) != -1)
+        })
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
         this.filtered = !this.filtered
+        this.isFiltered = !this.isFiltered
       },
       changePage : function(newP){
         this.currentPage = newP
@@ -260,32 +348,52 @@ export default {
         }
         this.changePage(1)
       },
-      goToAlgo : function(algo){
-        this.$router.push({
-          name : 'Problem',
-          params : algo,
-          query : {no : algo.seq}
-        })
+      searchKeyword : function(){
+        if(this.findInput ===''){
+          alert('검색어를 입력하세요')
+        }
+        else{
+          if(this.findType ==='Title'){
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.name.indexOf(this.findInput) != -1
+            })
+          }else if(this.findType ==='No'){
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.seq == this.findInput
+            })
+          }else{
+            this.algoList = this.algoListAll.filter(algo =>{
+              return algo.algorithms.indexOf(this.findInput) != -1
+            })
+          }
+          this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+          this.isSearched = true
+          this.changePage(1)
+        }
       },
+      rmCondition : function(){
+        this.algoList = this.algoListAll
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
+        this.isFiltered = false
+        this.typesClicked = new Array(7).fill(false)
+      }
     },
     created(){
-      axios.get(`http://127.0.0.1:8000/apps/v1/allProblem`)
-        .then(res =>{
-          this.algoList = res.data
-          this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
-          this.changePage(1)
-        })  
-        .catch(err => {
-          console.log(err)
+      this.$store.dispatch('getAlgo')
+      .then(() => {
+        this.algoListAll =  this.$store.state.algoList
+        this.algoList = this.algoListAll
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
         })
+      .catch((err) => console.log(err))
     },
-    filters :{
-      round : function(v){
-        return Math.ceil(10*v) / 10;
+    computed : {
+      showBtn : function(){
+        return this.isFiltered | this.typesClicked.indexOf(true) != -1 | this.isSearched
       }
     }
-
-
 }
 </script>
 
@@ -296,16 +404,36 @@ export default {
   position: relative;
 }
 /* 검색란 */
+#findtype{
+  position: absolute;
+  left: 31%;
+  top: 50%;
+  transform: translate(0,-50%);
+  border: none;
+  font-size: 1rem;
+}
+
+#findtype:focus{
+  border: none;
+}
+*:focus {
+    outline: none;
+}
 #search > form > input{
-  width: 40%;
+  width: 30%;
   height: 35px;
   border-radius: 20px;
   margin-right: 20px;
-  padding-left: 20px;
+  padding-left: 10%;
   font-size: 1rem;
   text-overflow: hidden;
 }
-
+@media (max-width : 782px) {
+  #search > form > input{
+    padding-left: 11%;
+    width: 25%;
+  }
+}
 #searchIcon{
   position: absolute;
   top: 50%;
@@ -332,11 +460,28 @@ export default {
   top: 50%;
   left: calc(70% + 3px);
   transform : translate(0%,-50%);
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+#rmCondition{
+  position: absolute;
+  top: 50%;
+  left: calc(70% + 50px);
+  transform : translate(0%,-50%);
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  padding: 5px 10px;
+}
+#rmCondition > span{
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 /* 타입별 필터 */
 #filterByType{
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 .typeIcon{
   height: 35px;
@@ -366,7 +511,34 @@ export default {
   background-color:  rgba(180, 180, 180, 0.514);
 }
 /* 세부 필터 */
-
+#filterClose{
+    margin: 0;
+    color: rgba(37, 40, 47, 0.65);
+    border-radius: 22px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 25px;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+#filterClose > span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+#filterClose:hover{
+    cursor: pointer;
+}
+#filterClose:hover > span{
+    background-color: rgba(202, 202, 202, 0.822);
+    color: rgba(37, 40, 47, 0.411);
+}
 
 /* 세부필터 슬라이드 */
 .slide-enter-active {
@@ -407,6 +579,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
   padding: 2% 4%;
+  position: relative;
 }
 #filterSection > p:nth-child(1){
   text-align: center;
@@ -521,6 +694,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   color: black;
   cursor: pointer;
 }
+
 /* 문제 목록 */
 table{
   margin : 0 10%;
@@ -554,19 +728,23 @@ table > thead > tr > th:nth-child(2){
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(3){
-  width: 8%;
+  width: 10%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(4){
-  width: 58%;
+  width: 50%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(5){
-  width: 12%;
+  width: 10%;
   border-right: 1px solid rgba(0, 0, 0, 0.486);
 }
 table > thead > tr > th:nth-child(6){
   width: 10%;
+  border-right: 1px solid rgba(0, 0, 0, 0.486);
+}
+table > thead > tr > th:nth-child(7){
+  width: 8%;
 }
 .algo{
   height: 35px;

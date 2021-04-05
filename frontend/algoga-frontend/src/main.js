@@ -11,8 +11,6 @@ Vue.config.productionTip = false;
 
 Vue.use(Codemirror);
 
-
-
 new Vue({
     created() {
         AOS.init();
