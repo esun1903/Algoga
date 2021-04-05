@@ -4,8 +4,7 @@ from .views import *
 from .problem_views import *
 from . import views
 from . import problem_views
-from .util import *
-
+ 
 
 urlpatterns = [ 
     #로그인
@@ -80,5 +79,4 @@ urlpatterns = [
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
 
-    
 ]
