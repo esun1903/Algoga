@@ -27,6 +27,8 @@ urlpatterns = [
     path("v1/nicknameCheck/<str:nickname>", UserViewSet.as_view({"get": "nicknameCheck"})),
     #비밀번호 찾기
     path("v1/findPassword/<str:email>", UserViewSet.as_view({"get": "findPassword"})),
+    #유저 seq로 회원정보 리턴
+    path("v1/userInfo/<int:seq>", UserViewSet.as_view({"get": "userInfo"})),
     #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
@@ -78,5 +80,7 @@ urlpatterns = [
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
+    #문제 세부 정보를 받으면 리턴하기 
+    path('image', Image.as_view(), name='image'),
 
 ]
