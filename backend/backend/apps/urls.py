@@ -4,12 +4,11 @@ from .views import *
 from .problem_views import *
 from . import views
 from . import problem_views
+ 
 
 urlpatterns = [ 
     #로그인
     path("v1/login", UserViewSet.as_view({"post": "login"})),
-    #로그아웃
-    path('v1/logout', UserViewSet.as_view({"get": "logout"})),
     #로그인토큰검사 재발급
     path('v1/token_verify', UserViewSet.as_view({"post": "token_verify"})),
     #회원가입
@@ -19,7 +18,17 @@ urlpatterns = [
     #회원탈퇴
     path("v1/userdelete/<str:email>", UserViewSet.as_view({"delete": "Userdelete"})),
     #이메일전송
-    path("v1/activate/<str:uidb6>", UserViewSet.as_view({"delete": "Userdelete"})),
+    path("v1/sendEmail/<str:email>", UserViewSet.as_view({"get": "sendEmail"})),
+    #이메일인증
+    path("v1/emailAuthenticate/<str:email>/<str:token>", UserViewSet.as_view({"get": "emailAuthenticate"})),
+    #이메일인증확인
+    path("v1/passEmailCheck/<str:email>", UserViewSet.as_view({"get": "passEmailCheck"})),
+    #nickname 체크
+    path("v1/nicknameCheck/<str:nickname>", UserViewSet.as_view({"get": "nicknameCheck"})),
+    #비밀번호 찾기
+    path("v1/findPassword/<str:email>", UserViewSet.as_view({"get": "findPassword"})),
+    #유저 seq로 회원정보 리턴
+    path("v1/userInfo/<int:seq>", UserViewSet.as_view({"get": "userInfo"})),
     #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
@@ -31,7 +40,6 @@ urlpatterns = [
     path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
     #팔로워삭제 
     path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
-    #===================================
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
@@ -72,6 +80,7 @@ urlpatterns = [
     path("v1/Problem/<int:seq>", ProblemViewSet.as_view({"get" : "Problem"}), name="Problem"),
     #문제 세부 정보를 받으면 리턴하기 
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
-    
-    
+    #문제 세부 정보를 받으면 리턴하기 
+    path('image', Image.as_view(), name='image'),
+
 ]

@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import datetime
 import my_settings 
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -67,10 +67,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'backend.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,6 +90,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 ACCOUNT_LOGOUT_ON_GET = True
 
 
+
+###########################AWS
+AWS_ACCESS_KEY_ID = 'AKIARDKX6EPHIIW7ECGX' # .csv 파일에 있는 내용을 입력 Access key ID
+AWS_SECRET_ACCESS_KEY = 'UW7zu5XL/zY5HxoZ5cO6JRXlCHn1+r1X+ZL+RZ2F' # .csv 파일에 있는 내용을 입력 Secret access key
+AWS_REGION = 'ap-northeast-2'
+
+###S3 Storages
+AWS_STORAGE_BUCKET_NAME = 'algoga' # 설정한 버킷 이름
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+MEDIA_URL = '/media/'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -174,9 +188,13 @@ STATIC_URL = '/static/'
 
 SITE_ID = 1
 
-# EMAIL_BACKEND = my_settings.EMAIL['EMAIL_BACKEND']
-# EMAIL_USE_TLS = my_settings.EMAIL['EMAIL_USE_TLS']
-# EMAIL_PORT = my_settings.EMAIL['EMAIL_PORT']
-# EMAIL_HOST = my_settings.EMAIL['EMAIL_HOST']
-# EMAIL_HOST_USER = my_settings.EMAIL['EMAIL_HOST_USER']
-# EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']
+EMAIL_BACKEND = my_settings.EMAIL['EMAIL_BACKEND']
+EMAIL_USE_TLS = my_settings.EMAIL['EMAIL_USE_TLS']
+EMAIL_PORT = my_settings.EMAIL['EMAIL_PORT']
+EMAIL_HOST = my_settings.EMAIL['EMAIL_HOST']
+EMAIL_HOST_USER = my_settings.EMAIL['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_MAIL = EMAIL_HOST_USER
+
+
+
