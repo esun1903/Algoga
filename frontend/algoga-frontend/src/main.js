@@ -14,8 +14,6 @@ Vue.config.productionTip = false;
 Vue.use(Codemirror);
 Vue.use(VueCodeHighlight)
 
-
-
 new Vue({
     created() {
         AOS.init();

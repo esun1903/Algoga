@@ -79,8 +79,7 @@ export default {
       dataHistory:[],
       dataList:[],
     }
-  }
-
+  },
 }
 </script>
 
