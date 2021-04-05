@@ -19,7 +19,7 @@
           </span>
         </p>
         <div id='graphBox'>
-          <img id='userGraph' src="https://file.mk.co.kr/meet/neds/2017/08/image_readbot_2017_571580_15036508393005867.jpg" alt="">
+          <Chart :chartdata="data" :options="chartOptions" />
         </div>
         <div id='problemSummary'>
           <div 
@@ -51,15 +51,27 @@
 <script>
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import Chart from '@/components/Main/Chart'
 
 export default {
     name:"MainAside",
+    components : {
+      Chart,
+    },
     data: function(){
       return{
         asideContent : true,
         userNo : 1,
         solvedList: [],
         user : {},
+        chartOptions: {
+          hoverBorderWidth: 20
+        },        
+        data : {
+          labels :[],
+          datasets : [{
+          }],
+        },
       }
     },
     methods : {
@@ -70,14 +82,17 @@ export default {
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.userNo}`)
         .then(res => {
           this.user = res.data
-          axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/${1}`)
+          axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/1`)
             .then(res => {
-              let myList = new Object();
-              res.data.array.forEach(element => {
-                myList[element.type_name] = element.type_cnt
+              let myList = new Array();
+              myList.push(['Type','Number'])
+              res.data.forEach(element => {
+                myList.push([element.type_name, element.type_cnt])
               });
-              this.solvedList = myList
-              console.log(this.solvedList)
+              // this.solvedList = myList
+              // this.data.labels = Object.keys(myList)
+              this.data = myList
+              // console.log(this.data)
             })
         })
         .catch(err => {
