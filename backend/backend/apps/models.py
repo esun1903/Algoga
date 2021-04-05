@@ -33,8 +33,8 @@ class CodeBoardLike(models.Model):
 class Comment(models.Model):
     seq = models.AutoField(primary_key=True)
     text = models.TextField()
-    register_date = models.DateTimeField()
-    like_cnt = models.IntegerField()
+    register_date = models.DateTimeField(auto_now_add=True)
+    like_cnt = models.IntegerField(null=True)
     user_seq = models.ForeignKey('User', models.DO_NOTHING, db_column='user_seq')
     code_board_seq = models.ForeignKey(CodeBoard, models.DO_NOTHING, db_column='code_board_seq') 
 
