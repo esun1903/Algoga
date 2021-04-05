@@ -54,6 +54,8 @@ urlpatterns = [
     path("v1/codeBoardUser/<str:email>", codeBoardViewSet.as_view({"get": "codeBoardUser"})),
     # 문제seq에 작성된 codeBoard들 리턴
     path("v1/codeBoardList/<int:problem_seq>", codeBoardViewSet.as_view({"get": "codeBoardList"})),
+    # codeBoard 좋아요하기(만약, 이미 있다면 취소하기)
+    path("v1/codeBoardLike/<int:codeBoard_seq>/<int:user_seq>", codeBoardViewSet.as_view({"get": "codeBoardLike"})),
     #사용자가 푼 알고리즘 분류 수 가져오기
     path('v1/userTypeInfo/<int:seq>', UserViewSet.as_view({"get": "UserTypeInfo"})),
     #commnet 등록
