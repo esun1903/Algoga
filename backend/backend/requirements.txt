@@ -30,3 +30,4 @@ soupsieve==2.2.1
 sqlparse==0.4.1
 uritemplate==3.0.1
 urllib3==1.26.4
+Pillow==8.2.0
