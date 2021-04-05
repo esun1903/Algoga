@@ -7,9 +7,12 @@ import 'codemirror/lib/codemirror.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+import VueCodeHighlight from "vue-code-highlight"
+
 Vue.config.productionTip = false;
 
 Vue.use(Codemirror);
+Vue.use(VueCodeHighlight)
 
 new Vue({
     created() {

@@ -103,7 +103,7 @@ export default {
     background-color: var(--font-color);    
     display:flex;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
 }
 
 /* #mode-btn-checkbox:checked + div {

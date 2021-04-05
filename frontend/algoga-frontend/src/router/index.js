@@ -5,6 +5,7 @@ import Main from '@/views/Main';
 import Register from '@/views/Register';
 import List from '@/views/List';
 import Problem from '@/views/Problem';
+import CodeBoardDetail from '@/views/CodeBoardDetail';
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
         path: '/list',
         name: 'List',
         component: List,
+    },
+    {
+        path: '/codeBoardDetail/:codeBoard_seq',
+        name: 'CodeBoardDetail',
+        component: CodeBoardDetail,
     },
     {
         path: '/problem/:no',
