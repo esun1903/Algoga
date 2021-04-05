@@ -76,13 +76,13 @@ export default {
 #mode-btn {
     position:fixed;
     bottom: 50px;    
-    right:50px;
-    width: 120px;
+    right:100px;
+    width: 55px;
     height: 50px;    
     border-radius: 50px;
     transition:1s;
     /* background-color: var(--font-color); */
-    border:1px solid var(--shadow-color);
+    /* border:1px solid var(--shadow-color); */
     background-color: rgba(255,255,255,0.4);
 }
 
@@ -106,13 +106,13 @@ export default {
     align-items: center;
 }
 
-#mode-btn-checkbox:checked + div {
+/* #mode-btn-checkbox:checked + div {
     left:100%;
     transform:translate(-100%,-50%)
 }
 #mode-btn-checkbox:checked + div:hover {
     background-color: black;
-}
+} */
 
 
 .fa-moon, .fa-lightbulb  {
