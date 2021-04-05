@@ -21,6 +21,15 @@ class CodeBoard(models.Model):
         db_table = 'code_board'
 
 
+class CodeBoardLike(models.Model):
+    seq = models.AutoField(primary_key=True)
+    user_seq = models.IntegerField()
+    code_board_seq = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'code_board_like'
+
 class Comment(models.Model):
     seq = models.AutoField(primary_key=True)
     text = models.TextField()
@@ -197,3 +206,5 @@ class test(models.Model):
     photo = models.FileField()
     def __str__(self):
         return selg.testfield
+
+
