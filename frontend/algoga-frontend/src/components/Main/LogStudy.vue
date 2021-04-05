@@ -87,6 +87,7 @@ export default {
   },
   mounted(){
     // mosue drag
+    console.log('mounted dd')
     const slider = document.querySelector("#log-study > div")
     let isMouseDown = false
     let startX, scrollLeft;
@@ -114,8 +115,6 @@ export default {
       slider.scrollLeft = scrollLeft - walk
     })  
 
-   
-
   }
   ,
   async created(){
@@ -142,8 +141,7 @@ export default {
 
     this.data = new Array(DateDiff)   
 
-    for (let i = 0; i<codeBoardUser.length; i++){
-      console.log(codeBoardUser[i])
+    for (let i = 0; i<codeBoardUser.length; i++){      
       let dateOfBoard = codeBoardUser[i].register_date
       let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
       if (this.data[dateIdx]) {
