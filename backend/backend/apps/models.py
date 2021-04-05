@@ -85,6 +85,8 @@ class Problem(models.Model):
     avg_try = models.FloatField()
     time_limit = models.CharField(max_length=50)
     memory_limit = models.CharField(max_length=50)
+    languages = models.CharField(max_length=100)
+    language_seqs = models.CharField(max_length=100)
     algorithms = models.CharField(max_length=200, blank=True, null=True)
     algorithm_ids = models.CharField(max_length=100, blank=True, null=True)
     review_count = models.IntegerField(blank=True, null=True)
@@ -172,6 +174,7 @@ class User(models.Model):
     nickname = models.CharField(unique=True, max_length=50)
     profile_image =models.ImageField(editable=True, null=True)
     register_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
