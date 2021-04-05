@@ -2,7 +2,7 @@
   <div id='code-board-detail'>
     <MainNavbar />    
     <div class='code-board-content'>
-      <h1>{{title}}</h1>
+      <h1>{{title}}</h1>      
       <div class='code-board-detail-status'>
         <div>
           <i class="far fa-user"></i>
@@ -21,7 +21,7 @@
               <i class="far fa-edit"></i>
               <span>edit</span>
             </div>
-            <div @click='deleteComment(data)'>
+            <div @click='deleteBoard()'>
               <i class="far fa-trash-alt"></i>
               <span>delete</span>
             </div>
@@ -123,7 +123,16 @@ export default {
     },
     deleteComment:function(){
       this.commentCnt -=1
-    }
+    },
+    deleteBoard:function(){
+      axios.delete(`${SERVER_URL}/apps/v1/codeBoardDelete/${this.data.seq}`)
+        .then(()=>{
+          this.$router.push({name:'Main',params:{nickname:localStorage.getItem('email')}})
+        })
+        .catch(err=>{
+          alert(err)
+        })
+    },
   },
   computed:{
     mine:function(){
@@ -211,6 +220,12 @@ export default {
   display:flex;
   justify-content: space-between;
 }
+
+.code-board-detail-status > div.flex > div > div {
+  cursor:pointer
+}
+
+
 
 .flex {display: flex;}
 .code-board-footer-info{
