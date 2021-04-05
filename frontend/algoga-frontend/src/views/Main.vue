@@ -75,8 +75,7 @@ export default {
       teststring:'',
       dataHistory:[],
     }
-  }
-
+  },
 }
 </script>
 

@@ -49,12 +49,15 @@
 </template>
 
 <script>
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
     name:"MainAside",
     data: function(){
       return{
         asideContent : true,
+        userSeq : 1,
         solvedList: {
           'dfs' : 21,
           'bfs' : 16,
@@ -68,7 +71,16 @@ export default {
     },
     methods : {
 
-    }
+    },
+    created(){
+      axios.get(`${SERVER_URL}apps/v1/userTypeInfo/${this.userSeq}`)
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
 }
 </script>
 
