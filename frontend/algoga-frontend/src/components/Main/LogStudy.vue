@@ -34,6 +34,7 @@ export default {
       data:[],
       week_data:[],
       first_day:-1,
+      problemsData:[], // [problem_seq,codeboard_seq]
     }
   },
   methods: {
@@ -86,7 +87,7 @@ export default {
     }
   },
   mounted(){
-    // mosue drag
+    // mosue drag    
     const slider = document.querySelector("#log-study > div")
     let isMouseDown = false
     let startX, scrollLeft;
@@ -114,8 +115,6 @@ export default {
       slider.scrollLeft = scrollLeft - walk
     })  
 
-   
-
   }
   ,
   async created(){
@@ -133,27 +132,47 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-
+    
     const registerDate = localStorage.getItem('register_date')
     const startDate = registerDate.split('T')[0] //startDate mean the date of creat id
     const registerDay = this.getDay(startDate) // 가입한날의 요일 -> 이 데이터는 잔디심는거의 시작점을 잡아주는 역할
     const today = this.getToday()
     const DateDiff = this.getDayDiff(startDate,today)
 
-    this.data = new Array(DateDiff)   
-
-    for (let i = 0; i<codeBoardUser.length; i++){
-      console.log(codeBoardUser[i])
-      let dateOfBoard = codeBoardUser[i].register_date
+    this.data = new Array(DateDiff)
+    this.problemsData = new Array(DateDiff)
+    for (let i = 0; i<codeBoardUser.length; i++){         
+      let dateOfBoard = codeBoardUser[i].register_date.split('T')[0]
       let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
+      let problemData = new Array()      
+      let title = ''
+      let number = -1
+
+      await axios.get(`${SERVER_URL}/apps/v1/Problem/${codeBoardUser[i].problem_seq}`)
+        .then(res=>{  
+          title = res.data.name                  
+          number = res.data.number 
+          
+
+        })
+
+
+      problemData.push(codeBoardUser[i].seq,codeBoardUser[i].language,codeBoardUser[i].problem_seq,title,number)
+      if (this.problemsData[dateIdx]) {
+        this.problemsData[dateIdx].push(problemData)
+      } else {
+        this.problemsData[dateIdx] = new Array(1).fill(problemData)
+      }
+
       if (this.data[dateIdx]) {
         this.data[dateIdx] += 1
       } else {
         this.data[dateIdx] = 1
+        
       }
 
     
-    }
+    }    
 
     for (let i = 0; i<DateDiff ; i++){     
       if (!this.data[i]) {
@@ -196,11 +215,10 @@ export default {
     }
     
 
-    this.first_day = registerDay[1]
+    this.first_day = registerDay[1]    
+    this.$emit('userData',{'data1':this.data,'data2':this.problemsData})
 
-    this.$emit('userData',this.data)
-
-    
+    console.log(this.problemsData)
 
   },
 }
