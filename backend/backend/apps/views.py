@@ -161,6 +161,12 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         email.send()
         return Response("해당 이메일에 비밀번호 전송",status=status.HTTP_200_OK)  
 
+    def userInfo(self,request, seq):
+
+        users =  User.objects.get(seq = seq)
+        serializer = UserSerializer(users)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
     def userInfoUpdate(self,request, email):
 
@@ -413,3 +419,10 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class Image(APIView) :
+    def post (self, request, format=None) :
+        serializers = PhotoSerializer(data = request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status= status.HTTP_201_CREATED)
+        return Response(serializers.errors, status= status.HTTP_400_BAD_REQUEST)
