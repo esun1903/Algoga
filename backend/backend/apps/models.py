@@ -191,7 +191,9 @@ class UserProblem(models.Model):
         unique_together = (('problem_seq', 'user_seq'),)
 
 
-
-class Profile(models.Model):
-    name = models.CharField(max_length=10)
-    photo = models.ImageField(upload_to="")
+#프로필 함수 
+class test(models.Model):
+    testfield = models.CharField(max_length=200)
+    photo = models.FileField()
+    def __str__(self):
+        return selg.testfield
