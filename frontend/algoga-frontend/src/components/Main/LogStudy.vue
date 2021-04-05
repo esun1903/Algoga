@@ -34,6 +34,7 @@ export default {
       data:[],
       week_data:[],
       first_day:-1,
+      problemsData:[], // [problem_seq,codeboard_seq]
     }
   },
   methods: {
@@ -138,16 +139,24 @@ export default {
     const today = this.getToday()
     const DateDiff = this.getDayDiff(startDate,today)
 
-    this.data = new Array(DateDiff)   
-
-    for (let i = 0; i<codeBoardUser.length; i++){   
-      console.log(i,codeBoardUser)
+    this.data = new Array(DateDiff)
+    this.problemsData = new Array(DateDiff)
+    for (let i = 0; i<codeBoardUser.length; i++){         
       let dateOfBoard = codeBoardUser[i].register_date.split('T')[0]
       let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
+      let problemData = new Array()      
+      problemData.push([codeBoardUser[i].seq,codeBoardUser[i].language,codeBoardUser[i].problem_seq])
+      if (this.problemsData[dateIdx]) {
+        this.problemsData[dateIdx].push(problemData)
+      } else {
+        this.problemsData[dateIdx] = new Array(1).fill(problemData)
+      }
+
       if (this.data[dateIdx]) {
         this.data[dateIdx] += 1
       } else {
         this.data[dateIdx] = 1
+        
       }
 
     
@@ -195,9 +204,9 @@ export default {
     
 
     this.first_day = registerDay[1]    
-    this.$emit('userData',this.data)
+    this.$emit('userData',{'data1':this.data,'data2':this.problemsData})
 
-    
+    console.log(this.problemsData)
 
   },
 }

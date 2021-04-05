@@ -15,8 +15,7 @@ export default {
   },
   methods:{
     checkJWT:function(){
-      const jwt = localStorage.getItem('JWT')
-      console.log(jwt)
+      const jwt = localStorage.getItem('JWT')      
       if (!jwt) {
         this.$router.push({name:'Home'})
       }

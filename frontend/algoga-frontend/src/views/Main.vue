@@ -26,7 +26,7 @@
           <LogStudy @userData='userData' />
           <!-- history -->
 
-          <History :dataHistory='dataHistory' />
+          <History :dataHistory='dataHistory' :dataList='dataList' />
 
           <button @click='test'>TEST Button router to problemSolving</button>                    
         </section>
@@ -64,9 +64,11 @@ export default {
       this.$router.push({name:'Register'})
     },
     userData:function(data){
-      
-      data.reverse()
-      this.dataHistory = data      
+      let data1 = data.data1
+      let data2 = data.data2
+      data1.reverse()
+      this.dataHistory = data1 
+      this.dataList = data2     
     },
   },
   data : function(){
@@ -74,6 +76,7 @@ export default {
       feedOpened: false,
       teststring:'',
       dataHistory:[],
+      dataList:[],
     }
   }
 
