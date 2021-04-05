@@ -21,6 +21,11 @@ class CodeBoardSerializer(serializers.ModelSerializer):
         model = CodeBoard
         fields = '__all__'
 
+class CodeBoardLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodeBoardLike
+        fields = '__all__'
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -46,3 +51,7 @@ class FollowerListSerializer(serializers.ModelSerializer):
         model = FollowUser
         fields = '__all__'
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = test
+        fields = '__all__'

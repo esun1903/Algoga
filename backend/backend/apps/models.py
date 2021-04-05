@@ -21,11 +21,20 @@ class CodeBoard(models.Model):
         db_table = 'code_board'
 
 
+class CodeBoardLike(models.Model):
+    seq = models.AutoField(primary_key=True)
+    user_seq = models.IntegerField()
+    code_board_seq = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'code_board_like'
+
 class Comment(models.Model):
     seq = models.AutoField(primary_key=True)
     text = models.TextField()
-    register_date = models.DateTimeField()
-    like_cnt = models.IntegerField()
+    register_date = models.DateTimeField(auto_now_add=True)
+    like_cnt = models.IntegerField(null=True)
     user_seq = models.ForeignKey('User', models.DO_NOTHING, db_column='user_seq')
     code_board_seq = models.ForeignKey(CodeBoard, models.DO_NOTHING, db_column='code_board_seq') 
 
@@ -191,7 +200,11 @@ class UserProblem(models.Model):
         unique_together = (('problem_seq', 'user_seq'),)
 
 
+#프로필 함수 
+class test(models.Model):
+    testfield = models.CharField(max_length=200)
+    photo = models.FileField()
+    def __str__(self):
+        return selg.testfield
 
-class Profile(models.Model):
-    name = models.CharField(max_length=10)
-    photo = models.ImageField(upload_to="")
+

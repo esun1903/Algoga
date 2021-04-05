@@ -161,6 +161,12 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         email.send()
         return Response("해당 이메일에 비밀번호 전송",status=status.HTTP_200_OK)  
 
+    def userInfo(self,request, seq):
+
+        users =  User.objects.get(seq = seq)
+        serializer = UserSerializer(users)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
     def userInfoUpdate(self,request, email):
 
@@ -281,6 +287,36 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+    def codeBoardLike(self, request, codeBoard_seq, user_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        codeBoard =  CodeBoard.objects.get(seq =codeBoard_seq)
+    
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            if one_codeboardlike.code_board_seq == codeBoard_seq and one_codeboardlike.user_seq == user_seq :
+                codeBoard.like_cnt =  codeBoard.like_cnt-1
+                one_codeboardlike.delete()
+                return Response("좋아요 취소완료",status=status.HTTP_200_OK)
+        
+        CodeBoardLike.objects.create(
+             code_board_seq = codeBoard_seq,
+             user_seq = user_seq
+        )
+        codeBoard.like_cnt =  codeBoard.like_cnt + 1
+        codeBoard.save()
+        return Response("좋아요 완료",status=status.HTTP_200_OK)
+    
+    def codeBoardLike_User(self, request, codeBoard_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        user = list()
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            user.append(one_codeboardlike.user_seq)
+                
+        return Response(user,status=status.HTTP_200_OK)
+
     def codeBoardUser(self, request, email):
 
         seq = User.objects.get(email=email)
@@ -363,9 +399,13 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             problem_language_seqs = ','.join(problem_language_seqs)
 
             problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
-
+       
+        codecomment = Comment.objects.filter(code_board_seq =codeBoard_seq)
+        for one_codecomment  in codecomment:
+            one_codecomment.delete()
+            
         codeBoard.delete()
-        
+   
         return  Response("삭제성공", status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
@@ -373,12 +413,11 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = CommentSerializer
 
-    def commentRegiste(self, request):
-
+    def commentRegister(self, request):
         commentSerializer = CommentSerializer(data=request.data, partial=True)
         if not commentSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+  
         commentSerializer.save()
 
 
@@ -413,3 +452,11 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class Image(APIView) :
+    def post (self, request, format=None) :
+        serializers = PhotoSerializer(data = request.data)
+        print("여기")
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status= status.HTTP_201_CREATED)
+        return Response(serializers.errors, status= status.HTTP_400_BAD_REQUEST)
