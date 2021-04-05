@@ -46,3 +46,7 @@ class FollowerListSerializer(serializers.ModelSerializer):
         model = FollowUser
         fields = '__all__'
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = test
+        fields = '__all__'
