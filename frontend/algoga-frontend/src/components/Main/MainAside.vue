@@ -57,25 +57,28 @@ export default {
     data: function(){
       return{
         asideContent : true,
-        userSeq : 1,
-        solvedList: {
-          'dfs' : 21,
-          'bfs' : 16,
-          'tree' : 4,
-          'simulation' : 27,
-          'dp' : 5,
-          'string' : 20,
-          'sorting' : 8,
-        }
+        userNo : 1,
+        solvedList: [],
+        user : {},
       }
     },
     methods : {
 
     },
     created(){
-      axios.get(`${SERVER_URL}apps/v1/userTypeInfo/${this.userSeq}`)
+      this.userNo = localStorage.getItem('userNo')
+      axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.userNo}`)
         .then(res => {
-          console.log(res.data)
+          this.user = res.data
+          axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/${1}`)
+            .then(res => {
+              let myList = new Object();
+              res.data.array.forEach(element => {
+                myList[element.type_name] = element.type_cnt
+              });
+              this.solvedList = myList
+              console.log(this.solvedList)
+            })
         })
         .catch(err => {
           console.log(err)
