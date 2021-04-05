@@ -306,6 +306,16 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         codeBoard.like_cnt =  codeBoard.like_cnt + 1
         codeBoard.save()
         return Response("좋아요 완료",status=status.HTTP_200_OK)
+    
+    def codeBoardLike_User(self, request, codeBoard_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        user = list()
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            user.append(one_codeboardlike.user_seq)
+                
+        return Response(user,status=status.HTTP_200_OK)
 
     def codeBoardUser(self, request, email):
 
@@ -399,12 +409,11 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = CommentSerializer
 
-    def commentRegiste(self, request):
-
+    def commentRegister(self, request):
         commentSerializer = CommentSerializer(data=request.data, partial=True)
         if not commentSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+  
         commentSerializer.save()
 
 
