@@ -1,5 +1,5 @@
 <template>
-  <div id='reviews'>
+  <div id='reviewsList'>
     <div>
       <span>등록된 풀이 보기</span>
       <div @click='chageToggle()' id='icon-container'>
@@ -9,17 +9,31 @@
       </div>
     </div>
     <transition name='slide'>
-      <h1 v-if="toggle" >dasdas</h1>
+      <div v-if="toggle" >
+        <Review v-for="(review, idx) in reviews" :key='idx'
+          :review = review
+        />
+      </div>
     </transition>
   </div>
 </template>
 
 <script>
+import Review from '@/components/Algo/Review'
+
+
 export default {
-  name : 'Reviews',
+  name : 'ReviewsList',
+  components : {
+    Review,
+  },
   data : function(){
     return{
       toggle : false,
+      reviews : [
+        {writer : '동희', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '파이썬', like : 31, date : '2021-01-32'},
+        {writer : '동희2', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '자바', like : 31, date : '2021-01-32'},
+      ]
     }
   },
   methods : {
@@ -38,20 +52,21 @@ export default {
 </script>
 
 <style>
-#reviews{
+#reviewsList{
   width: 70%;
   margin: 0 auto;
 }
-#reviews > div:nth-child(1){
+#reviewsList > div:nth-child(1){
   width: 100%;
   display: flex;
   justify-content: space-between;
   height: 8vh;
   border-radius: 10px;
-  background-color: #05106638;
+  background-color: #354673;
+  color: white;
   align-items: center;
 }
-#reviews > div:nth-child(1) > span:nth-child(1){
+#reviewsList > div:nth-child(1) > span:nth-child(1){
   margin: 0 0 0 5%;
 }
 #icon-container{
