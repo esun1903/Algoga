@@ -25,6 +25,7 @@ from rest_framework import exceptions
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from collections import Counter
+from .get_data import *
 
 
 
@@ -202,8 +203,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # 맞은 문제만 리턴
-        user_problems = UserProblem.objects.filter(user_seq = seq).filter(correct = 0).values_list('problem_seq')
-        user_problems = list(map(lambda x : x[0], user_problems))
+        user_problems = CodeBoard.objects.filter(user_seq = seq).values_list('problem_seq')
+        user_problems = list(set(map(lambda x: x[0], user_problems)))
+        
+        print(user_problems)
 
         # 맞은 문제 번호로 문제별 알고리즘 가져오기
         user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
