@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from .util import *
+
 
 # Create your models here.
 class CodeBoard(models.Model):
@@ -8,7 +10,7 @@ class CodeBoard(models.Model):
     explanation = models.TextField()
     free_write = models.TextField()
     public = models.IntegerField()
-    register_date = models.DateTimeField(blank=True, null=True)
+    register_date = models.DateTimeField(auto_now_add=True)
     like_cnt = models.IntegerField()
     language = models.CharField(max_length=45)
     user_seq = models.ForeignKey('User', models.DO_NOTHING, db_column='user_seq')
@@ -170,7 +172,7 @@ class User(models.Model):
     password = models.CharField(max_length=50)
     baek_id = models.CharField(max_length=50)
     nickname = models.CharField(unique=True, max_length=50)
-    profile_image = models.CharField(max_length=500, blank=True, null=True)
+    profile_image =models.ImageField(editable=True, null=True)
     register_date = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(blank=True, null=True)
 
@@ -190,3 +192,7 @@ class UserProblem(models.Model):
         unique_together = (('problem_seq', 'user_seq'),)
 
 
+
+class Profile(models.Model):
+    name = models.CharField(max_length=10)
+    photo = models.ImageField(upload_to="")

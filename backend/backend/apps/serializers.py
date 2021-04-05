@@ -45,3 +45,4 @@ class FollowerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FollowUser
         fields = '__all__'
+
