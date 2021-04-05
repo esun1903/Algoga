@@ -8,19 +8,23 @@
           <div>
             {{data}}
           </div>
-        </section>
-        
+        </section>        
+        <div class='detail-problem' v-if='dataHistory[idx]!==0'>
+          <div v-for="(dataProb,jdx) in dataList[idx]" :key='jdx' @click='routerCodeBoardDetail(dataProb[0])'>
+            <span>[BOJ] {{dataProb[4]}}. {{dataProb[3]}}  {{dataProb[1]}}</span>
+          </div>
+        </div>
+        <div class='detail-problem' v-else>
+          한문제도안풀음!@
+        </div>
       </div>
-    </div>    
+    </div>        
   </div>
 </template>
 
 <script>
 export default {
     name:"History",
-    methods:{
-
-    },
     props:{
       dataHistory:[Array],
       dataList:[Array],
@@ -29,6 +33,11 @@ export default {
         return {
             datas:[],
         }
+    },
+    methods:{
+      routerCodeBoardDetail:function(codeBoard_seq){
+        this.$router.push({name:'CodeBoardDetail',params:{'codeBoard_seq':codeBoard_seq}})
+      }
     },
     watch:{
       dataHistory:function(){              
@@ -50,16 +59,10 @@ export default {
           
           var d = new Date(`${year}-${month+1}-${day}`).getDay()
 
-
-          
           string_date = week[d]+' '+`${day}`+' ' +month_name[month]+' '+ year + ' '+', ' +`You solved ${this.dataHistory[i]} problems`
-          
-
-
           this.datas.push(string_date)
-          
         }
-      }
+      },
     },
     mounted(){
       let slider = document.querySelector('#history')
@@ -159,5 +162,24 @@ export default {
   border-radius:10px;   
   margin-right: 5px
 }
+
+
+.detail-problem {
+  width: 80%;
+  padding: 10px 20px;
+  /* height: 100px; */
+  margin: 10px auto 30px;
+  background-color: rgb(226, 223, 223);
+}
+
+.detail-problem span {
+  display:inline-block;
+  margin: 5px 0;
+  cursor:pointer;  
+}
+.detail-problem span:hover{
+  text-decoration-line: underline;
+}
+
 
 </style>

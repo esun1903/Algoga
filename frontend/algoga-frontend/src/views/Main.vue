@@ -67,6 +67,7 @@ export default {
       let data1 = data.data1
       let data2 = data.data2
       data1.reverse()
+      data2.reverse()
       this.dataHistory = data1 
       this.dataList = data2     
     },

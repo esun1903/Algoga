@@ -145,7 +145,19 @@ export default {
       let dateOfBoard = codeBoardUser[i].register_date.split('T')[0]
       let dateIdx = this.getDayDiff(startDate,dateOfBoard)-1     
       let problemData = new Array()      
-      problemData.push([codeBoardUser[i].seq,codeBoardUser[i].language,codeBoardUser[i].problem_seq])
+      let title = ''
+      let number = -1
+
+      await axios.get(`${SERVER_URL}/apps/v1/Problem/${codeBoardUser[i].problem_seq}`)
+        .then(res=>{  
+          title = res.data.name                  
+          number = res.data.number 
+          
+
+        })
+
+
+      problemData.push(codeBoardUser[i].seq,codeBoardUser[i].language,codeBoardUser[i].problem_seq,title,number)
       if (this.problemsData[dateIdx]) {
         this.problemsData[dateIdx].push(problemData)
       } else {
