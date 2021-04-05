@@ -15,6 +15,9 @@
       </form>
       <button @click='searchKeyword' id='searchIcon'  class='searchBtn'><i class="fas fa-search"></i></button>
       <button @click='filter' :class='{btnClicked : filtered}' id='filterIcon' class='searchBtn'><i class="fas fa-sort-amount-down"></i></button>
+      <button class='searchBtn' id='rmCondition' v-show="showBtn">
+        <span @click='rmCondition'>조건 초기화</span>
+      </button>
     </div>
     <!-- 타입 버튼 필터링 -->
     <div id='filterByType'>
@@ -78,7 +81,7 @@
             {{lang}}
           </label>
         </div>
-        <button @click='applyFilter' id='setFilter'>Apply</button>
+        <button @click='applyFilter()' id='setFilter'>Apply</button>
       </div>
     </transition>
     <!-- 알고리즘 문제 목록 -->
@@ -123,7 +126,6 @@
 import MainNavbar from '@/components/Main/MainNavbar'
 import _ from "lodash"
 import ListOneLine from '@/components/Algo/ListOneLine'
-// import { mapState } from 'vuex'
 
 export default {
     name : 'List',
@@ -191,6 +193,8 @@ export default {
         selectedType : new Array(7).fill(false),
         findInput : '',
         findType : 'Title',
+        isFiltered : false,
+        isSearched : false,
       }
     },
     methods: {
@@ -238,25 +242,28 @@ export default {
       applyFilter : function(){
         this.typesClicked = new Array(7).fill(false)
         let merged = []
-        for(let i = 0; i < this.selectedType; i ++){
+        for(let i = 0; i < this.selectedType.length; i ++){
           if(this.selectedType[i]=== true){
-            merged.concat(this.typeDetail[i])
+            merged = merged.concat(this.typeDetail[i])
           }
         }
         let language_list = []
-        for(let i = 0; i < this.selectedPl; i ++){
+        for(let i = 0; i < this.selectedPl.length; i ++){
           if(this.selectedPl[i]===true){
             language_list.push(this.pLang[i])
           }
         }
+        const that = this
         this.algoList = this.algoListAll.filter(function(algo){
-          return algo.level == this.selectedLv
+          return algo.level === that.selectedLv
           && merged.some(type => algo.algorithms.indexOf(type) != -1)
-          && algo.correct_rate >= this.selectedCr
+          && algo.correct_rate >= that.selectedCr
           && language_list.some(lan => algo.language.indexOf(lan) != -1)
         })
-
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
         this.filtered = !this.filtered
+        this.isFiltered = !this.isFiltered
       },
       changePage : function(newP){
         this.currentPage = newP
@@ -359,8 +366,17 @@ export default {
               return algo.algorithms.indexOf(this.findInput) != -1
             })
           }
+          this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+          this.isSearched = true
           this.changePage(1)
         }
+      },
+      rmCondition : function(){
+        this.algoList = this.algoListAll
+        this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
+        this.changePage(1)
+        this.isFiltered = false
+        this.typesClicked = new Array(7).fill(false)
       }
     },
     created(){
@@ -373,6 +389,11 @@ export default {
         })
       .catch((err) => console.log(err))
     },
+    computed : {
+      showBtn : function(){
+        return this.isFiltered | this.typesClicked.indexOf(true) != -1 | this.isSearched
+      }
+    }
 }
 </script>
 
@@ -439,11 +460,28 @@ export default {
   top: 50%;
   left: calc(70% + 3px);
   transform : translate(0%,-50%);
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+#rmCondition{
+  position: absolute;
+  top: 50%;
+  left: calc(70% + 50px);
+  transform : translate(0%,-50%);
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  padding: 5px 10px;
+}
+#rmCondition > span{
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 /* 타입별 필터 */
 #filterByType{
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 .typeIcon{
   height: 35px;
@@ -656,6 +694,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   color: black;
   cursor: pointer;
 }
+
 /* 문제 목록 */
 table{
   margin : 0 10%;
