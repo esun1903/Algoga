@@ -12,6 +12,7 @@
       :title = bojTitle
       :description = bojDescription
     />
+    
     <ReviewsList />
   </div>
 </template>
