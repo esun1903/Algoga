@@ -402,9 +402,13 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             problem_language_seqs = ','.join(problem_language_seqs)
 
             problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
-
+       
+        codecomment = Comment.objects.filter(code_board_seq =codeBoard_seq)
+        for one_codecomment  in codecomment:
+            one_codecomment.delete()
+            
         codeBoard.delete()
-        
+   
         return  Response("삭제성공", status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
@@ -454,6 +458,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 class Image(APIView) :
     def post (self, request, format=None) :
         serializers = PhotoSerializer(data = request.data)
+        print("여기")
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status= status.HTTP_201_CREATED)
