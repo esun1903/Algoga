@@ -114,7 +114,8 @@ export default {
         "like_cnt": 0,
         "user_seq": 1,
         "problem_seq": 1,
-        "language_seq": 1
+        "language_seq": 1,
+        "language":'',
       },
       problemTitle:'A+B'
 
@@ -122,6 +123,9 @@ export default {
   },
   methods:{
     registerProblem:function(){
+      const lang_name = ["","JAVA","PYTHON","C","C++"]
+
+
       if (this.btnClicked.length < 1) {
         alert('어떤 방식으로 풀었는지 알려주세요!')
         return
@@ -129,16 +133,22 @@ export default {
       
       const lang = document.querySelector('#register-problem select').value
       this.data.user_seq = localStorage.getItem('userNo')
-      this.data.language_seq = lang
       if (!lang) {
         alert('언어를 선택해주세요')
         return
       }
+      this.data.language_seq = lang
+      this.data.language = lang_name[this.data.language_seq]
+
+
+
+
       this.categoryToString()
 
       axios.post(`${SERVER_URL}/apps/v1/codeBoardRegister`,this.data)
         .then(res => {
-          console.log(res)
+          if (res.status !== 201) {return}
+          this.$router.push({name:'Main',params:{nickname:localStorage.getItem('email')}})
         })
         .catch(err => {
           console.log(err)

@@ -30,7 +30,8 @@ export default {
         }
     },
     watch:{
-      dataHistory:function(){        
+      dataHistory:function(){      
+        console.log(this.dataHistory) 
         this.datas = []
         const reg_date = localStorage.getItem('register_date').split('T')[0]        
         let week = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday')  
