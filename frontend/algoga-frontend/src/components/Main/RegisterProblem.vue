@@ -3,7 +3,7 @@
     <header>
       <div>
         <input type="number" placeholder="Input Problem No" @input="matchingTitle">
-        <input type="text" v-model='problemTitle' disabled>
+        <input type="text" v-model='problemTitle' disabled placeholder="Problem Title">
         <select>
           <option value="" selected hidden>Select Your Language</option>
           <option value="3">C</option>
@@ -117,7 +117,7 @@ export default {
         "language_seq": 1,
         "language":'',
       },
-      problemTitle:'A+B'
+      problemTitle:''
 
     }
   },
@@ -221,12 +221,14 @@ export default {
     },
     matchingTitle:function(event){
       const probNo = event.target.value
-      axios.get(`${SERVER_URL}/apps/v1/Problem/${probNo}`)
-        .then(res=>{
-          console.log(res)
+      axios.get(`${SERVER_URL}/apps/v1/searchNumberProblem/${probNo}`)
+        .then(res=>{          
+          this.problemTitle = res.data.name
+          this.data.problem_seq = res.data.seq
+
         })
-        .catch(err=>{
-          alert(err)
+        .catch(()=>{
+          this.problemTitle = ''
         })
     }
     

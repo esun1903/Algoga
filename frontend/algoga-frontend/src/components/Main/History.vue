@@ -22,7 +22,8 @@ export default {
 
     },
     props:{
-      dataHistory:[Array]
+      dataHistory:[Array],
+      dataList:[Array],
     },
     data:function(){
         return {
@@ -30,8 +31,7 @@ export default {
         }
     },
     watch:{
-      dataHistory:function(){      
-        console.log(this.dataHistory) 
+      dataHistory:function(){              
         this.datas = []
         const reg_date = localStorage.getItem('register_date').split('T')[0]        
         let week = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday')  
