@@ -25,6 +25,7 @@ from rest_framework import exceptions
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from collections import Counter
+from .get_data import *
 
 
 
@@ -202,8 +203,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # 맞은 문제만 리턴
-        user_problems = UserProblem.objects.filter(user_seq = seq).filter(correct = 0).values_list('problem_seq')
-        user_problems = list(map(lambda x : x[0], user_problems))
+        user_problems = CodeBoard.objects.filter(user_seq = seq).values_list('problem_seq')
+        user_problems = list(set(map(lambda x: x[0], user_problems)))
+        
+        print(user_problems)
 
         # 맞은 문제 번호로 문제별 알고리즘 가져오기
         user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
@@ -286,6 +289,36 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         serializer = CodeBoardSerializer(boardcodes, many=True)
 
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def codeBoardLike(self, request, codeBoard_seq, user_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        codeBoard =  CodeBoard.objects.get(seq =codeBoard_seq)
+    
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            if one_codeboardlike.code_board_seq == codeBoard_seq and one_codeboardlike.user_seq == user_seq :
+                codeBoard.like_cnt =  codeBoard.like_cnt-1
+                one_codeboardlike.delete()
+                return Response("좋아요 취소완료",status=status.HTTP_200_OK)
+        
+        CodeBoardLike.objects.create(
+             code_board_seq = codeBoard_seq,
+             user_seq = user_seq
+        )
+        codeBoard.like_cnt =  codeBoard.like_cnt + 1
+        codeBoard.save()
+        return Response("좋아요 완료",status=status.HTTP_200_OK)
+    
+    def codeBoardLike_User(self, request, codeBoard_seq):
+
+        codeboardlike = CodeBoardLike.objects.filter(code_board_seq = codeBoard_seq) 
+        user = list()
+        # 만약 중복된 값이 있다면 406리턴 
+        for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
+            user.append(one_codeboardlike.user_seq)
+                
+        return Response(user,status=status.HTTP_200_OK)
 
     def codeBoardUser(self, request, email):
 
@@ -379,12 +412,11 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
     serializer_class = CommentSerializer
 
-    def commentRegiste(self, request):
-
+    def commentRegister(self, request):
         commentSerializer = CommentSerializer(data=request.data, partial=True)
         if not commentSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+  
         commentSerializer.save()
 
 
