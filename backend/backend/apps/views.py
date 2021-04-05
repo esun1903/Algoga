@@ -15,7 +15,7 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage, message
 from django.utils.encoding import force_bytes, force_text
 # from .text import message
-import datetime
+import datetime 
 import jwt
 from django.conf import settings
 from .utils import *
@@ -28,6 +28,7 @@ from collections import Counter
 
 
 
+  
 @permission_classes([AllowAny])
 class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View): 
 
@@ -412,5 +413,3 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
-      
