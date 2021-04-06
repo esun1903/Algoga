@@ -13,6 +13,15 @@ export default {
   components: {
     ModeBtn,
   },
+  methods:{
+    checkJWT:function(){
+      const jwt = localStorage.getItem('JWT')      
+      if (!jwt) {
+        this.$router.push({name:'Home'})
+      }
+
+    }
+  },
   created(){
     window.addEventListener('click',function(event){
       let d = document.createElement('div')
@@ -24,6 +33,14 @@ export default {
       document.body.appendChild(d)
 
     })
+    this.checkJWT()
+  },
+  watch:{
+    $route(to,from){
+      if (to.path!==from.path){
+        this.checkJWT()
+      }
+    }
   }
 
 }

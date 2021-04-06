@@ -9,10 +9,6 @@
 
       <footer>asd</footer>
 
-
-
-
-
   </div>
 </template>
 
@@ -24,29 +20,37 @@ import FirstHome from '@/components/Home/FirstHome'
 import Home2nd from '@/components/Home/Home2nd'
 
 export default {
-    name : 'Home',
-    components : {
-      HomeNavbar,
-      Login,
-      Signup,
-      FirstHome,
-      Home2nd,
+  name : 'Home',
+  components : {
+    HomeNavbar,
+    Login,
+    Signup,
+    FirstHome,
+    Home2nd,
+  },
+  data : function(){
+    return{
+      loginClicked : false,
+      signupClicked: false,
+    }
+  },
+  methods :{
+    loginClick : function(){
+      this.loginClicked = !this.loginClicked
     },
-    data : function(){
-      return{
-        loginClicked : false,
-        signupClicked: false,
-      }
-    },
-    methods :{
-      loginClick : function(){
-        this.loginClicked = !this.loginClicked
-      },
-      signupClick: function(){
-        this.signupClicked = !this.signupClicked
+    signupClick: function(){
+      this.signupClicked = !this.signupClicked
 
-      }
+    }
+  },
+  created(){
+    let jwt = localStorage.getItem('JWT')
+    let email = localStorage.getItem('email')
+    if (jwt&&email) {
+      this.$router.push({name:'Main',params:{'nickname':email}})
+    }
   }
+  
 }
 </script>
 
