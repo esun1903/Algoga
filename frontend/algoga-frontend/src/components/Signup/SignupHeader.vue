@@ -58,7 +58,7 @@ export default {
 
 
 #signup-header > div:nth-child(odd) > div {width:50px;height:50px;border-radius: 50%;display:flex;justify-content: center;align-items: center;border:1px solid grey;transition:.3s;}
-#signup-header > div:nth-child(2n) > div {width:calc(300px/6);height: 3px;background-color:grey;transition: .3s;}
+#signup-header > div:nth-child(2n) > div {width:calc(300px / 6);height: 3px;background-color:grey;transition: .3s;}
 
 
 </style>

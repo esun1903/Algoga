@@ -6,6 +6,7 @@ import Register from '@/views/Register';
 import List from '@/views/List';
 import Problem from '@/views/Problem';
 import CodeBoardDetail from '@/views/CodeBoardDetail';
+import Mycode from '@/views/Mycode';
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,11 @@ const routes = [
         path: '/list',
         name: 'List',
         component: List,
+    },
+    {
+        path: '/mycode',
+        name: 'Mycode',
+        component: Mycode,
     },
     {
         path: '/codeBoardDetail/:codeBoard_seq',
