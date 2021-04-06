@@ -28,7 +28,7 @@ export default {
       this.$emit("closed")
     },
     nextStage:function(idx){
-      if (this.nowIdx === 8) {return}      
+      if (this.nowIdx === 10) {return}      
       this.nowIdx += idx      
     },
   },

@@ -15,8 +15,7 @@
           </div>
           <div v-else>
             <button @click='Login'>SignIn</button>
-          </div>          
-          <button @click='test'>testsets</button>
+          </div>                    
         </div>
         <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
@@ -74,19 +73,6 @@ export default {
 
 
 
-    },
-    test:function(){
-      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
-        .then(res=>{
-          return res.json()
-        })
-        .then(res=>{
-          console.log(JSON.stringify(res))
-        })
-        .catch(err=>{
-          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
-          this.teststring = err.data
-        })
     },
     statusChange:function(){
       this.loginStatus =true
