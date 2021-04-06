@@ -308,6 +308,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         for one_codeboardlike in codeboardlike : #만약 좋아요기록이 이미 있다면?
             if one_codeboardlike.code_board_seq == codeBoard_seq and one_codeboardlike.user_seq == user_seq :
                 codeBoard.like_cnt =  codeBoard.like_cnt-1
+                codeBoard.save()
                 one_codeboardlike.delete()
                 return Response("좋아요 취소완료",status=status.HTTP_200_OK)
         
