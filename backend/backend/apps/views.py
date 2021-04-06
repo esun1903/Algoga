@@ -145,7 +145,16 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        return Response("닉네임사용가능",status=status.HTTP_200_OK)     
+        return Response("닉네임사용가능",status=status.HTTP_200_OK)
+    
+    def emailoverlapCheck(self, request, email):
+
+        users =  User.objects.filter(email = email)
+        if users.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        return Response("email사용가능",status=status.HTTP_200_OK)     
+         
     
     def findPassword(self, request, email):
         
