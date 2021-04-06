@@ -15,8 +15,7 @@
           </div>
           <div v-else>
             <button @click='Login'>SignIn</button>
-          </div>          
-          <button @click='test'>testsets</button>
+          </div>                    
         </div>
         <div class="sign-up-back" @click='closeLoginModal'></div>
     </div>
@@ -28,12 +27,9 @@ import axios from 'axios'
 
 // const cookies = new Cookies()
 
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
-const SERVER_URL = 'http://j4a302.p.ssafy.io'
-// const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
-// axios.defaults.withCredentials = true;
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = 'http://j4a302.p.ssafy.io'
+
 
 export default {
   name : 'Login',
@@ -54,6 +50,7 @@ export default {
       this.$emit('closed')
     },
     Login:function(){      
+      console.log(this.idInput,this.passwordInput)
       axios.post(`${SERVER_URL}/apps/v1/login`,{
         'email': this.idInput,
         'password': this.passwordInput
@@ -62,7 +59,12 @@ export default {
           if(res.status !== 200){
             alert('로그인실패')
             return;
-          }                    
+          }             
+          if(!res.data.userInfo[0].is_active){
+            alert('이메일인증을 완료해주세요!')
+            return
+          }
+          console.log(res)       
           localStorage.setItem('email',res.data.userInfo[0].email)
           localStorage.setItem('userNo',res.data.userInfo[0].seq)
           localStorage.setItem('register_date',res.data.userInfo[0].register_date)
@@ -74,19 +76,6 @@ export default {
 
 
 
-    },
-    test:function(){
-      fetch(`${SERVER_URL}/apps/v1/sessionCheck>`,{credentials:'same-origin'})
-        .then(res=>{
-          return res.json()
-        })
-        .then(res=>{
-          console.log(JSON.stringify(res))
-        })
-        .catch(err=>{
-          console.log(err,'error!!!!!!!!!!!!!!!!!!!!!!!!')
-          this.teststring = err.data
-        })
     },
     statusChange:function(){
       this.loginStatus =true
