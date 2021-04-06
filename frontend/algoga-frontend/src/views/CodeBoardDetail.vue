@@ -72,7 +72,7 @@ import CodeBoardComment from "@/components/Main/CodeBoardComment"
 import axios from 'axios'
 
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
-const SERVER_URL = 	'http://j4a302.p.ssafy.io/apps/v1/'
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
 
 export default {
   name:'CodeBoardDetail',
@@ -107,7 +107,7 @@ export default {
         'user_seq':localStorage.getItem('userNo'),
         'code_board_seq':this.$route.params.codeBoard_seq
       }
-
+      console.log(commentData)
       axios.post(`${SERVER_URL}/apps/v1/commentRegister`,commentData)
         .then(()=>{
           commentData['register_date'] = '방금전'
@@ -117,6 +117,7 @@ export default {
           this.createActivate = false
         })
         .catch(err=>{
+          console.log(err)
           alert(err)
         })
 

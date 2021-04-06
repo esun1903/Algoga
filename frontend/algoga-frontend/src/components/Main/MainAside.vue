@@ -51,7 +51,7 @@
 <script>
 import axios from 'axios'
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
-const SERVER_URL = 'http://j4a302.p.ssafy.io/apps/v1/'
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
 import Chart from '@/components/Main/Chart'
 
 export default {

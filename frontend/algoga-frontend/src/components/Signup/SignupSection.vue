@@ -17,8 +17,8 @@ import StartForm from "@/components/Signup/StartForm"
 
 import axios from "axios"
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
-// const SERVER_URL = 'http://j4a302.p.ssafy.io:8000'
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
 
 export default {
   name:"SignupSection",
