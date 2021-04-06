@@ -169,9 +169,9 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
-    def userInfoUpdate(self,request, email):
+    def userInfoUpdate(self,request, email ,format=None):
 
-        users =  User.objects.filter(email =email)
+        users =  User.objects.filter(email=email)
         if not users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
@@ -406,7 +406,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         codecomment = Comment.objects.filter(code_board_seq =codeBoard_seq)
         for one_codecomment  in codecomment:
             one_codecomment.delete()
-            
+
         codeBoard.delete()
    
         return  Response("삭제성공", status=status.HTTP_200_OK)
@@ -455,10 +455,9 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class Image(APIView) :
-    def post (self, request, format=None) :
+    def post (self, request, format=None):
+        print("여기 들어왔다")
         serializers = PhotoSerializer(data = request.data)
-        print("여기")
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status= status.HTTP_201_CREATED)
