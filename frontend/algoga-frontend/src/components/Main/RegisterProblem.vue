@@ -77,8 +77,8 @@ import marked from "marked"
 import axios from "axios"
 
 // v1/codeBoardRegiste // post
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
-
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = 'http://j4a302.p.ssafy.io/apps/v1/'
 
 export default {
   name:'RegisterProblem',
