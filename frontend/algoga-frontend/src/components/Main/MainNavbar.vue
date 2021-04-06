@@ -38,6 +38,9 @@ export default {
           this.$router.push({name:'Main',params:{nickname:localStorage.getItem('email')}})
         } else if (idx===1) {
           this.$router.push({name:'List'})
+          } else if (idx===2) {
+          this.$router.push({name:'Mycode'})
+
         }
 
       }

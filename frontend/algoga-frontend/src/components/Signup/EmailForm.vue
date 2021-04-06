@@ -64,6 +64,8 @@ export default {
           this.check.email = false
           this.mes.email = '중복된 메일이 존재합니다.'
         })      
+      // this.check.email = true
+      // this.mes.email = '이메일이 확인되었습니다.'
     },
     nextStage:function(idx){
       if (this.check.email === false) {return}
