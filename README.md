@@ -63,25 +63,6 @@
 ![기술스택](/uploads/08492e84a7446c58dab5f9646cc22b54/기술스택.PNG)
 
 
-
-### ✔ 프로젝트 개발 일정
-
-![일정](/uploads/a4767ed53b24d414f9c5208fa4912880/일정.PNG)
-
-### ✔ 프로젝트 진행 과정
-
-![노션관리](/uploads/61b920744a3f3df380e7eaadeb657258/노션관리.PNG)
-
-- **진행은 <u>웹엑스, 디스코드, 노션</u>으로 협업하고 있습니다 :)** 
-
-### ✔ 와이어프레임
-
-![메인](/uploads/ecc41721c1c81d178c757b0731729c5f/메인.PNG)
-![메인2](/uploads/666ec839ba5183d45bf83551538ae02f/메인2.PNG)
-![메인3](/uploads/b96e410070a56f231a134229a3cfab54/메인3.PNG)
-![메인4](/uploads/925e5c5077f24bedf4b093efcdff5c19/메인4.PNG)
-![메인5](/uploads/4960e2c5c83c4b3d33197af77ddf605c/메인5.PNG)
-
 ### ⚙️ Install and Usage
 
 ### Frontend
@@ -111,5 +92,25 @@
   - ```
     $ python manage.py runserver
     ```
+
+
+
+### ✔ 프로젝트 개발 일정
+
+![일정](/uploads/a4767ed53b24d414f9c5208fa4912880/일정.PNG)
+
+### ✔ 프로젝트 진행 과정
+
+![노션관리](/uploads/61b920744a3f3df380e7eaadeb657258/노션관리.PNG)
+
+- **진행은 <u>웹엑스, 디스코드, 노션</u>으로 협업하고 있습니다 :)** 
+
+### ✔ 와이어프레임
+
+![메인](/uploads/ecc41721c1c81d178c757b0731729c5f/메인.PNG)
+![메인2](/uploads/666ec839ba5183d45bf83551538ae02f/메인2.PNG)
+![메인3](/uploads/b96e410070a56f231a134229a3cfab54/메인3.PNG)
+![메인4](/uploads/925e5c5077f24bedf4b093efcdff5c19/메인4.PNG)
+![메인5](/uploads/4960e2c5c83c4b3d33197af77ddf605c/메인5.PNG)
 
     
