@@ -180,9 +180,12 @@ class User(models.Model):
     password = models.CharField(max_length=50)
     baek_id = models.CharField(max_length=50)
     nickname = models.CharField(unique=True, max_length=50)
-    profile_image =models.ImageField(editable=True, null=True)
+    profile_image = models.FileField(null=True)
     register_date = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.profile_image
 
     class Meta:
         managed = False
@@ -199,12 +202,11 @@ class UserProblem(models.Model):
         db_table = 'user_problem'
         unique_together = (('problem_seq', 'user_seq'),)
 
-
 #프로필 함수 
 class test(models.Model):
     testfield = models.CharField(max_length=200)
     photo = models.FileField()
     def __str__(self):
-        return selg.testfield
+        return self.testfield
 
 
