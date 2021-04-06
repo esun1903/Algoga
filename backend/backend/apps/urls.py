@@ -25,6 +25,8 @@ urlpatterns = [
     path("v1/passEmailCheck/<str:email>", UserViewSet.as_view({"get": "passEmailCheck"})),
     #nickname 체크
     path("v1/nicknameCheck/<str:nickname>", UserViewSet.as_view({"get": "nicknameCheck"})),
+    #email 중복체크
+    path("v1/emailoverlapCheck/<str:email>", UserViewSet.as_view({"get": "emailoverlapCheck"})),
     #비밀번호 찾기
     path("v1/findPassword/<str:email>", UserViewSet.as_view({"get": "findPassword"})),
     #유저 seq로 회원정보 리턴
