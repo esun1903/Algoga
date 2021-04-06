@@ -1,6 +1,6 @@
 <template>
   <div id="signup-header">    
-    <div v-for="(index,idx) in [0,1,2,3,4,5,6,7,8]" :key="idx">
+    <div v-for="(index,idx) in [0,1,2,3,4,5,6,7,8,9,10]" :key="idx">
       <div v-if='index%2 === 0'>
         <i :class='icons[index/2]'></i>
       </div>
@@ -19,7 +19,7 @@ export default {
   },
   data:function(){
     return {
-      icons:['far fa-envelope-open','fas fa-key','fas','fas fa-user','fas'],
+      icons:['far fa-envelope-open','fas fa-key','fas','fas fa-user','far fa-envelope-open','fas'],
       mes:['이메일','비밀번호','BOJ','닉네임','시작']
     }
   },
@@ -58,7 +58,7 @@ export default {
 
 
 #signup-header > div:nth-child(odd) > div {width:50px;height:50px;border-radius: 50%;display:flex;justify-content: center;align-items: center;border:1px solid grey;transition:.3s;}
-#signup-header > div:nth-child(2n) > div {width:calc(300px/4);height: 3px;background-color:grey;transition: .3s;}
+#signup-header > div:nth-child(2n) > div {width:calc(300px/6);height: 3px;background-color:grey;transition: .3s;}
 
 
 </style>
