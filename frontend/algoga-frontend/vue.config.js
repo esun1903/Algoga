@@ -8,4 +8,5 @@ module.exports = {
         hot: true,
         disableHostCheck: true,      
     },
+    
 }
