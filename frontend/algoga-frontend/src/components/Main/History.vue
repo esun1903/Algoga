@@ -10,12 +10,15 @@
           </div>
         </section>        
         <div class='detail-problem' v-if='dataHistory[idx]!==0'>
-          <div v-for="(dataProb,jdx) in dataList[idx]" :key='jdx' @click='routerCodeBoardDetail(dataProb[0])'>
-            <span>[BOJ] {{dataProb[4]}}. {{dataProb[3]}}  {{dataProb[1]}}</span>
+          <div v-for="(dataProb,jdx) in dataList[idx]" :key='jdx' @click='routerCodeBoardDetail(dataProb[0])' class='problem-box'>            
+            <span>{{dataProb[4]}}. {{dataProb[3]}}</span>
           </div>
         </div>
-        <div class='detail-problem' v-else>
-          한문제도안풀음!@
+        <div class='center' v-else>
+          <div class='no-code' >
+
+          </div>
+          <h3>No code...</h3>
         </div>
       </div>
     </div>        
@@ -119,13 +122,15 @@ export default {
 <style>
 #history {  
   position:relative;
-  background-color:  white;
+  background-color:  var(--back-color);
   margin-top: 20px;  
+  color:var(--font-color);
   width: 100%;
   padding: 10px;
   max-height: 500px;
   overflow: auto;  
   scroll-behavior: smooth;
+  transition:0.3s;
 }
 #history::-webkit-scrollbar{
   display:none;
@@ -169,7 +174,18 @@ export default {
   padding: 10px 20px;
   /* height: 100px; */
   margin: 10px auto 30px;
-  background-color: rgb(226, 223, 223);
+  /* background-color: rgb(226, 223, 223); */
+}
+
+.problem-box {
+  cursor:pointer;
+  width:100%;
+  background-color: rgba(221, 139, 139, 0.185);
+  margin-bottom: 10px;
+  padding:5px 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px 1px var(--shadow-color);
+  transition: 0.3s;
 }
 
 .detail-problem span {
@@ -177,9 +193,21 @@ export default {
   margin: 5px 0;
   cursor:pointer;  
 }
+
 .detail-problem span:hover{
   text-decoration-line: underline;
 }
 
+
+.no-code {
+  margin-top: 30px;
+  width:100%;height: 200px;
+  background: url('../../assets/noCode.jpg') no-repeat;
+  background-position: center;
+  background-size: 30%;
+}
+.center{
+  text-align: center;
+}
 
 </style>

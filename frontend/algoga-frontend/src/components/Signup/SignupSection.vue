@@ -4,6 +4,7 @@
     <PasswordForm v-else-if='nowIdx === 2' @nextStage='nextStage'/>
     <BojForm v-else-if='nowIdx === 4' @nextStage='nextStage'/>
     <UserForm v-else-if='nowIdx === 6' @nextStage='nextStage'/>
+    <EmailMessageForm v-else-if='nowIdx === 8' @nextStage='nextStage' :data='data'/>
     <StartForm v-else />
   </div>
 </template>
@@ -14,6 +15,7 @@ import PasswordForm from "@/components/Signup/PasswordForm"
 import BojForm from "@/components/Signup/BojForm"
 import UserForm from "@/components/Signup/UserForm"
 import StartForm from "@/components/Signup/StartForm"
+import EmailMessageForm from "@/components/Signup/EmailMessageForm"
 
 import axios from "axios"
 
@@ -28,6 +30,7 @@ export default {
     BojForm,
     UserForm,
     StartForm,
+    EmailMessageForm
 
   },
   props:{
@@ -39,8 +42,7 @@ export default {
         email:'',
         password:'',
         baek_id:'',
-        nickname:'',
-        profile_image:'string'
+        nickname:'',        
       },
     }
   },
@@ -56,10 +58,8 @@ export default {
         this.data.nickname = data.nickname
         if (idx === 2) {
           this.signUp()
+          return
         }
-      }
-      if (idx === 2 && this.nowIdx === 6) {
-        return
       }
       this.$emit('nextStage',idx) 
     },
@@ -69,9 +69,6 @@ export default {
         .then(res => {
           if (res.status === 201) {
             this.$emit('nextStage',2) 
-            setTimeout(() => {              
-              this.login()
-            }, 1000);
           }
         })
         .catch(err=>{
