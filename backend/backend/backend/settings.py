@@ -29,7 +29,7 @@ SECRET_KEY = my_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -196,19 +196,13 @@ EMAIL_HOST_USER = my_settings.EMAIL['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']
 DEFAULT_FROM_MAIL = EMAIL_HOST_USER
 
-
-
-
 ###########################AWS
-AWS_ACCESS_KEY_ID = 'AKIARDKX6EPHIIW7ECGX' # .csv 파일에 있는 내용을 입력 Access key ID
-AWS_SECRET_ACCESS_KEY = 'UW7zu5XL/zY5HxoZ5cO6JRXlCHn1+r1X+ZL+RZ2F' # .csv 파일에 있는 내용을 입력 Secret access key
-AWS_REGION = 'ap-northeast-2'
-
+AWS_ACCESS_KEY_ID = my_settings.AWS_ACCESS_KEY_ID # .csv 파일에 있는 내용을 입력 Access key ID
+AWS_SECRET_ACCESS_KEY = my_settings.AWS_SECRET_ACCESS_KEY # .csv 파일에 있는 내용을 입력 Secret access key
+AWS_REGION = my_settings.AWS_REGION
 ###S3 Storages
-AWS_STORAGE_BUCKET_NAME = 'algoga' # 설정한 버킷 이름
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
+AWS_STORAGE_BUCKET_NAME = my_settings.AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = my_settings.AWS_S3_CUSTOM_DOMAIN
+AWS_S3_OBJECT_PARAMETERS = my_settings.AWS_S3_OBJECT_PARAMETERS
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = my_settings.DEFAULT_FILE_STORAGE
