@@ -127,7 +127,7 @@ export default {
   color:var(--font-color);
   width: 100%;
   padding: 10px;
-  max-height: 500px;
+  /* max-height: 500px; */
   overflow: auto;  
   scroll-behavior: smooth;
   transition:0.3s;
@@ -163,7 +163,7 @@ export default {
 .pointer {
   width:10px; 
   height:10px; 
-  background-color:rgb(94, 185, 41);
+  background-color:#C84160;
   border-radius:10px;   
   margin-right: 5px
 }

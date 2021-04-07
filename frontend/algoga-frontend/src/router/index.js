@@ -7,6 +7,7 @@ import List from '@/views/List';
 import Problem from '@/views/Problem';
 import CodeBoardDetail from '@/views/CodeBoardDetail';
 import Mycode from '@/views/Mycode';
+import Follow from '@/views/Follow';
 
 Vue.use(VueRouter);
 
@@ -40,6 +41,11 @@ const routes = [
         path: '/codeBoardDetail/:codeBoard_seq',
         name: 'CodeBoardDetail',
         component: CodeBoardDetail,
+    },
+    {
+        path: '/follow',
+        name: 'Follow',
+        component: Follow,
     },
     {
         path: '/problem/:no',

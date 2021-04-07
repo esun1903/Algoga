@@ -4,13 +4,14 @@
       <div v-if='!sending'>
         <h2 class='animate__animated animate__fadeIn animate__delay-1s'>회원가입이 완료되었습니다.</h2>      
         <h2 class='animate__animated animate__fadeIn animate__delay-1s'>메일을 전송 중입니다.</h2>      
-        <h2 class='animate__animated animate__fadeIn animate__delay-2s'></h2>    
+        <h2 class='animate__animated animate__fadeIn animate__delay-2s'>잠시만 기다려주세요</h2>    
       </div>            
       <div v-if='sending'>
-        <h2 class='animate__animated animate__fadeIn animate__delay-1s'>메일이 전송되었습니다. 메일을 확인해주세요</h2>      
-        <button @click='login'>로그인 바로가기</button>  
+        <h2 class='animate__animated animate__fadeIn animate__delay-1s'>메일이 전송되었습니다.</h2>      
+        <h2 class='animate__animated animate__fadeIn animate__delay-2s'>메일을 확인해주세요.</h2>      
+        <button @click='login' class='animate__animated animate__fadeIn animate__delay-3s' style='background-color:blue'>로그인 바로가기</button>  
       </div>
-    </div>
+    </div>    
   </div>
 </template>
 
@@ -73,7 +74,3 @@ export default {
 
 }
 </script>
-
-<style>
-
-</style>
