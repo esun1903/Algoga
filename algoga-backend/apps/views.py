@@ -90,7 +90,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         userSerializer.save()
 
-        return Response("회원가입완료", status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
     def sendEmail(self, request, email):
         print(settings.DOMAIN)
@@ -106,7 +106,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             to=[email],  # 받는 이메일 리스트
         )
         email.send()   
-        return Response("인증메일을 보냈습니다.", status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
     
 
     def emailAuthenticate(self, request, email,token):
@@ -128,7 +128,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users =  User.objects.filter(email =email)
         users.update(is_active =1)   
         
-        return Response("인증성공",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
      
     
     def passEmailCheck(self, request, email):
@@ -146,7 +146,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        return Response("닉네임사용가능",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
     
     def emailoverlapCheck(self, request, email):
 
@@ -154,14 +154,14 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        return Response("email사용가능",status=status.HTTP_200_OK)     
+        return Response(status=status.HTTP_200_OK)     
          
     
     def findPassword(self, request, email):
         
         users =  User.objects.filter(email = email)
         if not users.exists():
-            return Response("이메일이 존재하지않습니다.",status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         
         user =  User.objects.get(email=email)
         email = EmailMessage(
@@ -170,7 +170,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             to=[email],  # 받는 이메일 리스트
         )
         email.send()
-        return Response("해당 이메일에 비밀번호 전송",status=status.HTTP_200_OK)  
+        return Response(status=status.HTTP_200_OK)  
 
     def userInfo(self,request, seq):
 
@@ -193,7 +193,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userInfoModify.profile_image = request.data["profile_image"]
         userInfoModify.save()
 
-        return Response("수정 성공",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
     def Userdelete(self,request,email): 
         
@@ -203,7 +203,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
        
         users.delete()
         
-        return  Response("삭제성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
     
     
     # 사용자가 푼 알고리즘 수
@@ -250,7 +250,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
              user_following_seq = following_id.seq
         )
 
-        return  Response("팔로우 성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
     
     #user가 팔로잉하는 사람들의 List
     def FollowingList(self,request,user_follower_seq): 
@@ -279,14 +279,14 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         users.delete()
 
-        return  Response("팔로잉 삭제 성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
     
     def DeletefollowerUser(self,request,user_following_seq, user_delete_follower_seq): 
         users = FollowUser.objects.get(user_following_seq = user_following_seq , user_follower_seq = user_delete_follower_seq )
 
         users.delete()
 
-        return  Response("팔로워 삭제 성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
 
 
 @permission_classes([AllowAny])
@@ -312,7 +312,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
                 codeBoard.like_cnt =  codeBoard.like_cnt-1
                 codeBoard.save()
                 one_codeboardlike.delete()
-                return Response("좋아요 취소완료",status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK)
         
         CodeBoardLike.objects.create(
              code_board_seq = codeBoard_seq,
@@ -320,7 +320,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         )
         codeBoard.like_cnt =  codeBoard.like_cnt + 1
         codeBoard.save()
-        return Response("좋아요 완료",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
     
     def codeBoardLike_User(self, request, codeBoard_seq):
 
@@ -378,7 +378,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         codeBoardSerializer.save()
 
-        return Response("코드보드 등록완료", status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
     
     def codeBoardUpdate(self, request, codeBoard_seq):
         
@@ -387,7 +387,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoard.update(code =request.data["code"],explanation  =request.data["explanation"],free_write =request.data["free_write"],problem_seq=request.data["problem_seq"],language_seq=request.data["language_seq"])
-        return Response("수정 성공",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 
     def codeBoardDelete(self, request, codeBoard_seq):
@@ -421,7 +421,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         codeBoard.delete()
    
-        return  Response("삭제성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
 
 @permission_classes([AllowAny])
 class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
@@ -436,7 +436,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         commentSerializer.save()
 
 
-        return  Response("댓글등록", status=status.HTTP_201_CREATED)   
+        return  Response(status=status.HTTP_201_CREATED)   
 
     def commentUpdate(self, request, comment_seq):
         
@@ -445,7 +445,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         comment.update(text =request.data["text"])
-        return Response("수정 성공",status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
     
     def commentDelete(self, request, comment_seq):
 
@@ -455,7 +455,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         comment.delete()
         
-        return  Response("삭제성공", status=status.HTTP_200_OK)
+        return  Response(status=status.HTTP_200_OK)
     
     def commentList(self, request , codeBoard_seq):
        
@@ -468,7 +468,6 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post (self, request, format=None):
-        print("여기 들어왔다")
         serializers = PhotoSerializer(data = request.data)
         if serializers.is_valid():
             serializers.save()
