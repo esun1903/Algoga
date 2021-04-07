@@ -16,6 +16,10 @@
 
 
 <script>
+import axios from 'axios'
+
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
+
 export default {
   name:'UserForm',
   data:function(){
@@ -38,15 +42,21 @@ export default {
     },
     nicknameInput:function(event){
       const input = event.target.value
-      if (!input) { 
+      if (!input || input.length<3) { 
         this.check.nickname = false
-        this.mes.nickname = ""
+        this.mes.nickname = "3글자이상 입력해주세요."
 
         return }
 
-      this.check.nickname = true
-      this.mes.nickname= '입력완료'
-
+      axios.get(`${SERVER_URL}/apps/v1/nicknameCheck/${input}`)
+        .then(()=>{
+          this.check.nickname = true
+          this.mes.nickname= '사용가능한 닉네임입니다.'
+        })
+        .catch(()=>{
+          this.check.nickname = false
+          this.mes.nickname = "중복된 닉네임입니다."
+        })
     }
   }
 }
