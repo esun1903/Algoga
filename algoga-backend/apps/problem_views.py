@@ -19,14 +19,14 @@ import os
 from django.shortcuts import get_object_or_404
 
 USER_PAGE = "https://www.acmicpc.net/user/"
+ACCEPT_ALGORITHM_SEQ_LIST = list(range(1, 56)) + [62, 66, 68, 75]
 
 @permission_classes([AllowAny])
 class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     
     serializer_class = UserProblemSerializer
-    # serializer_problem_class = 
-    # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
+    # 백준아이디 존재 확인
     def checkBaekjoon(self, request, baek_id):
         userURL = USER_PAGE + baek_id
         webpage = requests.get(userURL)
@@ -39,12 +39,10 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         else:
             return Response(status=status.HTTP_200_OK)
 
-    # 사용자가 '문제 불러오기'를 클릭하면
+    # 사용자가 푼 문제 갱신
     def callProblem(self, request, seq):
-        
-        user = User.objects.get(seq=seq)
+        user = get_object_or_404(User, seq = seq)
 
-        # 1. 백준에서 사용자 아이디가 푼 문제 가져오기
         userURL = USER_PAGE + user.baek_id
         webpage = requests.get(userURL)
         bs = BeautifulSoup(webpage.content, "html.parser")
@@ -80,19 +78,11 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         correct_problems = list(set(totalProblem_number) & set(user_problems[0]))
         incorrect_problems = list(set(totalProblem_number) & set(user_problems[-1]))
-
-        # 푼 문제가 적을 경우 브론즈5문제 중 제출 많은 애들 추천
-        if len(correct_problems) + len(incorrect_problems) < 10:
-            recommend_problem = totalProblem.filter(level=1).order_by('-submission_cnt')[:20]
-            serializer = ProblemSerializer(recommend_problem, many=True)
-        
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         # 3) 기존 DB에 있는 사용자가 푼 문제들 삭제
         UserProblem.objects.filter(user_seq=user.seq).all().delete()
         
         # 4) DB에 푼 문제들 넣기, 맞으면 0, 틀리면 1
-        # bulk_create??
         for number in correct_problems:
             problem_seq = problem2seq[number]
             UserProblem.objects.create(problem_seq = totalProblem.get(seq = problem_seq), user_seq = user, correct = 0)
@@ -101,7 +91,7 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             problem_seq = problem2seq[number]
             UserProblem.objects.create(problem_seq = totalProblem.get(seq = problem_seq), user_seq = user, correct = 1)
 
-        # 5) 사용자 레벨 다시 구하기
+        # 5) 사용자 레벨 계산
         problem_exp = make_problem_exp_dict()
         level_exp = make_level_exp_dict()
 
@@ -114,50 +104,80 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
                 calc_level = cur_level
                 break
 
-        # 계산한 레벨과 solved 레벨의 차이가 4,5 이상이면 계산한 레벨을 사용한다
+        # 계산한 레벨과 solved 레벨의 차이가 크면 계산한 레벨로 업데이트
         diff = calc_level - level
         if diff < -5 or diff > 5 :
             level = calc_level
 
-        # 6) 문제 추천해주기
-        proble_type_dict = make_problem_type_dict()
+        user.level = level
+        user.save()
 
-        correct_algo = []
-        incorrect_algo = []
+        return Response(status=status.HTTP_201_CREATED)
+        
+    # 맞은 문제 중 가장 적은 알고리즘 문제들 추천
+    def recommendProblemByCorrect(self, request, seq):
+        
+        # 유저seq가 없는 경우 404에러
+        user = get_object_or_404(User, seq=seq)
+        level = user.level
 
-        # 맞은 문제들의 알고리즘 분류
-        for problem in correct_problems :
-            correct_algo += list(map(int, proble_type_dict[problem].split(',')))
+        myCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=0).values_list('problem_seq', flat=True)
+        myInCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=1).values_list('problem_seq', flat=True)
 
-        # 틀린 문제들의 알고리즘 분류
-        for problem in incorrect_problems :
-            incorrect_algo += list(map(int, proble_type_dict[problem].split(',')))
+        correctAlgoId = TypeOfProblem.objects.filter(problem_seq__in=myCorrectProblemSeq).values_list('type_seq', flat=True)
+        
+        # 맞은 문제가 없는 경우 406에러 -> 문제 갱신을 하거나 문제를 풀어라
+        if len(correctAlgoId) == 0:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # 알고리즘 분류별 개수
-        correct_algo_dict = Counter(correct_algo)
-        incorrect_algo_dict = Counter(incorrect_algo)
+        correct_algo_dict = Counter(correctAlgoId)
 
-        # 추천할 알고리즘 목록들
-        accept_alogithm_list = [
-            124, 25, 102, 7, 175, 33, 158, 11, 125, 65, 120, 97, 12, 100, 95, 126, 6, 121, 139,
-            127, 22, 141, 14, 81, 5, 24, 128, 106, 92, 45, 71, 59, 96, 80, 87, 74,
-            9, 140, 39, 13, 49, 62, 8, 67, 31, 28, 78, 40, 148, 73, 43]
+        # 맞은 문제기반으로 추천해줄 알고리즘
+        recommend_algo_seq_list = list(map(lambda x: x[0], correct_algo_dict.most_common()[-20:]))
+        recommend_algo_seq_list = list(set(recommend_algo_seq_list) & set(ACCEPT_ALGORITHM_SEQ_LIST))
 
-        # 맞은 문제에서 뽑은 추천해줄 알고리즘, 틀린 문제에서 뽑은 추천해줄 알고리즘
-        recommend_algo_id_list = list(map(lambda x : x[0] , correct_algo_dict.most_common()[-10:])) + list(map(lambda x : x[0] , incorrect_algo_dict.most_common()[:10]))
-        recommend_algo_id_list = list(set(recommend_algo_id_list) & set(accept_alogithm_list))
-
-        # id로 seq 검색
-        algo_seq = list(map(lambda x: x['seq'], Type.objects.filter(id__in = recommend_algo_id_list).values('seq')))
-
-        problem_seq = list(map(lambda x: x['problem_seq'], TypeOfProblem.objects.filter(type_seq__in=algo_seq).values('problem_seq').distinct()))
+        # 해당 알고리즘 유형의 문제seq 추출
+        recommend_problem = TypeOfProblem.objects.filter(type_seq__in = recommend_algo_seq_list).values_list('problem_seq', flat=True).distinct()
 
         # 추천할 문제 중 나의 레벨과 유사한 문제면서 내가 풀어보지 못한 문제를 제출수와 난이도 내림차순으로 정렬해서 20개만 보여주자
-        recommend_problem = totalProblem.filter(seq__in=problem_seq).filter(level__range=(level - 5, level + 5)).exclude(number__in=correct_problems + incorrect_problems).order_by('-submission_cnt', '-level')[:20]
+        recommend_problem = Problem.objects.filter(seq__in=recommend_problem).filter(level__range=(level - 5, level + 5)).exclude(seq__in = myCorrectProblemSeq).exclude(seq__in = myInCorrectProblemSeq).order_by('-submission_cnt', '-level')[:20]
         
         serializer = ProblemSerializer(recommend_problem, many=True)
         
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 틀린 문제 중 가장 많은 알고리즘 문제들 추천
+    def recommendProblemByInCorrect(self, request, seq):
+        # 유저seq가 없는 경우 404에러
+        user = get_object_or_404(User, seq=seq)
+        level = user.level
+
+        myCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=0).values_list('problem_seq', flat=True)
+        myInCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=1).values_list('problem_seq', flat=True)
+
+        InCorrectAlgoId = TypeOfProblem.objects.filter(problem_seq__in=myInCorrectProblemSeq).values_list('type_seq', flat=True)
+        
+        # 틀린 문제가 없는 경우 406에러 -> 틀린문제 기반으로 추천이 불가능하다
+        if len(InCorrectAlgoId) == 0:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # 알고리즘 분류별 개수
+        incorrect_algo_dict = Counter(InCorrectAlgoId)
+
+        # 틀린 문제기반으로 추천해줄 알고리즘
+        recommend_algo_seq_list = list(map(lambda x: x[0], incorrect_algo_dict.most_common()[:10]))
+        recommend_algo_seq_list = list(set(recommend_algo_seq_list) & set(ACCEPT_ALGORITHM_SEQ_LIST))
+
+        # 해당 알고리즘 유형의 문제seq 추출
+        recommend_problem = TypeOfProblem.objects.filter(type_seq__in = recommend_algo_seq_list).values_list('problem_seq', flat=True).distinct()
+
+        # 추천할 문제 중 나의 레벨과 유사한 문제면서 내가 풀어보지 못한 문제를 제출수와 난이도 내림차순으로 정렬해서 20개만 보여주자
+        recommend_problem = Problem.objects.filter(seq__in=recommend_problem).filter(level__range=(level - 5, level + 5)).exclude(seq__in = myCorrectProblemSeq).exclude(seq__in = myInCorrectProblemSeq).order_by('-submission_cnt', '-level')[:20]
+        
+        serializer = ProblemSerializer(recommend_problem, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
     def allProblem(self, request):
@@ -211,26 +231,3 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         codeBoard =  CodeBoard.objects.filter(problem_seq = seq)
         serializer_class = CodeBoardSerializer(codeBoard, many=True)   
         return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-
-    #         @permission_classes([AllowAny])
-    # def allProblem(self, request):
-    #     # 모든 문제 주기
-    #     # 모든 문제를 줄 때
-    #     totalProblem = Problem.objects.all()
-    #     List = list()
-    #     serializer = ProblemCustomSerializer
-    #     for problem in totalProblem:
-    #         print(problem.seq)
-    #         test = CodeBoard.objects.filter(problem_seq=problem.seq)
-    #         one_problem = {'seq': int(problem.seq), 'number': int(problem.number), 'name': problem.name,
-    #                        'correct_user': int(problem.correct_user), 'submission_cnt': int(problem.submission_cnt),
-    #                        'correct_rate': int(problem.correct_rate), 'level': int(problem.level),
-    #                        'avg_try': int(problem.avg_try), 'time_limit': problem.time_limit, 'memory_limit': problem.memory_limit,
-    #                        'algorithms': problem.algorithms, 'algorithm_ids': problem.algorithm_ids, 'review_count': len(test)}
-
-    #         print(one_problem)
-    #         serializer = ProblemCustomSerializer(data=one_problem)
-    #         List.append(one_problem)
-
-    #     return Response(List, status=status.HTTP_200_OK)
