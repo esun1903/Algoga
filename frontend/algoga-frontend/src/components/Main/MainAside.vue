@@ -1,12 +1,7 @@
 <template>
   <div id="mainAside">
-    <div id = 'profileBox'>
-      <img id='profileImg' src="http://storage.enuri.info/pic_upload/knowbox2/202005/08362910620200507cd5549b2-9c1f-4447-aa00-72645ae3a069.jpg" alt="">
-      <div id='userInfo'>
-        <p id ='userId'>Unnamed</p>
-        <p><span class='profileLink'>My blog</span><span class='profileLink'>My account</span></p>
-      </div>
-    </div>
+
+    <ProfileBox />
     <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> -->
     <div id ='userContent'>
       <transition name="fade" mode="out-in">
@@ -50,14 +45,16 @@
 
 <script>
 import axios from 'axios'
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import ProfileBox from '@/components/Main/ProfileBox'
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
+
 import Chart from '@/components/Main/Chart'
 
 export default {
     name:"MainAside",
     components : {
       Chart,
+      ProfileBox,
     },
     data: function(){
       return{
@@ -109,35 +106,18 @@ p{
 }
 #mainAside{
   width: 400px;
+  /* width: 80%;
+  margin: 0 auto; */
+  position:sticky;
+  top:70px;
   border-right: 1px solid rgba(61, 61, 61, 0.479);
 }
-#profileBox{
-  display: flex;
-  width: 100%;
-  margin-top: 55px;
-  padding-bottom: 25px;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(197, 195, 195, 0.205);
-}
+
 #profileImgBox{
   padding-top: 40px;
 }
-#profileImg{
-  width: 22%;
-  border-radius: 50%;
-  margin-left: 2em;
-}
-#userId{
-  font-size: 1.8rem;
-  margin-top: 10px;
-  font-weight: bold;
-  margin-right: 5rem;
-}
-#userId + p{
-  margin-top: 6px;
-  margin-left: 3rem;
-}
+
+
 #userContent{
   width: 100%;
   padding-top: 40px;
@@ -214,4 +194,14 @@ p{
 .fade-enter, .fade-leave-to{
   opacity: 0;
 }
+
+@media screen and (max-width:1100px) {
+  #mainAside{
+    width: 100%;
+    margin: 0 auto; 
+    position:sticky;
+    top:70px;  
+  }
+}
+
 </style>

@@ -19,8 +19,8 @@ import EmailMessageForm from "@/components/Signup/EmailMessageForm"
 
 import axios from "axios"
 
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
+// 
 
 export default {
   name:"SignupSection",
@@ -42,7 +42,7 @@ export default {
         email:'',
         password:'',
         baek_id:'',
-        nickname:''        
+        nickname:'',        
       },
     }
   },
@@ -90,7 +90,7 @@ export default {
           localStorage.setItem('register_date',res.data.userInfo[0].register_date)
           localStorage.setItem('JWT',res.data.access_token)          
           setTimeout(() => {
-            this.$router.push({name:'Main',params:{nickname:this.data.userInfo[0].email}})
+            this.$router.push({name:'Main',params:{nickname:this.data.userInfo[0].email,userno:res.data.userInfo[0].seq}})
             }, 3000);
           })
         .catch(err=>{alert(err)})

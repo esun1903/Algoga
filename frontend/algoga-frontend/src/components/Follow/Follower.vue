@@ -30,7 +30,7 @@ export default {
   },
   methods:{
     userMain(person){
-      this.$router.push({name:'Main',params:{nickname:person.email}})
+      this.$router.push({name:'Main',params:{nickname:person.email,userno:person.seq}})
     },
     changeFollow(user_seq){
       this.$emit('changeFollow',user_seq)
@@ -38,7 +38,7 @@ export default {
   },
   computed:{
     profileImage(){
-      return (person) => {
+      return (person) => {        
         return `${person.profile_image}`
       }
     },

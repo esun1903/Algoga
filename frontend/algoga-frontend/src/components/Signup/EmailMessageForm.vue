@@ -17,8 +17,8 @@
 
 <script>
 import axios from 'axios'
-
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
+
 
 export default {
   name:'EmailMessageForm',
