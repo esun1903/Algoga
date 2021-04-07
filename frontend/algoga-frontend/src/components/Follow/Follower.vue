@@ -39,6 +39,7 @@ export default {
   computed:{
     profileImage(){
       return (person) => {
+        console.log(person.profile_image)
         return `${person.profile_image}`
       }
     },
