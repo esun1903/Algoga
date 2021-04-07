@@ -469,7 +469,7 @@ class commentViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
        
         comments =  Comment.objects.filter(code_board_seq = codeBoard_seq)
         if not comments.exists():
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response([])
 
         serializer = CommentSerializer(comments, many=True)    
 

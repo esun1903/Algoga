@@ -1,8 +1,8 @@
 <template>
   <div id='reviewsList'>
-    <div>
-      <span>등록된 풀이 보기</span>
-      <div @click='chageToggle()' id='icon-container'>
+    <div @click='chageToggle()'>
+      <span id='title'>등록된 풀이 보기</span>
+      <div id='icon-container'>
         <span id='toggleIcon'>
           <i class="fas fa-sort-down"></i>
         </span>
@@ -54,7 +54,6 @@ export default {
   created(){
     axios.get(`${SERVER_URL}/apps/v1/codeBoardList/${this.algoSeq}`)
       .then(res => {
-        console.log(res.data)
         this.reviews = res.data
       })
       .catch(err => {
@@ -65,6 +64,10 @@ export default {
 </script>
 
 <style>
+#title{
+  font-weight: 300;
+  font-size: 1.3rem;
+}
 #reviewsList{
   width: 70%;
   margin: 0 auto;
@@ -79,6 +82,9 @@ export default {
   color: white;
   align-items: center;
 }
+#reviewsList > div:nth-child(1):hover{
+  cursor: pointer;
+}
 #reviewsList > div:nth-child(1) > span:nth-child(1){
   margin: 0 0 0 5%;
 }
@@ -91,8 +97,8 @@ export default {
   font-size: 1rem;
   height: 40px;
   width: 40px;
-  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
-  margin: 0 10% 0 0;
+  /* box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%); */
+  margin: 0 4% 0 0;
 }
 #icon-container:hover{
   cursor: pointer;
