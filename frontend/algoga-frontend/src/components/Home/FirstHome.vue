@@ -70,12 +70,7 @@ export default {
       seconddiv.style.height = `${secondHeight}px`
       thirdDiv.style.height = seconddiv.style.height
       fourthDiv.style.height = seconddiv.style.height
-      
     }
-
-
-
-
   },
   data:function(){
     return {
