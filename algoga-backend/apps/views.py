@@ -156,7 +156,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         
         return Response(status=status.HTTP_200_OK)     
          
-    
     def findPassword(self, request, email):
         
         users =  User.objects.filter(email = email)
