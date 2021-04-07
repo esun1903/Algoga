@@ -31,6 +31,8 @@ urlpatterns = [
     path("v1/findPassword/<str:email>", UserViewSet.as_view({"get": "findPassword"})),
     #유저 seq로 회원정보 리턴
     path("v1/userInfo/<int:seq>", UserViewSet.as_view({"get": "userInfo"})),
+    #팔로워들의 피드 확인
+    path('v1/getMyFeed/<int:seq>', UserViewSet.as_view({"get": "getMyFeed"})),
     #===================================
     #팔로잉걸기 
     path('v1/followUser/<int:user_follower_seq>/<int:user_following_seq>', UserViewSet.as_view({"get": "FollowUser"})),
@@ -42,8 +44,6 @@ urlpatterns = [
     path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
     #팔로워삭제 
     path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
-    #팔로워들의 피드 확인
-    path('v1/getMyFeed/<int:seq>', UserViewSet.as_view({"get": "getMyFeed"})),
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
@@ -90,5 +90,8 @@ urlpatterns = [
     path("v1/codeBoardProblem/<int:seq>", ProblemViewSet.as_view({"get" : "codeBoardProblem"}), name="codeBoardProblem"),
     #이미지(작업 중 )
     path("v1/image", commentViewSet.as_view({"post": "post"}), name="post"),
+
+    #백준 아이디가 존재하는지 검색
+    path('v1/checkBaekjoon/<str:baek_id>', ProblemViewSet.as_view({"get": "checkBaekjoon"})),
 
 ]
