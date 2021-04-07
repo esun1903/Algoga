@@ -176,6 +176,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         users =  User.objects.get(seq = seq)
         serializer = UserSerializer(users)
+        print(serializer.data)
 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -191,10 +192,6 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userInfoModify.nickname = request.data["nickname"]
         userInfoModify.profile_image = request.data["profile_image"]
         userInfoModify.save()
-        userInfo = User.objects.get(email=email)
-        one = userInfoModify.profile_image 
-        userInfo.profile_image = "https://algoga.s3.ap-northeast-2.amazonaws.com/"+ os.path.basename(one.name)
-        userInfo.save()
 
         return Response("수정 성공",status=status.HTTP_200_OK)
 
