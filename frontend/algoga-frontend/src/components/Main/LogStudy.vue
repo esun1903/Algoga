@@ -1,12 +1,13 @@
 <template>
-  <div id="log-study">
-    <header>
-            
-    </header>
-    
+  <div id="log-study">    
+    <div class='date'>
+      <span v-for= "(date,idx) in date_data" :key='idx'>
+        {{date}}
+      </span>
+    </div>
     <div>
       <div class="one-week" v-for = "(one_week_data,jdx) in week_data" :key="jdx">
-        <div v-for = "(d,idx) in one_week_data" :key="idx">          
+        <div v-for = "(d,idx) in one_week_data" :key="idx" ref='oneWeek'>          
           <div class = "one-day" :class="{'one-day-no-border':d==='not_day','solved_1':d===1,'solved_2':d===2,'solved_3':d===3, 'solved_4':d>=4}" :title="message(jdx,idx)">            
           </div>
         </div>
@@ -35,6 +36,7 @@ export default {
       week_data:[],
       first_day:-1,
       problemsData:[], // [problem_seq,codeboard_seq]
+      date_data:['Sun','','','Wed','','','Sat']
     }
   },
   methods: {
@@ -46,6 +48,7 @@ export default {
 
       if (month.length<2) month = '0' +month
       if (day.length< 2 ) day = '0' + day
+
       return [year,month,day].join('-');
     },
     getDay:function(date){
@@ -65,20 +68,14 @@ export default {
       diff = Math.ceil(diff / (1000*3600*24))
 
       return diff+1
-    },
-    focusingLast:function(){
-      const allDay = document.querySelectorAll('.one-day')
-      console.log(allDay)
-      console.log(allDay[allDay.legnth-1])
     }
-
   },
   computed:{
     message(){
       return (jdx,idx)=> {
-        if (jdx === 40 && idx ===this.first_day) {
+        if (jdx === 35 && idx ===this.first_day) {
           return 'You create this account'
-        } else if (jdx <40){
+        } else if (jdx <35){
           return 'You did not create account'
         } else {  
           return `You solved ${this.week_data[jdx][idx]} problems.`
@@ -86,9 +83,8 @@ export default {
       }
     }
   },
-  mounted(){
-    // mosue drag    
-    const slider = document.querySelector("#log-study > div")
+  mounted(){       
+    const slider = document.querySelector("#log-study > div:nth-child(2)")
     let isMouseDown = false
     let startX, scrollLeft;
 
@@ -114,7 +110,6 @@ export default {
       const walk = (x-startX) * 1
       slider.scrollLeft = scrollLeft - walk
     })  
-
   }
   ,
   async created(){
@@ -181,7 +176,7 @@ export default {
     }    
 
 
-    for (let i = 0; i<40; i++) {
+    for (let i = 0; i<35; i++) {
       let weekArray = new Array(7).fill(0)
       this.week_data.push(weekArray)
     }
@@ -226,15 +221,20 @@ export default {
 
 <style>
 #log-study {
-  padding: 10px;  
-  width: 100%;
-  border: 1px solid black;   
+  padding: 10px 10px 10px 0;  
+  width: 94.5%;
+  display:flex;
+  align-items: stretch; 
+  color:var(--font-color);
+
+  /* border: 1px solid black;    */
 }
 
 #log-study > div {
   display: flex;
-  width: 1000px;
+  /* width: 100%; */
   overflow:auto;
+  /* margin: 0 auto; */
   /* border: 1px solid black; */
 }
 
@@ -259,7 +259,7 @@ export default {
   /* border: 0.1px solid black; */
   border-radius: 5px;
   cursor:pointer;
-  background-color: rgba(0,0,0,0.1);
+  background-color: var(--oneDay-back);
 }
 
 
@@ -267,35 +267,31 @@ export default {
   background-color: rgba(0,0,0,0);
 }
 
-.python {
-  background-color: blue;
-}
-
-.cpp {
-  background-color: grey;
-}
-
-.java {
-  background-color: hotpink;
-}
-
 .solved_1 {
-  background-color:chartreuse;
+  background-color:#C84160;
   opacity: 0.25;
 }
 .solved_2 {
-  background-color:chartreuse;
+  background-color:#C84160;
   opacity: 0.5;
 }
 .solved_3 {
-  background-color:chartreuse;
+  background-color:#C84160;
   opacity: 0.75;
 }
 .solved_4 {
-  background-color:chartreuse;
+  background-color:#C84160;
   opacity: 1;
 }
 
+.date {
+  font-size: 0.8em;
+  width: 30px;  
+  display: flex;  
+  flex-direction: column;
+  justify-content:space-between ;
+  padding: 10px 0;
+}
 
 
 
