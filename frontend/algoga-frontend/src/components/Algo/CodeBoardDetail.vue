@@ -1,30 +1,15 @@
 <template>
   <div id='code-board-detail'>
     <div class='code-board-content'>
-      <h1>{{title}}</h1>      
       <div class='code-board-detail-status'>
         <div>
-          <i class="far fa-user"></i>
-          <span>{{userData.nickname}}</span>
           <i class="fas fa-sitemap"></i>
           <span>{{data.free_write}}</span>
-          <i :class="langClass"></i>
-          <span>{{data.language}}</span>
         </div>
 
         <div class='flex'>
           <i class="far fa-clock"></i>
           <span>{{registerDay[0]}} {{registerDay[1]}}</span>
-          <div v-if='mine' class='flex'>
-            <div>
-              <i class="far fa-edit"></i>
-              <span>edit</span>
-            </div>
-            <div @click='deleteBoard()'>
-              <i class="far fa-trash-alt"></i>
-              <span>delete</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -37,8 +22,13 @@
             <i class="far fa-comment-dots"></i>
             {{commentCnt}} comments
           </div>
-          <div>
-            <i class="far fa-heart"></i>
+          <div @click='like'>
+            <span v-if='iLiked'>
+              <i class="fas fa-heart"></i>
+            </span>
+            <i v-else>
+              <i class="far fa-heart"></i>
+            </i>
             {{likeCnt}} likes
           </div>
         </div>
@@ -70,6 +60,7 @@ import CodeBoardComment from "@/components/Main/CodeBoardComment"
 import axios from 'axios'
 
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
+// 
 
 export default {
   name:'CodeBoardDetail',
@@ -92,6 +83,12 @@ export default {
       createActivate:false,
       commentInput:'',
       langClass:'',
+      iLiked:false,
+    }
+  },
+  props : {
+    code_board_seq : {
+      type : String,
     }
   },
   methods:{
@@ -101,7 +98,7 @@ export default {
       const commentData = {
         'text':this.commentInput,
         'user_seq':localStorage.getItem('userNo'),
-        'code_board_seq':this.$route.params.codeBoard_seq
+        'code_board_seq':this.code_board_seq
       }
       console.log(commentData)
       axios.post(`${SERVER_URL}/apps/v1/commentRegister`,commentData)
@@ -116,8 +113,6 @@ export default {
           console.log(err)
           alert(err)
         })
-
-
     },
     deleteComment:function(){
       this.commentCnt -=1
@@ -131,6 +126,22 @@ export default {
           alert(err)
         })
     },
+    like:function(){
+      const userNo = localStorage.getItem('userNo')
+
+      axios.get(`${SERVER_URL}/apps/v1/codeBoardLike/${this.code_board_seq}/${userNo}`)
+        .then(()=>{
+          if (this.iLiked) {
+            this.likeCnt -= 1
+          } else {
+            this.likeCnt += 1
+          }
+          this.iLiked = !this.iLiked
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    }
   },
   computed:{
     mine:function(){
@@ -140,10 +151,10 @@ export default {
       return false
     }
   },
-  async created(){
-    const codeBoard_seq = this.$route.params.codeBoard_seq
+  async mounted(){
+    const userNo = localStorage.getItem('userNo')
     const langClassList = ['','fab fa-java','fab fa-python','fab fa-c','fab fa-cpp']
-    await axios.get(`${SERVER_URL}/apps/v1/codeBoardPage/${codeBoard_seq}`)
+    await axios.get(`${SERVER_URL}/apps/v1/codeBoardPage/${this.code_board_seq}`)
       .then(res => {
         this.code = res.data[0].code
         this.data = res.data[0]
@@ -151,6 +162,7 @@ export default {
         this.registerDay.push(this.data.register_date.split('T')[0])
         this.registerDay.push(this.data.register_date.split('T')[1].split('+')[0])     
         this.likeCnt = this.data.like_cnt
+        console.log(this.data)
         this.langClass = langClassList[this.data.language_seq]  
         console.log(this.langClass)
 
@@ -179,7 +191,7 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-    await axios.get(`${SERVER_URL}/apps/v1/commentList/${codeBoard_seq}`)
+    await axios.get(`${SERVER_URL}/apps/v1/commentList/${this.code_board_seq}`)
       .then(res =>{
         this.commentCnt = res.data.length
         this.commentList = res.data
@@ -188,21 +200,37 @@ export default {
       .catch(()=>{
         this.commentCnt = 0
       })    
+
+    axios.get(`${SERVER_URL}/apps/v1/codeBoardLike_User/${this.code_board_seq}`)
+      .then(res=>{
+        if (res.data.includes(Number(userNo))) {
+          this.iLiked = true
+        }        
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+
+
   }
 }
 </script>
 
 <style>
 .code-board-content {  
-  width:100%;
-  margin: 0 auto;
+  width:80%;
+  margin: 20px auto;
 }
 
 .code-board-content > h1 {
   border-bottom: 1px solid black;
   padding-bottom: 10px;
 }
-
+#code-board-detail{
+  padding: 30px 0;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  border-radius: 40px;
+}
 .code-board-detail-status svg {
   margin-right: 5px;
 }
@@ -258,4 +286,13 @@ export default {
   font-family: Hack;
 }
 
+.fa-heart{
+  cursor:pointer;
+}
+.comment-header > div:nth-child(2){
+  width: 100%;
+}
+.comment-header > div:nth-child(2) > div:nth-child(1){
+  width: 100%;
+}
 </style>
