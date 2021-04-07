@@ -20,9 +20,7 @@
         <div>
           <MainAside />
         </div>
-        <section>
-          챌린지 디브          
-
+        <section>                
           <LogStudy @userData='userData' />
           <!-- history -->
 
@@ -110,7 +108,7 @@ export default {
   position: fixed;
   justify-content: center;
   align-items: center;
-  bottom: 100px;
+  bottom: 100px;  
   right: 100px;
   border-radius: 50%;
   padding: 6px;
