@@ -20,7 +20,9 @@
 
 <script>
 import Review from '@/components/Algo/Review'
-
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = 'http://j4a302.p.ssafy.io'
 
 export default {
   name : 'ReviewsList',
@@ -30,10 +32,12 @@ export default {
   data : function(){
     return{
       toggle : false,
-      reviews : [
-        {writer : '동희', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '파이썬', like : 31, date : '2021-01-32'},
-        {writer : '동희2', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '자바', like : 31, date : '2021-01-32'},
-      ]
+      reviews : []
+    }
+  },
+  props : {
+    algoSeq : {
+      type : Number,
     }
   },
   methods : {
@@ -47,7 +51,16 @@ export default {
       this.toggle = !this.toggle
     }
   },
-  
+  created(){
+    axios.get(`${SERVER_URL}/apps/v1/codeBoardList/${this.algoSeq}`)
+      .then(res => {
+        console.log(res.data)
+        this.reviews = res.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 }
 </script>
 
