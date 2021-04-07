@@ -1,10 +1,18 @@
 <template>
   <div id="follow-comp">
-    <div class="person-div" v-for="(person,idx) in followerList" :key="idx">
-      <img :src="profileImage(person)" alt="" height='100px' width='100px'>
-      
-      {{person}}
-
+    <div class="person-div" v-for="(person,idx) in follow" :key="idx">
+      <div class='person-img'>
+        <img :src="profileImage(person)" alt="" height='70px' width='70px'>
+      </div>
+      <div class='person-info'>
+        <div>
+          {{person.nickname}}
+        </div>
+        <div>
+          <button @click='userMain(person)'><i class='fas fa-home'></i> Home</button>
+          <button @click='changeFollow(person.seq)'>{{followStatus(person.seq)}}</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -13,19 +21,37 @@
 export default {
   name:'Follower',
   props:{
-    followerList:Array,
+    follow:Array,
+    status:Array,
+  },
+  data(){
+    return {    
+    }
+  },
+  methods:{
+    userMain(person){
+      this.$router.push({name:'Main',params:{nickname:person.email}})
+    },
+    changeFollow(user_seq){
+      this.$emit('changeFollow',user_seq)
+    }
   },
   computed:{
     profileImage(){
       return (person) => {
-        console.log(person)
-        console.log(`require("${person.profile_image}")`)
-        return `'require("${person.profile_image}")'`
+        return `${person.profile_image}`
+      }
+    },
+    followStatus(){
+      return (idx)=>{
+        if (this.status.includes(idx)){
+          return 'Unfollow'
+        }
+        return 'Follow'
       }
     }
   },
-  mounted(){
-    console.log(this.followerList)
+  mounted(){    
   }
 }
 </script>

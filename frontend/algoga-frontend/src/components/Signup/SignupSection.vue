@@ -42,7 +42,7 @@ export default {
         email:'',
         password:'',
         baek_id:'',
-        nickname:'',        
+        nickname:''        
       },
     }
   },

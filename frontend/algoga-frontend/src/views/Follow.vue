@@ -1,7 +1,6 @@
 <template>
   <div id="follow">
     <MainNavbar />
-
     <div class='follow-toggle'>
       <button @click='toggle(true)' :style='{backgroundColor:backColor1}'>
         Follower
@@ -10,18 +9,14 @@
         Following
       </button>
     </div>
-
-    <Follower  v-if='followerActive' :followerList='followerList' />
-    <Following v-else :followingList='followingList' />
-
-
+    <Follower :follow='follow' :status='status' @changeFollow='changeFollow'/>
   </div>
 </template>
 
 <script>
 import MainNavbar from '@/components/Main/MainNavbar'
 import Follower from '@/components/Follow/Follower'
-import Following from '@/components/Follow/Following'
+
 
 import axios from "axios"
 
@@ -31,8 +26,7 @@ export default {
   name:'Follow',
   components:{
     MainNavbar,
-    Follower, 
-    Following
+    Follower,     
   },
   data(){
     return {
@@ -43,6 +37,10 @@ export default {
       followingList:[],
       followers:[],
       followings:[],
+      follow:[],
+      status:[],
+      followerIdx:[],
+      followingIdx:[],
     }
   },
   methods:{
@@ -52,11 +50,41 @@ export default {
       if (bool) {
         this.backColor1 = 'red'
         this.backColor2 = 'grey'
+        this.follow = this.followerList
+        
         return 
       }
       this.backColor1 = 'grey'
       this.backColor2 = 'red'
+      this.follow = this.followingList    
+    },
+    changeFollow:function(idx){
+      if (this.status.includes(idx)) {
+        let removeIdx = this.status.indexOf(idx)
+        this.status.splice(removeIdx,1)        
+        this.unFollow(idx)
+        return
+      }
+      this.status.push(idx)
+      this.Follow(idx)
+    },
+    Follow:function(user_seq){      
+      const myNo = localStorage.getItem('userNo')
+      axios.get(`${SERVER_URL}/apps/v1/followUser/${myNo}/${user_seq}`)
+        .then((res)=>{
+          console.log(res)
+        })
+        .catch(err=>{console.log(err)})
+    },
+    unFollow:function(user_seq){
+      const myNo = localStorage.getItem('userNo')
+      axios.delete(`${SERVER_URL}/apps/v1/DeletefollowingUser/${myNo}/${user_seq}`)
+        .then((res)=>{
+          console.log(res)
+        })
+        .catch(err=>{console.log(err)})
     }
+
   },
   async created(){
     const userNo = localStorage.getItem('userNo')
@@ -83,12 +111,16 @@ export default {
 
     this.followerList = []
     this.followingList = []
+    this.followingIdx = []
+    this.followerIdx = []
 
     for (let i = 0; i<this.followers.length; i++) {
       let user_seq = this.followers[i].user_follower_seq
+      this.followerIdx.push(user_seq)
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${user_seq}`)
         .then(res=>{
-          this.followerList.push(res.data)
+          this.followerList.push(res.data)    
+                
         })
         .catch(err=>{
           console.log(err)
@@ -96,6 +128,7 @@ export default {
     }
     for (let i = 0; i<this.followings.length; i++) {
       let user_seq = this.followings[i].user_following_seq
+      this.followingIdx.push(user_seq)
       console.log(this.followings)
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${user_seq}`)
         .then(res=>{
@@ -106,6 +139,8 @@ export default {
           console.log(err)
         })
     }
+    this.follow = this.followerList
+    this.status = this.followingIdx
 
   }
 }
@@ -116,6 +151,8 @@ export default {
   width: 80%;
   margin:0 auto;
   display:flex; justify-content: space-between;
+  /* border-top: 1px solid black;
+  padding-top: 5px; */
 }
 
 .follow-toggle > button {
@@ -129,7 +166,7 @@ export default {
 
 #follow-comp {
   width: 80%;
-  margin:50px auto 0;
+  margin:50px auto 0;  
 }
 
 .person-div {
@@ -137,6 +174,41 @@ export default {
   margin: 0 auto 20px;  
   border-bottom:1px solid black ;
   padding-bottom:20px;
+  display:flex; 
+  align-items: center; 
 }
+
+
+.person-img {
+  display:block;
+  width: 70px; height:70px;
+  border-radius: 50%; overflow: hidden;
+}
+
+.person-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width:90%;
+  margin:0 auto;
+}
+
+#follow-comp button {
+  font-family: Hack,Avenir, Helvetica, Arial;
+  width: 100px; height:40px;
+  margin-right: 20px;
+  cursor:pointer;
+  font-weight: bold;
+  color:white;
+  border:none; outline: none;
+  border-radius: 10px;
+  background-color: blue;
+}
+#follow-comp button:nth-child(2) {
+  width: 100px;
+  margin-right: 0px;
+  
+}
+
 
 </style>
