@@ -42,6 +42,8 @@ urlpatterns = [
     path('v1/DeletefollowingUser/<int:user_follower_seq>/<int:user_delete_following_seq>', UserViewSet.as_view({"delete": "DeletefollowingUser"})),
     #팔로워삭제 
     path('v1/DeletefollowerUser/<int:user_following_seq>/<int:user_delete_follower_seq>', UserViewSet.as_view({"delete": "DeletefollowerUser"})),
+    #팔로워들의 피드 확인
+    path('v1/getMyFeed/<int:seq>', UserViewSet.as_view({"get": "getMyFeed"})),
     #codBoard 등록
     path("v1/codeBoardRegister", codeBoardViewSet.as_view({"post": "codeBoardRegister"})),
     #codBoard 수정
