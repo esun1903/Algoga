@@ -49,7 +49,7 @@ export default {
 <style>
 #preview{
   display: flex;
-  margin: 0 auto;
+  margin: 0 auto 40px;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
   width: 70%;
   height: 20vh;

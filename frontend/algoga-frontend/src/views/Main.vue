@@ -20,9 +20,7 @@
         <div>
           <MainAside />
         </div>
-        <section>
-          챌린지 디브          
-
+        <section>                
           <LogStudy @userData='userData' />
           <!-- history -->
 
@@ -110,7 +108,7 @@ export default {
   position: fixed;
   justify-content: center;
   align-items: center;
-  bottom: 100px;
+  bottom: 100px;  
   right: 100px;
   border-radius: 50%;
   padding: 6px;
@@ -119,6 +117,7 @@ export default {
   width: 40px;
   justify-content: space-between;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  z-index: 1000;
 }
 #feed-container > span{
   text-align: center;
