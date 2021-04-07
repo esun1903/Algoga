@@ -109,6 +109,10 @@ p{
 }
 #mainAside{
   width: 400px;
+  /* width: 80%;
+  margin: 0 auto; */
+  position:sticky;
+  top:70px;
   border-right: 1px solid rgba(61, 61, 61, 0.479);
 }
 #profileBox{
@@ -214,4 +218,14 @@ p{
 .fade-enter, .fade-leave-to{
   opacity: 0;
 }
+
+@media screen and (max-width:1100px) {
+  #mainAside{
+    width: 80%;
+    margin: 0 auto; 
+    position:sticky;
+    top:70px;  
+  }
+}
+
 </style>
