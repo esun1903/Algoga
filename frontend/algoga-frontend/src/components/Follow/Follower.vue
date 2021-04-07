@@ -20,7 +20,7 @@ export default {
       return (person) => {
         console.log(person)
         console.log(`require("${person.profile_image}")`)
-        return `require("${person.profile_image}")`
+        return `'require("${person.profile_image}")'`
       }
     }
   },
