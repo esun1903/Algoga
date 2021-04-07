@@ -19,6 +19,7 @@ import datetime
 import jwt
 from django.conf import settings
 from .utils import *
+import os
 
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
@@ -190,6 +191,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         userInfoModify.nickname = request.data["nickname"]
         userInfoModify.profile_image = request.data["profile_image"]
         userInfoModify.save()
+        userInfo = User.objects.get(email=email)
+        one = userInfoModify.profile_image 
+        userInfo.profile_image = "https://algoga.s3.ap-northeast-2.amazonaws.com/"+ os.path.basename(one.name)
+        userInfo.save()
 
         return Response("수정 성공",status=status.HTTP_200_OK)
 
@@ -385,8 +390,8 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoard.update(code =request.data["code"],explanation  =request.data["explanation"],free_write =request.data["free_write"],problem_seq=request.data["problem_seq"],language_seq=request.data["language_seq"])
-        return Response("수정 성공",status=status.HTTP_200_OK)
-
+        return Response("수정 성공", status=status.HTTP_200_OK)
+        
     def codeBoardList(self, request, problem_seq):
 
         codeBoard = CodeBoard.objects.filter(problem_seq=problem_seq)
@@ -397,6 +402,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         serializer = CodeBoardSerializer(codeBoard, many = True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     def codeBoardDelete(self, request, codeBoard_seq):
 
