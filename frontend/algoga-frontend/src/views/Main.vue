@@ -20,9 +20,7 @@
         <div>
           <MainAside />
         </div>
-        <section>
-          챌린지 디브          
-
+        <section>                
           <LogStudy @userData='userData' />
           <!-- history -->
 

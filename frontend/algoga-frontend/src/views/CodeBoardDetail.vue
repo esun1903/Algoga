@@ -38,8 +38,13 @@
             <i class="far fa-comment-dots"></i>
             {{commentCnt}} comments
           </div>
-          <div>
-            <i class="far fa-heart"></i>
+          <div @click='like'>
+            <span v-if='iLiked'>
+              <i class="fas fa-heart"></i>
+            </span>
+            <i v-else>
+              <i class="far fa-heart"></i>
+            </i>
             {{likeCnt}} likes
           </div>
         </div>
@@ -96,6 +101,7 @@ export default {
       createActivate:false,
       commentInput:'',
       langClass:'',
+      iLiked:false,
     }
   },
   methods:{
@@ -120,8 +126,6 @@ export default {
           console.log(err)
           alert(err)
         })
-
-
     },
     deleteComment:function(){
       this.commentCnt -=1
@@ -135,6 +139,23 @@ export default {
           alert(err)
         })
     },
+    like:function(){
+      const codeBoard_seq = this.$route.params.codeBoard_seq
+      const userNo = localStorage.getItem('userNo')
+
+      axios.get(`${SERVER_URL}/apps/v1/codeBoardLike/${codeBoard_seq}/${userNo}`)
+        .then(()=>{
+          if (this.iLiked) {
+            this.likeCnt -= 1
+          } else {
+            this.likeCnt += 1
+          }
+          this.iLiked = !this.iLiked
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    }
   },
   computed:{
     mine:function(){
@@ -146,6 +167,7 @@ export default {
   },
   async created(){
     const codeBoard_seq = this.$route.params.codeBoard_seq
+    const userNo = localStorage.getItem('userNo')
     const langClassList = ['','fab fa-java','fab fa-python','fab fa-c','fab fa-cpp']
     await axios.get(`${SERVER_URL}/apps/v1/codeBoardPage/${codeBoard_seq}`)
       .then(res => {
@@ -155,6 +177,7 @@ export default {
         this.registerDay.push(this.data.register_date.split('T')[0])
         this.registerDay.push(this.data.register_date.split('T')[1].split('+')[0])     
         this.likeCnt = this.data.like_cnt
+        console.log(this.data)
         this.langClass = langClassList[this.data.language_seq]  
         console.log(this.langClass)
 
@@ -192,6 +215,18 @@ export default {
       .catch(()=>{
         this.commentCnt = 0
       })    
+
+    axios.get(`${SERVER_URL}/apps/v1/codeBoardLike_User/${codeBoard_seq}`)
+      .then(res=>{
+        if (res.data.includes(Number(userNo))) {
+          this.iLiked = true
+        }        
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+
+
   }
 }
 </script>
@@ -260,6 +295,10 @@ export default {
   cursor:pointer;
   color:white;
   font-family: Hack;
+}
+
+.fa-heart{
+  cursor:pointer;
 }
 
 </style>

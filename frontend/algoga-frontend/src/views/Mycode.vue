@@ -1,6 +1,12 @@
 <template>
   <div id="my-code">
     <MainNavbar />
+
+    <div class='my-code-section'>
+      <div v-for='(prob,idx) in data' :key='idx'>
+        {{prob}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,21 +40,21 @@ export default {
   created(){
     const userEmail = localStorage.getItem('email')
     const userNo = localStorage.getItem('userNo')
+    
     if (!userEmail||!userNo){
       this.$router.push({name:'Home'})
       return
     }
-
+    
     this.loadData(userEmail)
-
-
-
-
-
   }
 }
 </script>
 
 <style>
+.my-code-section {
+  width: 80%;
+  margin:5vh auto 0;
+}
 
-</style>
+</style> 
