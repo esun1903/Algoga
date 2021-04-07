@@ -72,7 +72,7 @@ urlpatterns = [
     path("v1/commentDelete/<int:comment_seq>", commentViewSet.as_view({"delete": "commentDelete"})),
     #commentList
     path("v1/commentList/<int:codeBoard_seq>", commentViewSet.as_view({"get": "commentList"})),
-    #사용자가 맞은 문제 불러오기
+    #사용자가 푼 문제 갱신하기
     path("v1/userProblem/<int:seq>", ProblemViewSet.as_view({"get" : "callProblem"}), name="callProblem"),
     #모든 문제 리턴 (pagenation)
     path("v1/allProblem", ProblemViewSet.as_view({"get" : "allProblem"}), name="allProblem"),
@@ -93,5 +93,9 @@ urlpatterns = [
 
     #백준 아이디가 존재하는지 검색
     path('v1/checkBaekjoon/<str:baek_id>', ProblemViewSet.as_view({"get": "checkBaekjoon"})),
+    #맞은 문제 기반 문제 추천
+    path('v1/recommendByCorrect/<int:seq>', ProblemViewSet.as_view({"get": "recommendProblemByCorrect"})),
+    #틀린 문제 기반 문제 추천
+    path('v1/recommendByInCorrect/<int:seq>', ProblemViewSet.as_view({"get": "recommendProblemByInCorrect"})),
 
 ]
