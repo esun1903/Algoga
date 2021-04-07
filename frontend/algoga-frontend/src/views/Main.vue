@@ -43,11 +43,6 @@ import History from "@/components/Main/History"
 import MainAside from "@/components/Main/MainAside"
 import Feed from "@/components/Main/Feed"
 
-// import axios from "axios"
-
-
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
-
 export default {
   name:"Main",
   components: {

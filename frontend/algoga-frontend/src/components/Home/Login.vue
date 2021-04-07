@@ -27,8 +27,8 @@ import axios from 'axios'
 
 // const cookies = new Cookies()
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
-// const SERVER_URL = 'http://j4a302.p.ssafy.io'
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
+
 
 
 export default {
@@ -69,7 +69,7 @@ export default {
           localStorage.setItem('userNo',res.data.userInfo[0].seq)
           localStorage.setItem('register_date',res.data.userInfo[0].register_date)
           localStorage.setItem('JWT',res.data.access_token)
-          this.$router.push({name:'Main',params:{nickname:this.idInput}})
+          this.$router.push({name:'Main',params:{nickname:this.idInput,userno:res.data.userInfo[0].seq}})
           
         })
         .catch(err=>{alert(err)})
