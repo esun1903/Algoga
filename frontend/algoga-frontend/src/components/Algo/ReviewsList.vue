@@ -1,8 +1,8 @@
 <template>
   <div id='reviewsList'>
-    <div>
-      <span>등록된 풀이 보기</span>
-      <div @click='chageToggle()' id='icon-container'>
+    <div @click='chageToggle()'>
+      <span id='title'>등록된 풀이 보기</span>
+      <div id='icon-container'>
         <span id='toggleIcon'>
           <i class="fas fa-sort-down"></i>
         </span>
@@ -20,7 +20,9 @@
 
 <script>
 import Review from '@/components/Algo/Review'
-
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = 'http://j4a302.p.ssafy.io'
 
 export default {
   name : 'ReviewsList',
@@ -30,10 +32,12 @@ export default {
   data : function(){
     return{
       toggle : false,
-      reviews : [
-        {writer : '동희', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '파이썬', like : 31, date : '2021-01-32'},
-        {writer : '동희2', profile : 'https://i.pinimg.com/originals/05/1f/f3/051ff3fb781ff83c9b0f8a32f9922fa6.png', language : '자바', like : 31, date : '2021-01-32'},
-      ]
+      reviews : []
+    }
+  },
+  props : {
+    algoSeq : {
+      type : Number,
     }
   },
   methods : {
@@ -47,11 +51,23 @@ export default {
       this.toggle = !this.toggle
     }
   },
-  
+  created(){
+    axios.get(`${SERVER_URL}/apps/v1/codeBoardList/${this.algoSeq}`)
+      .then(res => {
+        this.reviews = res.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 }
 </script>
 
 <style>
+#title{
+  font-weight: 300;
+  font-size: 1.3rem;
+}
 #reviewsList{
   width: 70%;
   margin: 0 auto;
@@ -66,6 +82,9 @@ export default {
   color: white;
   align-items: center;
 }
+#reviewsList > div:nth-child(1):hover{
+  cursor: pointer;
+}
 #reviewsList > div:nth-child(1) > span:nth-child(1){
   margin: 0 0 0 5%;
 }
@@ -78,8 +97,8 @@ export default {
   font-size: 1rem;
   height: 40px;
   width: 40px;
-  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
-  margin: 0 10% 0 0;
+  /* box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%); */
+  margin: 0 4% 0 0;
 }
 #icon-container:hover{
   cursor: pointer;
