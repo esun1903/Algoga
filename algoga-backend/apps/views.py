@@ -385,7 +385,18 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         codeBoard.update(code =request.data["code"],explanation  =request.data["explanation"],free_write =request.data["free_write"],problem_seq=request.data["problem_seq"],language_seq=request.data["language_seq"])
-        return Response("수정 성공",status=status.HTTP_200_OK)
+        return Response("수정 성공", status=status.HTTP_200_OK)
+        
+    def codeBoardList(self, request, problem_seq):
+
+        codeBoard = CodeBoard.objects.filter(problem_seq=problem_seq)
+        print(codeBoard)
+        if not codeBoard.exists():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = CodeBoardSerializer(codeBoard, many = True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def codeBoardDelete(self, request, codeBoard_seq):
