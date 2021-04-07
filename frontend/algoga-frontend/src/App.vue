@@ -55,6 +55,7 @@ export default {
   --shadow-color: rgba(0,0,0,0.5);
   --test-color: red;
   --logo-color: rgb(252, 69, 69);
+  --oneDay-back: rgba(0,0,0,0.1);
 }
 
 @keyframes clickEffect{
@@ -86,6 +87,7 @@ input::placeholder {opacity: 0.5;}
   color: #2c3e50;  
   background-color: var(--back-color);
   transition: 0.3s; 
+  min-height: 100vh;
   
 }
 .text-center{

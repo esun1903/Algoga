@@ -40,11 +40,12 @@ export default {
             iBulb.classList.add('fa-lightbulb')
 
             if (this.mode==='light') {
-                document.documentElement.style.setProperty('--font-color', 'black');
-                document.documentElement.style.setProperty('--back-color', 'white');
+                document.documentElement.style.setProperty('--font-color', '#121212');
+                document.documentElement.style.setProperty('--back-color', '#FFF');
                 document.documentElement.style.setProperty('--shadow-color', 'rgba(0,0,0,0.5)');
                 document.documentElement.style.setProperty('--test-color', 'red');
                 document.documentElement.style.setProperty('--font-color2', 'white');
+                document.documentElement.style.setProperty('--oneDay-back', 'rgba(0,0,0,0.1)');
                 
                 let removeI = document.querySelector('#mode-btn-checkbox+div > svg')                
                 if (removeI) {
@@ -54,11 +55,12 @@ export default {
 
 
             } else {
-                document.documentElement.style.setProperty('--font-color', 'white');
-                document.documentElement.style.setProperty('--back-color', 'black');
+                document.documentElement.style.setProperty('--font-color', '#EEE');
+                document.documentElement.style.setProperty('--back-color', '#121212');
                 document.documentElement.style.setProperty('--shadow-color', 'white');
                 document.documentElement.style.setProperty('--test-color', 'blue');
                 document.documentElement.style.setProperty('--font-color2', 'white');
+                document.documentElement.style.setProperty('--oneDay-back', 'rgba(255,255,255,0.1)');
                 let removeI = document.querySelector('#mode-btn-checkbox+div > svg')
                 if (removeI) {
                     removeI.remove()

@@ -19,7 +19,7 @@ export default {
   },
   data:function(){
     return {
-      icons:['far fa-envelope-open','fas fa-key','fas','fas fa-user','far fa-envelope-open','fas'],
+      icons:['far fa-envelope-open','fas fa-key','fas fa-code','fas fa-user','far fa-envelope-open','fas'],
       mes:['이메일','비밀번호','BOJ','닉네임','시작']
     }
   },
