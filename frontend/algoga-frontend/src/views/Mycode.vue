@@ -3,8 +3,8 @@
     <MainNavbar />
 
     <div class='my-code-section'>
-      <div v-for='(prob,idx) in data' :key='idx'>
-        {{prob}}
+      <div v-for='(prob,idx) in data' :key='idx'>        
+        <MycodeComp :data = 'prob'/>
       </div>
     </div>
   </div>
@@ -12,6 +12,8 @@
 
 <script>
 import MainNavbar from "@/components/Main/MainNavbar"
+import MycodeComp from "@/components/Mycode/MycodeComp"
+
 import axios from "axios"
 
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
@@ -20,6 +22,7 @@ export default {
   name:"Mycode",
   components:{
     MainNavbar,
+    MycodeComp
   },
   data(){
     return {
