@@ -119,6 +119,7 @@ export default {
   width: 40px;
   justify-content: space-between;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+  z-index: 1000;
 }
 #feed-container > span{
   text-align: center;

@@ -68,35 +68,35 @@ export default {
         chartOptions: {
           hoverBorderWidth: 20
         },        
-        data : {
-          labels :[],
-          datasets : [{
-          }],
-        },
+        data : [],
       }
     },
     methods : {
 
     },
-    created(){
+    async created(){
       this.userNo = localStorage.getItem('userNo')
-      axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.userNo}`)
+      await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.userNo}`)
         .then(res => {
           this.user = res.data
-          axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/1`)
-            .then(res => {
-              let myList = new Array();
-              myList.push(['Type','Number'])
-              res.data.forEach(element => {
-                myList.push([element.type_name, element.type_cnt])
-              });
-              // this.solvedList = myList
-              // this.data.labels = Object.keys(myList)
-              this.data = myList
-              // console.log(this.data)
-            })
         })
         .catch(err => {
+          console.log(err)
+        })
+
+      await axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/1`)
+        .then(res => {
+          let myList = new Array();
+          myList.push(['Type','Number'])
+          res.data.forEach(element => {
+            myList.push([element.type_name, element.type_cnt])
+          });
+          // this.solvedList = myList
+          // this.data.labels = Object.keys(myList)
+          this.data = myList
+          // console.log(this.data)
+        })
+        .catch(err=> {
           console.log(err)
         })
     },
