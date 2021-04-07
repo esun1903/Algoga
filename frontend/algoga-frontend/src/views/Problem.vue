@@ -13,7 +13,9 @@
       :description = bojDescription
     />
     
-    <ReviewsList />
+    <ReviewsList
+      :algoSeq = algo.seq
+    />
   </div>
 </template>
 
