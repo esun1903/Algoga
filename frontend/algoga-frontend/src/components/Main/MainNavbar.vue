@@ -17,9 +17,6 @@
 </template>
 
 <script>
-// import axios from "axios"
-
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
     name : 'MainNavbar',
@@ -35,7 +32,7 @@ export default {
       },
       routerNav:function(idx){                
         if (idx === 0) {
-          this.$router.push({name:'Main',params:{nickname:localStorage.getItem('email')}})
+          this.$router.push({name:'Main',params:{nickname:localStorage.getItem('email'),userno:localStorage.getItem('userNo')}})
         } else if (idx===1) {
           this.$router.push({name:'List'})
           } else if (idx===2) {

@@ -20,8 +20,8 @@ let regEmail = /^[A-Za-z0-9_-]+@[A-Za-z0-9]+[.]+['com']+/;
 
 import axios from 'axios'
 
+
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 
 
