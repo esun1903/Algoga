@@ -27,6 +27,18 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     # serializer_problem_class = 
     # 내가 푼 문제와 내 레벨 가져오기, [0] : 맞은 문제 / [-1] : 시도했지만 틀린 문제
 
+    def checkBaekjoon(self, request, baek_id):
+        userURL = USER_PAGE + baek_id
+        webpage = requests.get(userURL)
+        bs = BeautifulSoup(webpage.content, "html.parser")
+
+        level_img = bs.find('div', {'class': 'page-header'})
+
+        if level_img is None:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            return Response(status=status.HTTP_200_OK)
+
     # 사용자가 '문제 불러오기'를 클릭하면
     def callProblem(self, request, seq):
         
