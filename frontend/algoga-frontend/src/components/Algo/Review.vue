@@ -15,15 +15,15 @@
     </div>
     <transition name='slide'>
       <div id='userBoard' v-if="toggle">
-        <CodeBoardDetail />
+        <CodeBoardDetail
+          :code_board_seq = 'review.seq'
+        />
       </div>
     </transition>  
   </div>
 </template>
 
 <script>
-// import CodeHighlighter from "@/components/Main/CodeHighlighter"
-// import CodeBoardComment from "@/components/Main/CodeBoardComment"
 import axios from 'axios'
 import CodeBoardDetail from '@/components/Algo/CodeBoardDetail'
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
@@ -38,7 +38,7 @@ export default {
     return{
       toggle : false,
       iconClass : '',
-      commentList : [],
+      code_board_seq : '',
     }
   },
   props : {
@@ -48,7 +48,7 @@ export default {
   },
   methods : {
   },
-  async created(){
+  async mounted(){
     if(this.review.language ==="PYTHON"){
       this.iconClass= 'fab fa-python'
     }else if(this.review.language === 'JAVA'){
@@ -58,13 +58,7 @@ export default {
     }else{
       this.iconClass= 'fas fa-code'
     }
-    await axios.get(`${SERVER_URL}/apps/v1/commentList/${this.review.seq}`)
-      .then(res =>{
-        this.commentList = res.data
-      })
-      .catch((err)=>{
-        console.log(err)
-      })    
+    console.log(localStorage.getItem())
     await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.review.user_seq}`)
       .then(res =>{
         this.review.writer = res.data.nickname
@@ -122,17 +116,12 @@ export default {
 }
 #userBoard{
   width: 100%;
-  margin: 0 auto;
-  height: fit-content;
+  margin: 40px auto;
 }
 #code-highlighter{
   width: 80%;
 }
-#code-board-comment{
-  width: 100%;
-  height: 40px;
-  display: block;
-}
+
 #registeredDate{
   margin-right: 30px;
 }
