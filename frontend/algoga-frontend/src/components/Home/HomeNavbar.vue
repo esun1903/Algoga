@@ -2,12 +2,12 @@
   <div id='home-navbar'>
     <nav>
       <div>        
-        <h1><span>//</span>ALGOGA</h1>
-        <div>
+        <h1 @click='homeToTop()'><span>//</span>ALGOGA</h1>
+        <!-- <div>
           <div>first link</div>
           <div>second link</div>
           <div>third link</div>                   
-        </div>
+        </div> -->
       </div>
       <div>
         <a href="#" @click="emitSign(1)">Signin</a>
@@ -27,6 +27,9 @@ export default {
         } else {
           this.$emit("signup")
         }
+      },
+      homeToTop : function(){
+          window.scrollTo({top: 0, behavior: 'smooth'});
       }
     },
     mounted: function(){
