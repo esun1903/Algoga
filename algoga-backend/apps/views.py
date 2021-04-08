@@ -288,13 +288,17 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return  Response(status=status.HTTP_200_OK)
         
     def getMyFeed(self, request, seq):
-         my_following_seqs = FollowUser.objects.filter(user_follower_seq=seq).values_list('user_following_seq', flat=True)
+        my_following_seqs = FollowUser.objects.filter(user_follower_seq=seq).values_list('user_following_seq', flat=True)
 
-         get_follower_codeboards = CodeBoard.objects.filter(user_seq__in = my_following_seqs).filter(public = 0).order_by('-register_date')
-         
-         codeBoardSerializer = CodeBoardSerializer(get_follower_codeboards, many = True)
-         
-         return Response(codeBoardSerializer.data ,status=status.HTTP_200_OK)
+        get_follower_codeboards = CodeBoard.objects.filter(user_seq__in=my_following_seqs).filter(public=0).order_by('-register_date')
+
+        follower_seqs = list(set(list(get_follower_codeboards.values_list('user_seq', flat=True))))
+        followers = User.objects.filter(seq__in=follower_seqs)
+        
+        codeBoard_serializer = CodeBoardSerializer(get_follower_codeboards, many=True)
+        followers_serializer = UserSerializer(followers, many=True)
+
+        return Response([codeBoard_serializer.data, followers_serializer.data], status=status.HTTP_200_OK)
 
 
 @permission_classes([AllowAny])
