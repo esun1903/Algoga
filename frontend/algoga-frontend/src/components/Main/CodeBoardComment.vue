@@ -4,7 +4,7 @@
       <div class="comment-header">
         <div>
           <div class='comment-user-profile-img'>
-            <img src="../../assets/userNull.png" alt="">
+            <img :src="profileImage(userData[idx])" alt="">
           </div>
         </div>        
         <div>
@@ -17,13 +17,15 @@
               {{createdAt(data.register_date)}}
             </div>
             <div v-if='mine(data,idx)'>
-              <div>
-                <i class="far fa-edit"></i>
-                <span>edit</span>
-              </div>
               <div @click='deleteComment(data)'>
                 <i class="far fa-trash-alt"></i>
                 <span>delete</span>
+              </div>
+            </div>
+            <div v-else>
+              <div @click='routeHome(data)'>
+                <i class='fas fa-home'></i> 
+                <span>Home</span> 
               </div>
             </div>
           </div>
@@ -64,6 +66,14 @@ export default {
         .catch((err)=>{
           alert(err)
         })
+    },
+    routeHome:function(data){
+      console.log(data)
+      axios.get(`${SERVER_URL}/apps/v1/userInfo/${data.user_seq}`)
+        .then(res=>{
+          this.$router.push({name:'Main',params:{nickname:res.data.email,userno:data.user_seq}})
+        })
+        .catch(err=>console.log(err))
     }
   },
   watch:{
@@ -87,8 +97,13 @@ computed:{
         return time
       } 
       return time.split('T')[0] + ' ' + time.split('T')[1].split('+').[0]
-    } 
+    }
   },
+  profileImage(){
+    return (data) => {      
+      return data.profile_image
+    }
+  },    
   mine(){
     return (data) => {      
       if (data.user_seq == localStorage.getItem('userNo')) {
@@ -154,8 +169,7 @@ computed:{
 }
 
 .comment-user-profile-img {
-  border-radius: 10px;
-  background-color: red;
+  border-radius: 10px;  
   width: 50px;
   height:50px;
   overflow: hidden;

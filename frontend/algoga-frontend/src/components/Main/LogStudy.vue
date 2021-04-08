@@ -1,5 +1,5 @@
 <template>
-  <div id="log-study">    
+  <div id="log-study">        
     <div class='date'>
       <span v-for= "(date,idx) in date_data" :key='idx'>
         {{date}}
@@ -73,9 +73,9 @@ export default {
   computed:{
     message(){
       return (jdx,idx)=> {
-        if (jdx === 35 && idx ===this.first_day) {
+        if (jdx === 33 && idx ===this.first_day) {
           return 'You create this account'
-        } else if (jdx <35){
+        } else if (jdx <33){
           return 'You did not create account'
         } else {  
           return `You solved ${this.week_data[jdx][idx]} problems.`
@@ -176,7 +176,7 @@ export default {
     }    
 
 
-    for (let i = 0; i<35; i++) {
+    for (let i = 0; i<33; i++) {
       let weekArray = new Array(7).fill(0)
       this.week_data.push(weekArray)
     }
@@ -211,9 +211,7 @@ export default {
     
 
     this.first_day = registerDay[1]    
-    this.$emit('userData',{'data1':this.data,'data2':this.problemsData})
-
-    console.log(this.problemsData)
+    this.$emit('userData',{'data1':this.data,'data2':this.problemsData})   
 
   },
   watch:{
@@ -233,6 +231,7 @@ export default {
   display:flex;
   align-items: stretch; 
   color:var(--font-color);
+  margin:0 auto;
 
   /* border: 1px solid black;    */
 }
