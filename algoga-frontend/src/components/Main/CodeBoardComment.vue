@@ -18,14 +18,12 @@
             </div>
             <div v-if='mine(data,idx)'>
               <div @click='deleteComment(data)'>
-                <i class="far fa-trash-alt"></i>
-                <span>delete</span>
+                <span><i class="far fa-trash-alt"></i> delete</span>
               </div>
             </div>
             <div v-else>
               <div @click='routeHome(data)'>
-                <i class='fas fa-home'></i> 
-                <span>Home</span> 
+                <span><i class='fas fa-home'></i> Home</span> 
               </div>
             </div>
           </div>
@@ -99,8 +97,12 @@ computed:{
     }
   },
   profileImage(){
-    return (data) => {      
-      return data.profile_image
+    return (data) => {
+      if(data){
+        return data.profile_image
+      }else{
+        return null
+      }
     }
   },    
   mine(){
