@@ -50,7 +50,6 @@ export default {
       const userNum = localStorage.getItem('userNo')
       axios.get(`${SERVER_URL}/apps/v1/getMyFeed/${userNum}`)
         .then(res => {
-          console.log(res.data)
           this.users = res.data[0]
           this.info = res.data[1]
           this.users.forEach(user => {

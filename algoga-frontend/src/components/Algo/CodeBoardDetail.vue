@@ -187,7 +187,6 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-    console.log(this.data)
     await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.data.user_seq}`)
       .then(res =>{
         this.userData = res.data

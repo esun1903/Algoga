@@ -132,7 +132,6 @@ export default {
       this.followingIdx.push(user_seq)      
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${user_seq}`)
         .then(res=>{
-          console.log(res.data)
           this.followingList.push(res.data)
         })
         .catch(err=>{
