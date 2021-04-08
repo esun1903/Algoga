@@ -18,7 +18,7 @@
       </div>
       <div id='main-content'>
         <div>
-          <MainAside />
+          <MainAside @profileUpdate = 'profileUpdate' />
         </div>
         <section>                
           <LogStudy @userData='userData' />
@@ -32,7 +32,7 @@
     
       </div>
     </div>
-
+    <UserInfoUpdate v-if = 'userUpdate' @closeUpdate='closeUpdate' />
   </div>
 </template>
 
@@ -41,6 +41,7 @@ import MainNavbar from "@/components/Main/MainNavbar"
 import LogStudy from "@/components/Main/LogStudy"
 import History from "@/components/Main/History"
 import MainAside from "@/components/Main/MainAside"
+import UserInfoUpdate from "@/components/Main/UserInfoUpdate"
 import Feed from "@/components/Main/Feed"
 
 export default {
@@ -50,7 +51,8 @@ export default {
       LogStudy,
       History,
       MainAside,
-      Feed
+      Feed,
+      UserInfoUpdate
   },
   methods:{
     test:function(){
@@ -64,6 +66,12 @@ export default {
       this.dataHistory = data1 
       this.dataList = data2     
     },
+    profileUpdate:function(){
+      this.userUpdate = true
+    },
+    closeUpdate(){
+      this.userUpdate = false
+    }
   },
   data : function(){
     return{
@@ -71,6 +79,7 @@ export default {
       teststring:'',
       dataHistory:[],
       dataList:[],
+      userUpdate:false,
     }
   },
 }

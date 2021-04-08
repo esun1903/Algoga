@@ -9,11 +9,10 @@
           {{data.nickname}}
         </span>
         <div>
-          <div v-if='mine' class='profile-setting'>
+          <div v-if='mine' class='profile-setting' @click='profileUpdate'>
             <i class="fas fa-cog"></i>
           </div>
           <button v-else>Follow</button>
-
         </div>
       </div>
       <div>
@@ -28,7 +27,7 @@
         </div>
       </div>
     </div>
-    <UserInfoUpdate />
+    
   </div>
 </template>
 
@@ -45,6 +44,7 @@ export default {
       data:[],
       follower:0,
       following:0,
+      updateStatus:true,
     }
   },
   methods:{
@@ -68,9 +68,13 @@ export default {
       const userNo = this.$route.params.userno
       axios.get(`${SERVER_URL}/apps/v1/followingList/${userNo}`)
         .then(res=>{
+          console.log(res,'/???')
           this.follower = res.data.length
         })
         .catch(err=>console.log(err))
+    },
+    profileUpdate:function(){
+      this.$emit('profileUpdate')
     }
 
   },
