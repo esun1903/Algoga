@@ -50,7 +50,7 @@ mysql>
 ssafy 사용자를 생성하고, 모든 권한을 부여한다.
 변경된 권한 적용
 중요 : 컨테이너 외부에서 MySQL에 로그인도 가능해야 하므로 ssafy@localhost에서 localhost 대신 %를 사용한다.
-
+```jsx
 mysql> CREATE USER 'ssafy'@'%' IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.00 sec)
 
@@ -61,8 +61,8 @@ mysql> flush privileges;
 Query OK, 0 rows affected (0.00 sec)
 
 mysql> quit
+```
 
----
 
 ## 📗2. Git
 
@@ -115,7 +115,7 @@ $ cd algoga-backend
 ```
 
  5-2. my_settings.py 작성 [mysetting.py](http://mysetting.py/) 위치 algoga-backend/
-
+```jsx
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.mysql',
@@ -151,40 +151,29 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
+```
 ---
 
-### 가상환경 구축
-
 **xxxxx 자신의 알맞는 내용으로 넣기**
-5-3. python3 -m venv env
+
+
+5-3. 가상환경 구축
 
 ```jsx
 $ python3 -m venv env
 ```
 
-5-5. python [manage.py](http://manage.py/) makemigrations
+5-4 . makemigrations,migrate,구동 확인
 
 ```jsx
-$ python [manage.py](http://manage.py/) makemigrations
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py runserver
 ```
 
-5-6. python [manage.py](http://manage.py/) migrate
-
-```jsx
-$ python [manage.py](http://manage.py/) migrate
-```
-
-5-7. python [manage.py](http://manage.py/) runserver 서버 구동 확인
-
-```jsx
-$ python [manage.py](http://manage.py/) runserver
-```
-
-5-8. algoga-backend/
+algoga-backend/로 이동 
 
 5-9. nginx설치
-
 5-10. uwsgi 설치
 
 5-11. sudo apt-get install nginx
@@ -204,7 +193,7 @@ $ pip install uwsgi
 ```jsx
 $ vi algoga_uwsgi.ini
 ```
-
+```jsx
 [uwsgi]
 chdir = /home/ubuntu/algoga1.0/s04p23a302/algoga-backend
 module = backend.wsgi
@@ -222,7 +211,7 @@ vacuum = true
 daemonize = /home/ubuntu/algoga1.0/s04p23a302/algoga-backend/algoga_uwsgi.log
 
 die-on-term = true
-
+```
 module : django 프로젝트를 생성하면 자동으로 생성되는 wsgi 파일을 지정한다.<br>
 socket : socket 파일을 이용하는 경우 소켓이 생성될 위치와 함께 .sock 파일명을 입력한다. ip, port를 이용하고 싶은 경우 주석으로 처리된 부분과 같이 지정하면 된다.<br>
 home, virtualenv : virtualenv를 이용하는 경우 가상 환경의 경로를 지정해줘야 한다.<br>
@@ -258,15 +247,19 @@ $ uwsgi --ini algoga_uwsgi.ini
  sudo vim /etc/nginx/sites-enabled/default
 ```
 
---------------------------------연결 과정
 nignx
 
+5.19. frotend 경로 맞추기
+5-20. backend reverse proxy 설정 추가
+
+연결 과정
+```jsx
 server {
 listen 80;
 ...
 ..
 
-5.19. frotend 경로 맞추기
+
 root /home/ubuntu/algoga1.2/s04p23a302/frontend/algoga-frontend/dist
 
 location / {
@@ -275,7 +268,6 @@ location / {
 	try_files $uri $uri/ =404;
 }
 
-5-20. backend reverse proxy 설정 추가
 
      location /apps {
 
@@ -284,8 +276,10 @@ location / {
 	#backend sock 있던 위치
 
 }
+```
 
----
+
+
 
 ## 🌳6. Syntax 검사 및 Nginx 재시작 (배포과정 끝)
 
