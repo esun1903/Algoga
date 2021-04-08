@@ -51,7 +51,6 @@ export default {
             alert('이메일인증을 완료해주세요!')
             return
           }
-          console.log(res)
           this.$emit('nextStage',2)
           localStorage.setItem('email',res.data.userInfo[0].email)
           localStorage.setItem('userNo',res.data.userInfo[0].seq)
