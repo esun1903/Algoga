@@ -37,7 +37,7 @@
             <History :dataHistory='dataHistory' :dataList='dataList' />
           </div>
 
-          <button @click='test'>TEST Button router to problemSolving</button>                    
+          <!-- <button @click='test'>TEST Button router to problemSolving</button>                     -->
         </section>
         
     
