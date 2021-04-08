@@ -47,20 +47,19 @@ export default {
       updateStatus:true,
       followStatus:'Follow',
       bgcolor:'rgba(30, 42, 216, 0.644)',
+      userNo : '',
     }
   },
   methods:{
     loadData:function(){
-      const userNo = localStorage.getItem('userNo')
-      axios.get(`${SERVER_URL}/apps/v1/userInfo/${userNo}`)
+      axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.userNo}`)
         .then(res=>{
           this.data = res.data
         })
         .catch(err=>{console.log(err)})
       },
     followerCheck:function(){
-      const userNo = localStorage.getItem('userNo')
-      axios.get(`${SERVER_URL}/apps/v1/followerList/${userNo}`)
+      axios.get(`${SERVER_URL}/apps/v1/followerList/${this.userNo}`)
         .then(res=>{
           this.follower = res.data.length          
           for (let i=0; i<res.data.length; i++) {
@@ -73,8 +72,7 @@ export default {
         .catch(err=>console.log(err))
     },
     followingCheck:function(){
-      const userNo = localStorage.getItem('userNo')
-      axios.get(`${SERVER_URL}/apps/v1/followingList/${userNo}`)
+      axios.get(`${SERVER_URL}/apps/v1/followingList/${this.userNo}`)
         .then(res=>{          
           this.following = res.data.length
           
@@ -100,7 +98,7 @@ export default {
     follow:function(){
       this.changeFollowStatus()
     },
-    Follow:function(){      
+    Follow:function(){
       const myNo = localStorage.getItem('userNo')
       const user_seq = this.$route.params.userno
       axios.get(`${SERVER_URL}/apps/v1/followUser/${myNo}/${user_seq}`)
@@ -131,6 +129,12 @@ export default {
     }
   },
   created(){
+    const userNumUrl = this.$route.params.userno
+    if(!userNumUrl){
+      this.userNo = localStorage.getItem('userNo')
+    }else{
+      this.userNo = userNumUrl
+    }
     this.loadData()
     this.followerCheck()
     this.followingCheck()
@@ -141,7 +145,7 @@ export default {
         this.loadData()
       }
     }
-  }
+  },
 
 }
 </script>
