@@ -1,7 +1,7 @@
 <template>
   <div id="mainAside">
 
-    <ProfileBox />
+    <ProfileBox @profileUpdate='profileUpdate'/>
     <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> -->
     <div id ='userContent'>
       <transition name="fade" mode="out-in">
@@ -76,6 +76,9 @@ export default {
       }
     },
     methods : {
+      profileUpdate:function(){
+        this.$emit('profileUpdate')
+        },
       reloadAlgos : function(){
         const userMail = localStorage.getItem('email')
         axios.post(`${SERVER_URL}/apps/v1/userInfoUpdate/${userMail}`)
