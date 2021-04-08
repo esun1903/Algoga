@@ -49,8 +49,7 @@ export default {
     closeLoginModal : function(){
       this.$emit('closed')
     },
-    Login:function(){      
-      console.log(this.idInput,this.passwordInput)
+    Login:function(){            
       axios.post(`${SERVER_URL}/apps/v1/login`,{
         'email': this.idInput,
         'password': this.passwordInput

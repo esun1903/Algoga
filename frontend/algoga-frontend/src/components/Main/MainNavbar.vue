@@ -5,8 +5,8 @@
         <h1 @click='routerNav(0)'><span>//</span>ALGOGA</h1>
         <div>
           <div @click='routerNav(1)'>Problems</div>
-          <div @click='routerNav(2)'>Regist</div>
-          <div @click='routerNav(3)'>Community</div>                   
+          <div @click='routerNav(2)'>My Code</div>
+          <div @click='routerNav(3)'>Follow</div>                   
         </div>
       </div>
       <div class='sign-out-btn' @click='signout'>

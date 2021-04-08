@@ -33,8 +33,8 @@ export default {
   data(){
     return {
       followerActive:true,
-      backColor1:  'black',
-      backColor2: 'red',
+      backColor1:  'rgba(30, 42, 216, 0.644)',
+      backColor2: 'grey',
       followerList:[],
       followingList:[],
       followers:[],
@@ -46,11 +46,10 @@ export default {
     }
   },
   methods:{
-    toggle(bool){
-      console.log(bool)
+    toggle(bool){      
       this.followerActive = bool
       if (bool) {
-        this.backColor1 = 'red'
+        this.backColor1 = 'rgba(30, 42, 216, 0.644)'
         this.backColor2 = 'grey'
         this.follow = this.followerList
         
@@ -130,8 +129,7 @@ export default {
     }
     for (let i = 0; i<this.followings.length; i++) {
       let user_seq = this.followings[i].user_following_seq
-      this.followingIdx.push(user_seq)
-      console.log(this.followings)
+      this.followingIdx.push(user_seq)      
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${user_seq}`)
         .then(res=>{
           console.log(res.data)
@@ -164,17 +162,19 @@ export default {
   cursor:pointer;
   font-size: 1em;
   transition: .3s;
+  color:white;
 }
 
 #follow-comp {
   width: 80%;
   margin:50px auto 0;  
+  color:var(--font-color);
 }
 
 .person-div {
   width: 100%;  
   margin: 0 auto 20px;  
-  border-bottom:1px solid black ;
+  border-bottom:1px solid var(--font-color) ;
   padding-bottom:20px;
   display:flex; 
   align-items: center; 

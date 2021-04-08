@@ -63,8 +63,7 @@ export default {
       }
       this.$emit('nextStage',idx) 
     },
-    signUp:function(){
-      console.log(this.data)
+    signUp:function(){      
       axios.post(`${SERVER_URL}/apps/v1/signUp`,this.data)
         .then(res => {
           if (res.status === 201) {
