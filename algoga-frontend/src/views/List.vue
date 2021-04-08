@@ -262,7 +262,6 @@ export default {
         this.algoList = this.algoList.filter(function(algo){
           return merged.some(type => algo.algorithms.indexOf(type) != -1)
         })
-        console.log(this.algoList)
         
         let language_list = []
         if(this.selectedPl.indexOf(true) != -1){
