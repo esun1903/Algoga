@@ -402,6 +402,9 @@ export default {
 </script>
 
 <style>
+#list{
+  color : var(--font-color);
+}
 #search{
   margin: 60px 0 10px 0 ;
   text-align: center;
