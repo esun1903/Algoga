@@ -93,6 +93,12 @@ export default {
     background-color: rgb(255, 255, 255);
     transition: all 1s;
     box-shadow: -1px 0 0 0 rgb(37 40 47 / 10%);
+    overflow: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */    
+}
+#feed::-webkit-scrollbar {
+  display: none;
 }
 #feed > div:nth-child(1){
     margin: 0;
