@@ -8,6 +8,10 @@
         </div>
 
         <div class='flex'>
+          <div @click='home' style='cursor:pointer'>
+            <i class="fa fa-home"></i>
+            <span>Home</span>
+          </div>
           <i class="far fa-clock"></i>
           <span>{{registerDay[0]}} {{registerDay[1]}}</span>
         </div>
@@ -140,6 +144,9 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+    },
+    home:function(){
+      this.$router.push({name:'Main',params:{nickname:this.userData.email,userno:this.userData.seq}})
     }
   },
   computed:{
@@ -180,7 +187,7 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-
+    console.log(this.data)
     await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.data.user_seq}`)
       .then(res =>{
         this.userData = res.data
