@@ -54,7 +54,7 @@ export default {
 				return
 			} else if (idx === 1 && this.check.password && this.data.password !== this.data.passwordConfirm) {
 				this.check.passwordConfirm = false
-				this.mes.passwordConfirm = '비밀번호를 일치시켜 주세용'
+				this.mes.passwordConfirm = '비밀번호를 일치시켜 주세요'
 			} else if (idx === 1 && this.check.password && this.data.password === this.data.passwordConfirm) {
 				this.check.passwordConfirm = true
 				this.mes.passwordConfirm = '비밀번호가 확인되었습니다.'

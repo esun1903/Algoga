@@ -54,6 +54,8 @@ export default {
         this.data.password = data.password
       } else if (this.nowIdx === 4) {
         this.data.baek_id = data.boj
+        this.bojCheck(data.boj)
+        return
       } else if (this.nowIdx === 6) {
         this.data.nickname = data.nickname
         if (idx === 2) {
@@ -93,6 +95,14 @@ export default {
             }, 3000);
           })
         .catch(err=>{alert(err)})
+    },
+    bojCheck:function(id){
+      axios.get(`${SERVER_URL}/apps/v1/checkBaekjoon/${id}`)
+        .then(()=>{
+          this.$emit('nextStage',2)
+        })
+        .catch(()=>
+        alert('존재하지 않는 백준아이디입니다.'))
     }
   }
   
