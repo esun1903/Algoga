@@ -8,24 +8,13 @@
       </div>
     </div>
     <div id='explainSection'>
+
+      <img :src="imgsrc" alt="">
       <div>
-        <Chart
-          :ctype = "ColumnChart"
-          :data = crdata
-          :options = chartOptions
-        />
-      </div>
-      <div>
-        <p>Lv.{{algo.level}}</p>
-        <img :src="imgsrc" alt="">
-        <p id='emojiExplain'></p>
-      </div>
-      <div>
-        <Chart
-          :ctype = "PieChart"
-          :data = crdata2
-          :options = chartOptions2
-        />
+        <p>Lv.{{algo.level}} <span id='emojiExplain'></span></p>
+        <p>{{algo.algorithms}}</p>
+        <p>정답률 : {{algo.correct_rate}} %</p> 
+        <p>350000명 중 {{algo.correct_user}}명이 풀었어요!</p> 
       </div>
     </div>
     <Preview
@@ -44,7 +33,6 @@
 import MainNavbar from '@/components/Main/MainNavbar'
 import Preview from '@/components/Algo/Preview'
 import ReviewsList from '@/components/Algo/ReviewsList'
-import Chart from '@/components/Algo/Chart'
 
 export default {
     name : 'Problem',
@@ -52,7 +40,6 @@ export default {
         MainNavbar,
         Preview,
         ReviewsList,
-        Chart,
     },
     data : function(){
         return{
@@ -66,31 +53,11 @@ export default {
               level: 0,
               avg_try: 0
             },
-          crdata : [],
-          chartOptions: {
-            chart: {
-            }
-          },
-          crdata2 :[],
-          chartOptions2: {
-            chart: {
-            }
-          },
           imgsrc : ''
       }
     },
     created(){
         this.algo = this.$route.params
-        this.chartType = 'ColumnChart'
-        const newData = []
-        newData.push(['columChart','correct_user','submission_cnt'])
-        newData.push([`${this.algo.correct_rate}%`,this.algo.correct_user, this.algo.submission_cnt])
-        this.crdata = newData
-
-        const newData2 =[]
-        newData.push(['PieChart','correct_user','all_user'])
-        newData.push([`${this.algo.correct_rate}%`,this.algo.correct_user, 34900])
-        this.crdata = newData2        
     },
     mounted(){
       const emojiExplain = document.querySelector('#emojiExplain')
@@ -165,19 +132,25 @@ export default {
   font-size: 22px;
 }
 #explainSection{
-  padding: 0 10%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  margin: 40px 0;
+  margin: 40px auto;
+  width: 40%;
+  /* border: 1px solid black; */
 }
-#explainSection > div:nth-child(1){
-  width: 25%;
+#explainSection > img{
+  width: 150px;
+  height: 150px;
 }
-#explainSection > div:nth-child(2){
-  text-align: center;
+
+#explainSection > div > p:nth-child(1){
+  font-size: 1.5rem;
 }
-#emoji{
-  font-size: 6rem;
+#explainSection > div > p:nth-child(2){
+  margin-bottom: 10px;
+}
+#explainSection > div > p:nth-child(3){
+  font-size : 1.2rem
 }
 </style>

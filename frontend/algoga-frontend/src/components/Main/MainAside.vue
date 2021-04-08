@@ -10,7 +10,7 @@
           <span class='box-title'>Solved Summary</span>
           <span class='tooltip'>
             <i class="fas fa-question-circle"></i>
-            <p class='tooltiptext'>너의 문제</p>
+            <p class='tooltiptext'>당신의 문제 풀이를 분석하는 공간입니다.</p>
           </span>
         </p>
         <div id='graphBox'>
@@ -24,8 +24,12 @@
             <span>{{problem}} : {{solvedList[problem]}}</span>
           </div>
         </div>
-        <div class='transBtn' @click='asideContent = !asideContent'>
-          <span><i class="fas fa-arrow-left"></i></span>
+          <p id='explain'><span>{{user.nickname}}</span>님은 '<span>{{mostSolved}}</span>' 유형을 가장 많이 풀었고,<span id='sectionStart'>『</span></p>
+          <p>'<span>{{leastSolved}}</span>' 유형의 문제 풀이가 필요합니다.<span id='sectionEnd'>』</span></p>
+          
+          
+        <div class='transTxt' @click='asideContent = !asideContent'>
+          <span>> Get Algorithm Recommendation</span>
         </div>
       </div>
       </transition>
@@ -40,8 +44,8 @@
           <span @click='reloadAlgos()' id='refreshIcon'><i class="fas fa-retweet"></i></span>
         </p>
         <Recommend />
-        <div class='transBtn' @click='asideContent = !asideContent'>
-          <span><i class="fas fa-arrow-left"></i></span>
+        <div class='transTxt' @click='asideContent = !asideContent'>
+          <span>> Back to Summary</span>
         </div>
       </div>
       </transition>
@@ -70,9 +74,24 @@ export default {
         solvedList: [],
         user : {},
         chartOptions: {
-          hoverBorderWidth: 20
+          hoverBorderWidth: 20,
+          width : 400,
+          height : 300,
+          is3D: true,
+          sliceVisibilityThreshold: .1,
+          chartArea:{left:0,top:40,width:'100%',height:'100%'},
+          fontName : 'Hack',
+          legend : {position :'labeled', textStyle: {color: 'black'}},
+          colors : [
+            '#FF6666', '#99CCFF', '#CCFF99', '#FFFF99','#FF9966', '#66FFCC', 
+          ],
+          tooltip : {textStyle: {color: 'black'}, showColorCode: true},
+          pieSliceTextStyle : {color: 'black', fontName: 'Hack',fontSize: 14},
+          pieSliceBorderColor : 'white'
         },        
         data : [],
+        mostSolved : '',
+        leastSolved : '',
       }
     },
     methods : {
@@ -100,17 +119,16 @@ export default {
           console.log(err)
         })
 
-      await axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/1`)
+      await axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/${this.userNo}`)
         .then(res => {
           let myList = new Array();
           myList.push(['Type','Number'])
           res.data.forEach(element => {
             myList.push([element.type_name, element.type_cnt])
           });
-          // this.solvedList = myList
-          // this.data.labels = Object.keys(myList)
           this.data = myList
-          // console.log(this.data)
+          this.mostSolved = this.data[1][0]
+          this.leastSolved = this.data[this.data.length -1][0]
         })
         .catch(err=> {
           console.log(err)
@@ -125,8 +143,6 @@ p{
 }
 #mainAside{
   width: 400px;
-  /* width: 80%;
-  margin: 0 auto; */
   position:sticky;
   top:70px;
   /* border-right: 1px solid rgba(61, 61, 61, 0.479); */
@@ -143,7 +159,6 @@ p{
 }
 #summary-box{
   width: 100%;
-  translate: all 1s ease-out;
 }
 #userGraph{
   width: calc(100% - 40px);
@@ -163,6 +178,7 @@ p{
 #graphBox{
   text-align: center;
   margin-top: 30px;
+  box-shadow: 0 -1px 0 0 rgb(37 40 47 / 10%);
 }
 .tooltip {
   position: absolute;
@@ -260,5 +276,47 @@ p{
 }
 .contentBox{
   position: relative;
+}
+.transTxt{
+  text-align: center;
+  font-size: 1.1rem;
+  box-shadow: -1px 0px 4px 0 rgb(0 0 0 / 60%);
+  margin: 60px 20px 0 0;
+  padding: 20px 10px;
+}
+.transTxt:hover{
+  cursor: pointer;
+  color: #C84160;
+  background-color: rgba(241, 241, 241, 0.521);
+}
+
+#explain{
+  font-size: 1rem;
+  position: relative;
+}
+#explain span{
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+#explain + p{
+  font-size: 1rem;
+  position: relative;
+  margin-left: 30px;
+}
+#explain +p span{
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+#sectionStart{
+  position: absolute;
+  top: -5px;
+  left: -20px;
+  font-size: 40px;
+}
+#sectionEnd{
+  position: absolute;
+  bottom: -5px;
+  right: 20px;
+  font-size: 40px;
 }
 </style>

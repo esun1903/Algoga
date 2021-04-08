@@ -17,7 +17,7 @@ export default {
   },
   props: {
     chartdata: {
-      type: Object,
+      type: Array,
       default: null
     },
     options: {
