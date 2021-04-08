@@ -381,6 +381,8 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         problem = Problem.objects.filter(seq=problem_seq)
 
+        review_count = problem.values('review_count')[0]['review_count']
+
         problem_languages = problem.values_list('languages', flat=True)[0].split(",")
         problem_languages.append(language)
         
@@ -398,7 +400,7 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         problem_language_seqs = ','.join(problem_language_seqs)
 
-        problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
+        problem.update(languages = problem_languages , language_seqs = problem_language_seqs , review_count = review_count + 1)
 
         codeBoardSerializer.save()
 
@@ -437,9 +439,10 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
 
         languages = CodeBoard.objects.filter(problem_seq=problem_seq).values_list('language', flat=True)
         
+        problem = Problem.objects.filter(seq=problem_seq)
+        review_count = problem.values('review_count')[0]['review_count']
+        
         if Counter(languages)[language] == 1:
-            problem = Problem.objects.filter(seq=problem_seq)
-
             problem_languages = problem.values_list('languages', flat=True)[0].split(',')
             problem_languages.remove(language)
             problem_languages = ','.join(problem_languages)
@@ -449,12 +452,13 @@ class codeBoardViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             problem_language_seqs = ','.join(problem_language_seqs)
 
             problem.update(languages = problem_languages , language_seqs = problem_language_seqs)
-       
+            
         codecomment = Comment.objects.filter(code_board_seq =codeBoard_seq)
         for one_codecomment  in codecomment:
             one_codecomment.delete()
 
         codeBoard.delete()
+        problem.update(review_count = review_count - 1)
    
         return  Response(status=status.HTTP_200_OK)
 
