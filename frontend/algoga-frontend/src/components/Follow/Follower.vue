@@ -57,5 +57,11 @@ export default {
 </script>
 
 <style>
+#follow-comp button:nth-child(1){
+  background-color: rgba(83, 216, 30, 0.884);
+}
+#follow-comp button:nth-child(2){
+  background-color: rgba(30, 42, 216, 0.644);
+}
 
 </style>

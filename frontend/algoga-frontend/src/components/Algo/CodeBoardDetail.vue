@@ -100,7 +100,6 @@ export default {
         'user_seq':localStorage.getItem('userNo'),
         'code_board_seq':this.code_board_seq
       }
-      console.log(commentData)
       axios.post(`${SERVER_URL}/apps/v1/commentRegister`,commentData)
         .then(()=>{
           commentData['register_date'] = '방금전'
@@ -162,9 +161,7 @@ export default {
         this.registerDay.push(this.data.register_date.split('T')[0])
         this.registerDay.push(this.data.register_date.split('T')[1].split('+')[0])     
         this.likeCnt = this.data.like_cnt
-        console.log(this.data)
         this.langClass = langClassList[this.data.language_seq]  
-        console.log(this.langClass)
 
       })
       .catch(err => {
@@ -195,7 +192,6 @@ export default {
       .then(res =>{
         this.commentCnt = res.data.length
         this.commentList = res.data
-        console.log(this.commentList)
       })
       .catch(()=>{
         this.commentCnt = 0

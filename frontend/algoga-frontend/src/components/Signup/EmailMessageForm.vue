@@ -37,8 +37,7 @@ export default {
           this.sending = true
         })
     },
-    login:function(){
-      console.log(this.data)
+    login:function(){      
       axios.post(`${SERVER_URL}/apps/v1/login`,{
         'email':this.data.email,
         'password':this.data.password
