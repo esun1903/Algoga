@@ -54,6 +54,8 @@ import History from "@/components/Main/History"
 import MainAside from "@/components/Main/MainAside"
 import UserInfoUpdate from "@/components/Main/UserInfoUpdate"
 import Feed from "@/components/Main/Feed"
+import axios from 'axios'
+const SERVER_URL = 'http://j4a302.p.ssafy.io'
 
 export default {
   name:"Main",
@@ -99,6 +101,16 @@ export default {
       userUpdate:false,
     }
   },
+  created(){
+    const userNo = localStorage.getItem('userNo')
+    axios.get(`${SERVER_URL}/apps/v1/userProblem/${userNo}`)
+      .then((res)=>{            
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+    })
+  }
   
 }
 </script>

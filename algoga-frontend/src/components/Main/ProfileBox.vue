@@ -51,7 +51,7 @@ export default {
   },
   methods:{
     loadData:function(){
-      const userNo = this.$route.params.userno
+      const userNo = localStorage.getItem('userNo')
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${userNo}`)
         .then(res=>{
           this.data = res.data
@@ -59,7 +59,7 @@ export default {
         .catch(err=>{console.log(err)})
       },
     followerCheck:function(){
-      const userNo = this.$route.params.userno
+      const userNo = localStorage.getItem('userNo')
       axios.get(`${SERVER_URL}/apps/v1/followerList/${userNo}`)
         .then(res=>{
           this.follower = res.data.length          
@@ -73,7 +73,7 @@ export default {
         .catch(err=>console.log(err))
     },
     followingCheck:function(){
-      const userNo = this.$route.params.userno
+      const userNo = localStorage.getItem('userNo')
       axios.get(`${SERVER_URL}/apps/v1/followingList/${userNo}`)
         .then(res=>{          
           this.following = res.data.length
