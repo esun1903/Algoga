@@ -24,7 +24,7 @@ export default {
     }
   },
   methods:{
-    closeSignup:function(){
+    closeSignup:function(){      
       this.$emit("closed")
     },
     nextStage:function(idx){

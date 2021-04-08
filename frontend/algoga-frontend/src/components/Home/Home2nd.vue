@@ -1,8 +1,7 @@
 <template>
   <div id="home-2nd">
     <div>
-      <div>
-        asdf
+      <div>        
       </div>
     </div>
 

@@ -2,12 +2,9 @@
   <div id='home'> 
       <HomeNavbar @signup = "signupClick" @signin = "loginClick"/>
       <Login v-if='loginClicked' @closed ='loginClick'/>
-      <Signup v-if ="signupClicked" @closed = "signupClick"/>
-      <!-- <button @click="loginClick" id='loginModalBtn'>로그인</button> -->
+      <Signup v-if ="signupClicked" @closed = "signupClick"/>      
       <FirstHome />
-      <Home2nd />
-
-      <footer>asd</footer>
+      <!-- <Home2nd /> -->
 
   </div>
 </template>
@@ -17,7 +14,7 @@ import HomeNavbar from '@/components/Home/HomeNavbar'
 import Login from '@/components/Home/Login'
 import Signup from '@/components/Home/Signup'
 import FirstHome from '@/components/Home/FirstHome'
-import Home2nd from '@/components/Home/Home2nd'
+// import Home2nd from '@/components/Home/Home2nd'
 
 export default {
   name : 'Home',
@@ -26,7 +23,7 @@ export default {
     Login,
     Signup,
     FirstHome,
-    Home2nd,
+    // Home2nd,
   },
   data : function(){
     return{
@@ -39,15 +36,15 @@ export default {
       this.loginClicked = !this.loginClicked
     },
     signupClick: function(){
-      this.signupClicked = !this.signupClicked
-
+      this.signupClicked = !this.signupClicked     
     }
   },
   created(){
     let jwt = localStorage.getItem('JWT')
     let email = localStorage.getItem('email')
+    let userNo = localStorage.getItem('userNo')
     if (jwt&&email) {
-      this.$router.push({name:'Main',params:{'nickname':email}})
+      this.$router.push({name:'Main',params:{'nickname':email,'userno':userNo}})
     }
   }
   
@@ -56,7 +53,4 @@ export default {
 
 <style>
 
-#home> footer {
-  height:100vh
-}
 </style>

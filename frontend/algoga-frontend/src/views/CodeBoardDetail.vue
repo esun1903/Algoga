@@ -1,5 +1,5 @@
 <template>
-  <div id='code-board-detail'>
+  <div id='code-board-detail-origin'>
     <MainNavbar />    
     <div class='code-board-content'>
       <h1>{{title}}</h1>      

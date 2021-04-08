@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view /> 
-    <ModeBtn />
+    <ModeBtn v-if='modeBtn' />
   </div>
 </template>
 
@@ -13,6 +13,11 @@ export default {
   components: {
     ModeBtn,
   },
+  data(){
+    return {
+      modeBtn:true
+    }
+  },
   methods:{
     checkJWT:function(){
       const jwt = localStorage.getItem('JWT')      
@@ -20,6 +25,13 @@ export default {
         this.$router.push({name:'Home'})
       }
 
+    },
+    routerCheck:function(){      
+      if (this.$route.path =='/') {
+        this.modeBtn = false
+        return
+      }
+      this.modeBtn = true
     }
   },
   created(){
@@ -34,11 +46,13 @@ export default {
 
     })
     this.checkJWT()
+    this.routerCheck()
   },
   watch:{
     $route(to,from){
       if (to.path!==from.path){
         this.checkJWT()
+        this.routerCheck()
       }
     }
   }
@@ -81,7 +95,7 @@ input::placeholder {opacity: 0.5;}
 
 #app {
   /* font-family: Avenir, Helvetica, Arial, sans-serif; */
-  font-family: Hack;
+  font-family: Hack,Avenir;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;  
@@ -90,6 +104,11 @@ input::placeholder {opacity: 0.5;}
   min-height: 100vh;
   
 }
+
+.btn-font {
+  font-family: Hack,Avenir;
+}
+
 .text-center{
   text-align: center;
 }
