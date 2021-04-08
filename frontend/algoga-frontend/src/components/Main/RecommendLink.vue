@@ -3,7 +3,7 @@
     <div>
       <p id='recotitle'>No.{{algo.number}} {{bojTitle}}</p>
       <p id='recotype'>{{algo.algorithms}}</p>
-      <p>{{bojDct}}</p>
+      <p id='recolv'>{{bojDct}}</p>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
 #recotitle{
     margin : 5px 0;
     padding-bottom: 5px;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     font-weight: 500;
     text-overflow: ellipsis;
     max-width: 100%;
@@ -67,5 +67,9 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     margin-bottom: 3px;
+    font-size: 0.7rem;
+}
+#recolv{
+  font-size: 0.6rem;
 }
 </style>
