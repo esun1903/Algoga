@@ -2,11 +2,19 @@
   <div id ='review'>
     <div id='reviewToggle' @click='toggle = !toggle'>
       <div>
-        <span>Writer :</span>
-        <img id='userImg' src="../../assets/userNull.png" alt="">
-        <span>{{review.writer}}</span>
-        <span id='thumbIcon'><i class="fas fa-thumbs-up"></i>{{review.like_cnt}}</span>
-        <span id='langIcon'><i :class='iconClass'></i></span><span>{{review.language}}</span>
+        <div>
+          <span>Writer :</span>
+          <div id='imgBox'>
+            <img id='userImg' :src="imgSrc" alt="">
+          </div>
+          <span>{{writerName}}</span>
+        </div>
+        <div>
+          <span id='thumbIcon'><i class="fas fa-thumbs-up"></i>{{review.like_cnt}}</span>
+        </div>
+        <div>
+          <span id='langIcon'><i :class='iconClass'></i></span><span>{{review.language}}</span>
+        </div>
         <!-- <img id='userImg' :src="review.profile" alt=""> -->
       </div>
       <div>
@@ -39,6 +47,8 @@ export default {
       toggle : false,
       iconClass : '',
       code_board_seq : '',
+      writerName : '',
+      imgSrc : '',
     }
   },
   props : {
@@ -48,7 +58,7 @@ export default {
   },
   methods : {
   },
-  async mounted(){
+  created(){
     if(this.review.language ==="PYTHON"){
       this.iconClass= 'fab fa-python'
     }else if(this.review.language === 'JAVA'){
@@ -58,11 +68,11 @@ export default {
     }else{
       this.iconClass= 'fas fa-code'
     }
-    console.log(localStorage.getItem())
-    await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.review.user_seq}`)
+    this.writerName = ''
+    axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.review.user_seq}`)
       .then(res =>{
-        this.review.writer = res.data.nickname
-        this.review.profile = res.data.profile_image
+        this.writerName = res.data.nickname
+        this.imgSrc = res.data.profile_image
       })
       .catch((err)=>{
         console.log(err)
@@ -72,6 +82,13 @@ export default {
     dateChange : function(date){
       return date.split('T')[0]
     }
+  },
+  computed : {
+    profileImage(){
+      return (data) => {      
+        return data.profile_image
+      }
+    },
   }
 }
 </script>
@@ -81,20 +98,25 @@ export default {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  height: 50px;
+  height: 60px;
   align-items: center;
   border-radius: 10px;
   background-color: #35467309;
   margin-top: 5px;
   border-bottom: 0.1px solid #354673;
+  font-size: 1rem;
 }
 #reviewToggle:hover{
   cursor: pointer;
   background-color: rgba(236, 236, 236, 0.568);
 }
 #reviewToggle > div:nth-child(1){
+  width: 100%;
   display: flex;
   align-items: center;
+}
+#reviewToggle > div:nth-child(2){
+  width: 15%;
 }
 #thumbIcon{
   margin : 0 8px 0 20px
@@ -108,10 +130,22 @@ export default {
 #langIcon > svg{
   margin-right: 4px;
 }
-#reviewToggle > div:nth-child(1) > span:nth-child(1){
+#reviewToggle > div:nth-child(1) > div:nth-child(1){
   margin-left: 20px;
+  display: flex;
+  align-items: center;
+  width: 20%;
+  min-width: 120px;
+}
+#imgBox{
+  width: 40px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 0 5px;
+  text-align: center;
 }
 #userImg{
+  width: 40px;
   height: 40px;
 }
 #userBoard{

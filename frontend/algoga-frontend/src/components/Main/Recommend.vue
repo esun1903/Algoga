@@ -15,8 +15,8 @@
         <img class='recoTypeImg' src="@/assets/success.png" alt=""><span>2. Overcome the Failure</span>
       </div>
       <div
-        v-for="(algo, idx) in toThree(recoByInCorrect)"
-        :key='idx'
+        v-for="(algo, idx2) in toThree(recoByInCorrect)"
+        :key='idx2'
       >
         <RecommendLink
             :algo = algo

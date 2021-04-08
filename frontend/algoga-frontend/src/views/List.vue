@@ -377,6 +377,10 @@ export default {
         this.changePage(1)
         this.isFiltered = false
         this.typesClicked = new Array(7).fill(false)
+        this.isSearched = false
+        this.findType = 'Title'
+        this.findInput =''
+        
       }
     },
     created(){
