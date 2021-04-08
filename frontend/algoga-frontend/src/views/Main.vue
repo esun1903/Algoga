@@ -112,13 +112,13 @@ export default {
   position: fixed;
   justify-content: center;
   align-items: center;
-  bottom: 100px;  
-  right: 100px;
+  bottom: 53px;
+  right: 40px;
   border-radius: 50%;
   padding: 6px;
   font-size: 1rem;
-  height: 40px;
-  width: 40px;
+  height: 33px;
+  width: 33px;
   justify-content: space-between;
   box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
   z-index: 1000;

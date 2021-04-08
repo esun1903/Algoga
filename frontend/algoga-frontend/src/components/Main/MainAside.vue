@@ -5,7 +5,7 @@
     <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> -->
     <div id ='userContent'>
       <transition name="fade" mode="out-in">
-      <div v-if="asideContent" id ='summary-box'>
+      <div class='contentBox' v-if="asideContent" id ='summary-box'>
         <p class='text-center'>
           <span class='box-title'>Solved Summary</span>
           <span class='tooltip'>
@@ -24,19 +24,25 @@
             <span>{{problem}} : {{solvedList[problem]}}</span>
           </div>
         </div>
-        <p @click='asideContent = !asideContent' class='content-toggle'>recommend</p>
+        <div class='transBtn' @click='asideContent = !asideContent'>
+          <span><i class="fas fa-arrow-left"></i></span>
+        </div>
       </div>
       </transition>
       <transition name="fade" mode="out-in">
-      <div v-if='!asideContent' id ='recommendBox'>
+      <div class='contentBox' v-if='!asideContent' id ='recommendBox'>
         <p class='text-center'>
-          <span class='box-title'>Recommended Problem</span>
+          <span class='box-title'>Alogorithms For You</span> 
           <span class='tooltip'>
             <i class="fas fa-question-circle"></i>
-            <p class='tooltiptext'>어떠한 방식을 통해 추천함</p>
+            <p class='tooltiptext'>맞은 문제와 틀린 문제를 분석하여 추천</p>
           </span>
+          <span @click='reloadAlgos()' id='refreshIcon'><i class="fas fa-retweet"></i></span>
         </p>
-        <p @click='asideContent = !asideContent'  class='content-toggle'>summary</p>      
+        <Recommend />
+        <div class='transBtn' @click='asideContent = !asideContent'>
+          <span><i class="fas fa-arrow-left"></i></span>
+        </div>
       </div>
       </transition>
     </div>
@@ -47,14 +53,15 @@
 import axios from 'axios'
 import ProfileBox from '@/components/Main/ProfileBox'
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
-
 import Chart from '@/components/Main/Chart'
+import Recommend from '@/components/Main/Recommend'
 
 export default {
     name:"MainAside",
     components : {
       Chart,
       ProfileBox,
+      Recommend
     },
     data: function(){
       return{
@@ -71,6 +78,16 @@ export default {
     methods : {
       profileUpdate:function(){
         this.$emit('profileUpdate')
+      reloadAlgos : function(){
+        const userMail = localStorage.getItem('email')
+        axios.post(`${SERVER_URL}/apps/v1/userInfoUpdate/${userMail}`)
+          .then(()=>{
+            console.log('리스트 갱신')
+            window.location.reload()
+          })
+          .catch(err=>{
+            console.log(err)
+          })
       }
     },
     async created(){
@@ -190,11 +207,14 @@ p{
 .content-toggle{
   float: right;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-enter {
+    transform: translateX(0);
+    transition: all .3s linear;
 }
-.fade-enter, .fade-leave-to{
-  opacity: 0;
+.fade-enter,
+.fade-leave-to {
+    transform: translateX(-100%);
 }
 
 @media screen and (max-width:1100px) {
@@ -205,5 +225,40 @@ p{
     top:70px;  
   }
 }
-
+#refreshIcon{
+  margin : 5px 0 0 40px;
+}
+#refreshIcon:hover{
+  cursor: pointer;
+  color: red;
+}
+.transBtn{
+  position: absolute;
+  left: -14%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 40%);
+}
+.transBtn:hover{
+  color: red;
+  cursor: pointer;
+}
+.transBtn:active{
+  box-shadow: -1px 0px 4px 0 rgb(0 0 0 / 40%);
+  background-color: rgba(119, 136, 153, 0.089);
+}
+.transBtn> span{
+  text-align: center;
+  margin: auto;
+  font-size: 22px;
+}
+.contentBox{
+  position: relative;
+}
 </style>

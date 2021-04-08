@@ -128,7 +128,7 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         users =  User.objects.filter(email =email)
         users.update(is_active =1)   
         
-        return Response(status=status.HTTP_200_OK)
+        return Response("Algoga email 인증완료!! 창을 닫아주세요",status=status.HTTP_200_OK)
      
     
     def passEmailCheck(self, request, email):
