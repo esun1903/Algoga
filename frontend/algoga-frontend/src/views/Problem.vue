@@ -90,8 +90,7 @@ export default {
         const newData2 =[]
         newData.push(['PieChart','correct_user','all_user'])
         newData.push([`${this.algo.correct_rate}%`,this.algo.correct_user, 34900])
-        this.crdata = newData2
-        // console.log(this.crdata)
+        this.crdata = newData2        
     },
     mounted(){
       const emojiExplain = document.querySelector('#emojiExplain')

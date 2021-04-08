@@ -108,7 +108,7 @@ export default {
       ctrlCheck:false,
       data:{
         "code": "SELECT YOUT LANGUAGE!",
-        "explanation": "# Write yout explanation \n ## ctrl+/",
+        "explanation": "# Write your explanation \n ## ctrl+/",
         "free_write": "",
         "public": 0,        
         "like_cnt": 0,
@@ -188,9 +188,8 @@ export default {
         this.btnClicked.splice(removeIdx,1)
         return
       } 
-      this.btnClicked.push(idx)
-      event.target.style.color = 'black'
-      event.target.style.backgroundColor = "red"
+      this.btnClicked.push(idx)      
+      event.target.style.backgroundColor = "#3121be8c"
     },    
     focusTextarea:function(){
       const textarea = document.querySelector('.edit-mark > textarea')
@@ -434,7 +433,7 @@ export default {
   border:none;outline: none;
   width:100px;height:50px;
   border-radius: 10px;
-  background-color: #FF6F61;
+  background-color: #FF6F61;  
   color:white;
   cursor:pointer;
   font-family: Hack;

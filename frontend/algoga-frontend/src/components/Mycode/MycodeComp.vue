@@ -67,8 +67,7 @@ export default {
         })      
     },
     codePlus(){
-      this.hovered = !this.hovered
-      console.log(this.hovered)
+      this.hovered = !this.hovered      
     },
     routTo(seq){
       this.$router.push({name:'CodeBoardDetail',params:{codeBoard_seq:seq}})
@@ -94,7 +93,6 @@ export default {
   transition: .3s;
   display: flex;
   justify-content: space-around;
-  color:black;
   overflow: hidden;
 }
 
@@ -104,11 +102,12 @@ export default {
 }
 
 .mycode-comp-header {
-
+  
   position:relative;
   width:90%;
   display:flex;
   justify-content: space-between;
+  color:var(--font-color)
 }
 
 #mycode-comp svg{margin-right: 10px;}
@@ -135,7 +134,7 @@ export default {
   width:100%; height:100%;
   transition:.3s;
   z-index:0;
-  background-color: rgba(0, 0, 0, 0.473);
+  background-color: rgba(216, 74, 74, 0.473);
 }
 
 #mycode-comp:hover > .mycode-comp-cover {

@@ -28,8 +28,7 @@ export default {
       if (screen.width > 1000 ){
         let i = 0
         divs.forEach((d)=>{          
-          d.style.height = `${d.clientWidth}px`
-          console.log(d.style.height,d.style.width)
+          d.style.height = `${d.clientWidth}px`          
           if (i==1) {
             d.style.margin = "0 -2%"
             d.classList.add('second-circle')

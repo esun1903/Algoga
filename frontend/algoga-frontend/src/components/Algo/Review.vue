@@ -57,8 +57,7 @@ export default {
       this.iconClass= 'fab fa-js'
     }else{
       this.iconClass= 'fas fa-code'
-    }
-    console.log(localStorage.getItem())
+    }    
     await axios.get(`${SERVER_URL}/apps/v1/userInfo/${this.review.user_seq}`)
       .then(res =>{
         this.review.writer = res.data.nickname
