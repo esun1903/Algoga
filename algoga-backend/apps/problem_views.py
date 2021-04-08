@@ -191,7 +191,6 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # 모든 문제를 줄 때
         totalProblem = Problem.objects.all()
         serializer = ProblemSerializer(totalProblem, many = True)
-        print(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([AllowAny])
