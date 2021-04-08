@@ -47,14 +47,14 @@ $ root@f3aasdasdasd8:/#mysql -u root -p
 mysql>
 
 데이터베이스와 사용자를 생성하고 (컨테이너 내에서) MySQL에서 권한을 부여한다.
-jmlim이라는 사용자를 생성하고, 모든 권한을 부여한다.
+ssafy 사용자를 생성하고, 모든 권한을 부여한다.
 변경된 권한 적용
-중요 : 컨테이너 외부에서 MySQL에 로그인도 가능해야 하므로 jmlim@localhost에서 localhost 대신 %를 사용한다.
+중요 : 컨테이너 외부에서 MySQL에 로그인도 가능해야 하므로 ssafy@localhost에서 localhost 대신 %를 사용한다.
 
-mysql> CREATE USER 'jmlim'@'%' IDENTIFIED BY 'password';
+mysql> CREATE USER 'ssafy'@'%' IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> GRANT ALL PRIVILEGES ON *.* TO 'jmlim'@'%';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'ssafy'@'%';
 Query OK, 0 rows affected (0.00 sec)
 
 mysql> flush privileges;
@@ -223,10 +223,10 @@ daemonize = /home/ubuntu/algoga1.0/s04p23a302/algoga-backend/algoga_uwsgi.log
 
 die-on-term = true
 
-module : django 프로젝트를 생성하면 자동으로 생성되는 wsgi 파일을 지정한다.
-socket : socket 파일을 이용하는 경우 소켓이 생성될 위치와 함께 .sock 파일명을 입력한다. ip, port를 이용하고 싶은 경우 주석으로 처리된 부분과 같이 지정하면 된다.
-home, virtualenv : virtualenv를 이용하는 경우 가상 환경의 경로를 지정해줘야 한다.
-daemonize : 백그라운드로 실행 하도록 하는 설정을 하면서 로그가 저장될 파일 위치를 지정한다.
+module : django 프로젝트를 생성하면 자동으로 생성되는 wsgi 파일을 지정한다.<br>
+socket : socket 파일을 이용하는 경우 소켓이 생성될 위치와 함께 .sock 파일명을 입력한다. ip, port를 이용하고 싶은 경우 주석으로 처리된 부분과 같이 지정하면 된다.<br>
+home, virtualenv : virtualenv를 이용하는 경우 가상 환경의 경로를 지정해줘야 한다.<br>
+daemonize : 백그라운드로 실행 하도록 하는 설정을 하면서 로그가 저장될 파일 위치를 지정한다.<br>
 
 가상환경 위에서 배포하시면 home,virtualenv 주석제거
 
