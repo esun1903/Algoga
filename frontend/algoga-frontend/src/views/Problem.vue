@@ -9,20 +9,20 @@
     </div>
     <div id='explainSection'>
       <div>
-        <GChart
-          type="ColumnChart"
+        <Chart
+          :ctype = "ColumnChart"
           :data = crdata
           :options = chartOptions
         />
       </div>
       <div>
         <p>Lv.{{algo.level}}</p>
-        <div id='emoji'></div>
+        <img :src="imgsrc" alt="">
         <p id='emojiExplain'></p>
       </div>
       <div>
-        <GChart
-          type="PieChart"
+        <Chart
+          :ctype = "PieChart"
           :data = crdata2
           :options = chartOptions2
         />
@@ -44,7 +44,7 @@
 import MainNavbar from '@/components/Main/MainNavbar'
 import Preview from '@/components/Algo/Preview'
 import ReviewsList from '@/components/Algo/ReviewsList'
-import { GChart } from 'vue-google-charts'
+import Chart from '@/components/Algo/Chart'
 
 export default {
     name : 'Problem',
@@ -52,7 +52,7 @@ export default {
         MainNavbar,
         Preview,
         ReviewsList,
-        GChart
+        Chart,
     },
     data : function(){
         return{
@@ -76,6 +76,7 @@ export default {
             chart: {
             }
           },
+          imgsrc : ''
       }
     },
     created(){
@@ -93,19 +94,15 @@ export default {
         // console.log(this.crdata)
     },
     mounted(){
-      const emoji = document.querySelector('#emoji')
       const emojiExplain = document.querySelector('#emojiExplain')
       if(this.algo.level <=3 ){
-        emoji.innerHTML = '<i class="far fa-laugh-beam"></i>'
+        this.imgsrc = require('@/assets/positive.png')
         emojiExplain.innerText = 'Easy'
-        emoji.style = 'color : yellow;'
       }else if(this.algo.level <=7 ){
-        emoji.innerHTML = '<i class="far fa-smile"></i>'
-        emoji.style = 'color : green;'
+        this.imgsrc = require('@/assets/happy.png')
         emojiExplain.innerText = 'So So'
       }else{
-        emoji.innerHTML = '<i class="far fa-tired"></i>'
-        emoji.style = 'color : red;'
+        this.imgsrc = require('@/assets/anxiety.png')
         emojiExplain.innerText = 'Very Hard'
       }
 
