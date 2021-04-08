@@ -80,14 +80,22 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
     def signUp(self, request): 
         #회원가입 시 
         users =  User.objects.filter(email =request.data["email"])
-
+        
         if users.exists():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+        
+        
+        # print("=============2===============")
+        # user = User(email= request.data["email"], password= request.data["password"], 
+        # baek_id= request.data["baek_id"], nickname=request.data["nickname"]
+        # )
+        # print(user)
+        # print("============3===============")
         userSerializer = UserSerializer(data=request.data, partial=True)
+        print("============4===============")
         if not userSerializer.is_valid():
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+        
         userSerializer.save()
 
         return Response(status=status.HTTP_201_CREATED)
@@ -213,8 +221,10 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # 맞은 문제만 리턴
-        user_problems = UserProblem.objects.filter(correct = 0).filter(user_seq = seq).values_list('problem_seq')
+        user_problems = CodeBoard.objects.filter(user_seq = seq).values_list('problem_seq')
         user_problems = list(set(map(lambda x: x[0], user_problems)))
+        
+        print(user_problems)
 
         # 맞은 문제 번호로 문제별 알고리즘 가져오기
         user_type = Problem.objects.filter(seq__in=user_problems).values_list('algorithm_ids')
@@ -286,17 +296,13 @@ class UserViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         return  Response(status=status.HTTP_200_OK)
         
     def getMyFeed(self, request, seq):
-        my_following_seqs = FollowUser.objects.filter(user_follower_seq=seq).values_list('user_following_seq', flat=True)
+         my_following_seqs = FollowUser.objects.filter(user_follower_seq=seq).values_list('user_following_seq', flat=True)
 
-        get_follower_codeboards = CodeBoard.objects.filter(user_seq__in=my_following_seqs).filter(public=0).order_by('-register_date')
-
-        follower_seqs = list(set(list(get_follower_codeboards.values_list('user_seq', flat=True))))
-        followers = User.objects.filter(seq__in=follower_seqs)
-        
-        codeBoard_serializer = CodeBoardSerializer(get_follower_codeboards, many=True)
-        followers_serializer = UserSerializer(followers, many=True)
-
-        return Response([codeBoard_serializer.data, followers_serializer.data], status=status.HTTP_200_OK)
+         get_follower_codeboards = CodeBoard.objects.filter(user_seq__in = my_following_seqs).filter(public = 0).order_by('-register_date')
+         
+         codeBoardSerializer = CodeBoardSerializer(get_follower_codeboards, many = True)
+         
+         return Response(codeBoardSerializer.data ,status=status.HTTP_200_OK)
 
 
 @permission_classes([AllowAny])
