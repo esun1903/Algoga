@@ -30,8 +30,11 @@ export default {
   },
   methods : {
     goLink : function(){
-      let openNew = window.open(this.link,'newWindow')
-      openNew.focus();
+      this.$router.push({
+        name : 'Problem',
+        params : this.algo,
+        query : {no : this.algo.seq}
+      })
     }
   }
 }
