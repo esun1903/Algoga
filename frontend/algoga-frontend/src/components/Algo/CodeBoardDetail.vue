@@ -88,7 +88,7 @@ export default {
   },
   props : {
     code_board_seq : {
-      type : String,
+      type : Number,
     }
   },
   methods:{
@@ -148,7 +148,7 @@ export default {
         return true
       }
       return false
-    }
+    },
   },
   async mounted(){
     const userNo = localStorage.getItem('userNo')

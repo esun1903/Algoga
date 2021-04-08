@@ -69,7 +69,7 @@ export default {
 <style>
 #feed{
     width: 350px;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     right: 0px;
     z-index: 100000;
