@@ -140,4 +140,36 @@ export default {
   font-size: 0.7rem;  
 }
 
+@media screen and (max-width:1100px) {
+  #profile-box{    
+    justify-content: left;
+    
+  }
+  .profile-img-box {
+    width: 150px; height:150px;    
+    margin: 0;
+  }
+    #profile-box img {
+    width: 150px; height: 150px;
+  }
+  .profile-content-box {  
+    width:calc(40% - 100px);    
+  }
+  
+  .profile-nick-box {
+    display: flex; justify-content: space-between;
+  }
+
+  .profile-setting {
+    cursor:pointer
+  }
+
+  .profile-bottom {
+    justify-content:left;
+  }
+
+      
+}
+
+
 </style>

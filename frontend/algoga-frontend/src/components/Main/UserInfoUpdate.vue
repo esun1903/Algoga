@@ -1,7 +1,10 @@
 <template>
   <div id="user-info-update">
     <div class='user-update'>
-      <input type="file" @change='saveFile'>
+      <label for="profileImage">
+        dd
+        <input id='profileImage' type="file" @change='saveFile'>
+      </label>
       <button @click='update'>update</button>
     </div>
     <div class="back" @click='close'></div>
@@ -35,8 +38,8 @@ export default {
     },
     update:function(){
       let dataForm = new FormData()
-      const keys = ['email','password','baek_id','nickname','level','profile_image']
-      const data = ['ldh297@naver.com','dkfrhrk1!','ldh297','dodo','0',this.userPic]
+      const keys = ['email','password','baek_id','nickname','profile_image']
+      const data = ['ldh297@naver.com','dkfrhrk1!','ldh297','dodo',this.userPic]
       for (let i=0;i<6;i++) {
         dataForm.append(`${keys[i]}`,data[i])
       }
@@ -81,6 +84,10 @@ export default {
   top:0;left:0;
   z-index: 1000;
   background-color: rgba(0,0,0,0.5);
+}
+
+#profileImage{
+  visibility: hidden;
 }
 
 

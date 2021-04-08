@@ -106,7 +106,7 @@ export default {
   position:relative;
   overflow: hidden;
   width:100%;
-  height: 500px;  
+  min-height: 500px;  
   color:var(--font-color2);  
   background-color: var(--back-color);
   cursor:pointer;

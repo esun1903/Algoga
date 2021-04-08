@@ -78,6 +78,7 @@ export default {
     methods : {
       profileUpdate:function(){
         this.$emit('profileUpdate')
+        },
       reloadAlgos : function(){
         const userMail = localStorage.getItem('email')
         axios.post(`${SERVER_URL}/apps/v1/userInfoUpdate/${userMail}`)
