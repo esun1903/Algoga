@@ -180,8 +180,8 @@ export default {
         levelSort : 0,
         answerRateSort :0,
         pLang : [
-          'Java',
-          'Python',
+          'JAVA',
+          'PYTHON',
           'C','C++','C#',
           'JavaScript',
           'Ruby',
@@ -241,24 +241,43 @@ export default {
       },
       applyFilter : function(){
         this.typesClicked = new Array(7).fill(false)
-        let merged = []
-        for(let i = 0; i < this.selectedType.length; i ++){
-          if(this.selectedType[i]=== true){
-            merged = merged.concat(this.typeDetail[i])
-          }
-        }
-        let language_list = []
-        for(let i = 0; i < this.selectedPl.length; i ++){
-          if(this.selectedPl[i]===true){
-            language_list.push(this.pLang[i])
-          }
-        }
         const that = this
         this.algoList = this.algoListAll.filter(function(algo){
           return algo.level === that.selectedLv
-          && merged.some(type => algo.algorithms.indexOf(type) != -1)
           && algo.correct_rate >= that.selectedCr
-          && language_list.some(lan => algo.language.indexOf(lan) != -1)
+        })
+        let merged = []
+        if(this.selectedType.indexOf(true) != -1){
+          for(let i = 0; i < this.selectedType.length; i ++){
+            if(this.selectedType[i]=== true){
+              merged = merged.concat(this.typeDetail[i])
+            }
+          }
+        }else{
+          for(let i = 0; i < this.selectedType.length; i ++){
+            merged = merged.concat(this.typeDetail[i])
+          }
+        }
+
+        this.algoList = this.algoList.filter(function(algo){
+          return merged.some(type => algo.algorithms.indexOf(type) != -1)
+        })
+        console.log(this.algoList)
+        
+        let language_list = []
+        if(this.selectedPl.indexOf(true) != -1){
+          this.selectedPl.forEach(function(val, idx){
+            if(val===true){
+              language_list.push(that.pLang[idx])
+            }
+          })
+        }else{
+          this.selectedPl.forEach(function(val, idx){
+            language_list.push(that.pLang[idx])
+          })
+        }        
+        this.algoList = this.algoList.filter(function(algo){
+          return language_list.some(lan => algo.languages.indexOf(lan) != -1)
         })
         this.lastBlock = Math.ceil(this.algoList.length / this.algoPerPage)
         this.changePage(1)
@@ -622,11 +641,12 @@ export default {
 .manulBtnUnable > span{
   color : rgb(176, 176, 176) !important;
 }
-.manulBtnUnable:hover{
-  border: 1px solid rgb(176, 176, 176, 0.856) !important;
-}
 .manulBtn + span{
   font-size: 1.5rem;
+}
+.manulBtnUnable:hover{
+  border: 1px solid rgb(176, 176, 176, 0.856) !important;
+  cursor: none;
 }
 .manulBtn:focus{
   outline: none;
@@ -795,10 +815,10 @@ table > tbody > tr:nth-child(17){
 }
 .sort-area{
   position: relative;
+  background-color: rgba(103, 169, 255, 0.253);
 }
 .sort-area:hover{
   cursor: pointer;
-  background-color: rgba(103, 169, 255, 0.253);
 }
 .sort-icon{
   position: absolute;

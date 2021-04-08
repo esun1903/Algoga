@@ -120,6 +120,9 @@ export default {
 
       await axios.get(`${SERVER_URL}/apps/v1/userTypeInfo/${this.userNo}`)
         .then(res => {
+          console.log('res.data')
+          console.log(res.data)
+          console.log('res.data')
           let myList = new Array();
           myList.push(['Type','Number'])
           res.data.forEach(element => {
@@ -317,5 +320,13 @@ p{
   bottom: -5px;
   right: 20px;
   font-size: 40px;
+}
+@media screen and  (max-width : 1080px) {
+  #userContent{
+    text-align: center !important;
+  }
+  #graphBox > div > div> div > div{
+    margin: 0 auto !important;
+  }
 }
 </style>
