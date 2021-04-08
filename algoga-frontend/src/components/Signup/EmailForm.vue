@@ -55,8 +55,7 @@ export default {
       }
 
       axios.get(`${SERVER_URL}/apps/v1/emailoverlapCheck/${input}`)
-        .then((res)=>{
-          console.log(res)
+        .then(()=>{
           this.check.email = true
           this.mes.email = '이메일이 확인되었습니다.'
         })

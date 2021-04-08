@@ -55,6 +55,9 @@ export default {
     axios.get(`${SERVER_URL}/apps/v1/codeBoardList/${this.algoSeq}`)
       .then(res => {
         this.reviews = res.data
+        this.reviews = this.reviews.filter(review =>{
+          return review.public === 0
+        })
       })
       .catch(err => {
         console.log(err)

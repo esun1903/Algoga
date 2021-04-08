@@ -28,7 +28,7 @@
           <p>'<span>{{leastSolved}}</span>' 유형의 문제 풀이가 필요합니다.<span id='sectionEnd'>』</span></p>
           
           
-        <div class='transTxt' @click='asideContent = !asideContent'>
+        <div v-show="isMine" class='transTxt' @click='asideContent = !asideContent'>
           <span>> Get Algorithm Recommendation</span>
         </div>
       </div>
@@ -55,8 +55,8 @@
 
 <script>
 import axios from 'axios'
-import ProfileBox from '@/components/Main/ProfileBox'
 const SERVER_URL = 'http://j4a302.p.ssafy.io'
+import ProfileBox from '@/components/Main/ProfileBox'
 import Chart from '@/components/Main/Chart'
 import Recommend from '@/components/Main/Recommend'
 
@@ -78,7 +78,7 @@ export default {
           width : 400,
           height : 300,
           is3D: true,
-          sliceVisibilityThreshold: .1,
+          sliceVisibilityThreshold: .02,
           chartArea:{left:0,top:40,width:'100%',height:'100%'},
           fontName : 'Hack',
           legend : {position :'labeled', textStyle: {color: 'black'}},
@@ -133,6 +133,22 @@ export default {
           console.log(err)
         })
     },
+    computed : {
+      isMine : function(){
+        const user1 = localStorage.getItem('userNo')
+        var url = window.location.href
+        if(url ==='http://j4a302.p.ssafy.io/'){
+          return true
+        }
+        const userA = url.split('/')
+        const user2 = userA[userA.length -1 ]
+        if(user1 == user2){
+          return true
+        }else{
+          return false
+        }
+      }
+    }
 }
 </script>
 
@@ -290,15 +306,17 @@ p{
 }
 
 #explain{
-  font-size: 1rem;
+  font-size: 0.8rem;
   position: relative;
+  white-space: nowrap;
 }
 #explain span{
   font-weight: 600;
   font-size: 1.1rem;
 }
 #explain + p{
-  font-size: 1rem;
+  white-space: nowrap;
+  font-size: 0.8rem;
   position: relative;
   margin-left: 30px;
 }
@@ -315,7 +333,7 @@ p{
 #sectionEnd{
   position: absolute;
   bottom: -5px;
-  right: 20px;
+  right: 5px;
   font-size: 40px;
 }
 @media screen and  (max-width : 1080px) {
