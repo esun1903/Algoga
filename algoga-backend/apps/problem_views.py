@@ -121,6 +121,9 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         user = get_object_or_404(User, seq=seq)
         level = user.level
 
+        if level is None:
+            level = 0
+
         myCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=0).values_list('problem_seq', flat=True)
         myInCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=1).values_list('problem_seq', flat=True)
 
@@ -152,6 +155,9 @@ class ProblemViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,View):
         # 유저seq가 없는 경우 404에러
         user = get_object_or_404(User, seq=seq)
         level = user.level
+
+        if level is None:
+            level = 0
 
         myCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=0).values_list('problem_seq', flat=True)
         myInCorrectProblemSeq = UserProblem.objects.filter(user_seq=user.seq).filter(correct=1).values_list('problem_seq', flat=True)
