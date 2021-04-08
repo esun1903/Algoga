@@ -73,9 +73,9 @@ export default {
   computed:{
     message(){
       return (jdx,idx)=> {
-        if (jdx === 33 && idx ===this.first_day) {
+        if (jdx === 28 && idx ===this.first_day) {
           return 'You create this account'
-        } else if (jdx <33){
+        } else if (jdx <28){
           return 'You did not create account'
         } else {  
           return `You solved ${this.week_data[jdx][idx]} problems.`
@@ -176,7 +176,7 @@ export default {
     }    
 
 
-    for (let i = 0; i<33; i++) {
+    for (let i = 0; i<28; i++) {
       let weekArray = new Array(7).fill(0)
       this.week_data.push(weekArray)
     }

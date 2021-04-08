@@ -18,14 +18,12 @@
           <span>{{registerDay[0]}} {{registerDay[1]}}</span>
           <div v-if='mine' class='flex'>
             <div @click='deleteBoard()'>
-              <i class="far fa-trash-alt"></i>
-              <span>Delete</span>
+              <span><i class="far fa-trash-alt"></i> Delete</span>
             </div>
           </div>
           <div class='flex' v-else>
             <div @click='routeHome(userData.seq,userData.email)'>                
-                <i class='fas fa-home'></i> 
-                <span>Home</span> 
+                <span><i class='fas fa-home'></i> Home</span> 
               </div>
           </div>
         </div>
