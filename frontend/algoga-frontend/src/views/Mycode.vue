@@ -80,11 +80,14 @@ export default {
 .register-btn {
   width: 100px; height: 30px;
   cursor:pointer; outline: none; border:none; border-radius: 10px;
+  background-color:rgba(26, 172, 26, 0.473);
+  color:white;
 }
 
 .my-code-header {
   width: 80%; margin: 0 auto; display:flex; 
   justify-content: space-between; align-items: center;
+  color:var(--font-color);
 }
 
 .my-code-section {

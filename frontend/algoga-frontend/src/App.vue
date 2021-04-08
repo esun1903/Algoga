@@ -123,4 +123,16 @@ input::placeholder {opacity: 0.5;}
   z-index:99999;
 }
 
+
+.fa-user, .fa-user+span {
+  cursor: pointer;
+}
+
+.main-box {
+  border:1px solid rgba(0,0,0,0.2);
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
 </style>

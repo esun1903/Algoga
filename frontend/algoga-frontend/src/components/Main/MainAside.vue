@@ -99,9 +99,9 @@ export default {
         this.$emit('profileUpdate')
         },
       reloadAlgos : function(){
-        axios.get(`${SERVER_URL}/apps/v1/userProblem/${this.userNo}`)
-          .then(()=>{
-            console.log('리스트 갱신')
+        const userMail = localStorage.getItem('email')
+        axios.post(`${SERVER_URL}/apps/v1/userInfoUpdate/${userMail}`)
+          .then(()=>{            
             window.location.reload()
           })
           .catch(err=>{
@@ -145,7 +145,7 @@ p{
   width: 400px;
   position:sticky;
   top:70px;
-  border-right: 1px solid rgba(61, 61, 61, 0.479);
+  /* border-right: 1px solid rgba(61, 61, 61, 0.479); */
 }
 
 #profileImgBox{

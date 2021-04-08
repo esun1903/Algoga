@@ -20,13 +20,24 @@
         <div>
           <MainAside @profileUpdate = 'profileUpdate' />
         </div>
-        <section>                
-          <LogStudy @userData='userData' />
+        <section>   
+          <div class='main-box'>
+            <div class='log-header'>
+              <h2>Study Log</h2>  
+              <button class='register-btn btn-font' @click='routeRegister'>
+                <i class="fas fa-signature"></i>
+                CREATE
+              </button>
+            </div>
+            <LogStudy @userData='userData' />
+          </div>           
           <!-- history -->
+          <div class='main-box'>
+            <h2>History</h2>  
+            <History :dataHistory='dataHistory' :dataList='dataList' />
+          </div>
 
-          <History :dataHistory='dataHistory' :dataList='dataList' />
-
-          <button @click='test'>TEST Button router to problemSolving</button>                    
+          <!-- <button @click='test'>TEST Button router to problemSolving</button>                     -->
         </section>
         
     
@@ -69,8 +80,14 @@ export default {
     profileUpdate:function(){
       this.userUpdate = true
     },
-    closeUpdate(){
+    closeUpdate(bool){
       this.userUpdate = false
+      if (bool) {
+        location.reload()
+      }
+    },
+    routeRegister:function(){
+      this.$router.push({name:'Register'})
     }
   },
   data : function(){
@@ -82,12 +99,18 @@ export default {
       userUpdate:false,
     }
   },
+  
 }
 </script>
 
 <style>
+#main{
+  transition: .3s;
+  color:var(--font-color)
+}
 #main > div:nth-child(2){
   display: flex;
+  
 }
 #main-content > section {
   width: 1000px;    
@@ -138,6 +161,9 @@ export default {
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+.log-header {
+  display:flex; justify-content: space-between;
 }
 
 @media screen and (max-width:1100px) {
