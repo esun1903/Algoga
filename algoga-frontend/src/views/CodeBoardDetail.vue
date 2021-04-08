@@ -114,7 +114,8 @@ export default {
         'code_board_seq':this.$route.params.codeBoard_seq
       }      
       axios.post(`${SERVER_URL}/apps/v1/commentRegister`,commentData)
-        .then(()=>{
+        .then((res)=>{
+          console.log(res)
           commentData['register_date'] = '방금전'
           this.commentList.push(commentData)
           this.commentCnt += 1

@@ -69,7 +69,7 @@ export default {
   height: 30px; 
   cursor:pointer;
   color:white;
-  
+  margin-right: 2%;
 }
 .sign-out-btn > p { margin-top: 5px;}
 

@@ -16,7 +16,7 @@
       </div>
       <div
         v-for="(algo, idx2) in toThree(recoByInCorrect)"
-        :key='idx2'
+        :key='idx2+3'
       >
         <RecommendLink
             :algo = algo

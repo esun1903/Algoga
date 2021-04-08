@@ -87,7 +87,7 @@ export default {
           ],
           tooltip : {textStyle: {color: 'black'}, showColorCode: true},
           pieSliceTextStyle : {color: 'black', fontName: 'Hack',fontSize: 14},
-          pieSliceBorderColor : 'white'
+          pieSliceBorderColor : 'white',
         },        
         data : [],
         mostSolved : '',
