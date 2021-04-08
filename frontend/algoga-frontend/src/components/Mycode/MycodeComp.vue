@@ -99,7 +99,7 @@ export default {
 }
 
 #mycode-comp:hover {
-  margin: 0 0 0 12%;
+  margin: 5px 0 20px 12%;
   color:white
 }
 

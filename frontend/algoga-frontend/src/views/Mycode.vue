@@ -1,8 +1,21 @@
 <template>
   <div id="my-code">
     <MainNavbar />
-
-    <div class='my-code-section'>
+    <div class='my-code-header-box'>
+      <div class='my-code-header'> 
+        <h1>
+          Mycodes
+        </h1>
+        <button class='register-btn btn-font' @click='routeRegister'>
+          <i class="fas fa-signature"></i>
+          CREATE
+        </button>
+      </div>
+    </div>
+    <div v-if='!data' class='my-code-section'>
+      asd
+    </div>
+    <div class='my-code-section' v-else>
       <div v-for='(prob,idx) in data' :key='idx'>        
         <MycodeComp :data = 'prob'/>
       </div>
@@ -39,6 +52,9 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+    },
+    routeRegister:function(){
+      this.$router.push({name:'Register'})
     }
   },
   created(){
@@ -56,9 +72,24 @@ export default {
 </script>
 
 <style>
+
+.my-code-header-box{
+  width:80%; margin:0 auto
+}
+
+.register-btn {
+  width: 100px; height: 30px;
+  cursor:pointer; outline: none; border:none; border-radius: 10px;
+}
+
+.my-code-header {
+  width: 80%; margin: 0 auto; display:flex; 
+  justify-content: space-between; align-items: center;
+}
+
 .my-code-section {
   width: 80%;
-  margin:5vh auto 0;
+  margin:1vh auto 0;
 }
 
 </style> 
