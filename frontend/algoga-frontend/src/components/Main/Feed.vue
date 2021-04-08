@@ -60,7 +60,12 @@ export default {
     },
     filters : {
       dateChange : function(date){
-        return date.split('T')[0]
+        if(!date){
+          return date.split('T')[0]
+        }
+        else{
+          return
+        }
       }
     }
 }

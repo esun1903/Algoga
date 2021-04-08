@@ -13,7 +13,6 @@
       </div>
     </div>
     <div v-if='!data' class='my-code-section'>
-      asd
     </div>
     <div class='my-code-section' v-else>
       <div v-for='(prob,idx) in data' :key='idx'>        
