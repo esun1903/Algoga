@@ -51,10 +51,15 @@ export default {
         
         let register_date = new Date(reg_date)
 
+        function addDays(date, days) {
+          let result = new Date(date)
+          result.setDate(result.getDate()+days)          
+          return result
+        }
         for (let i = 0; i<this.dataHistory.length;i++){
           let new_date = new Date()
           let string_date = ''
-          new_date.setDate(register_date.getDate()+this.dataHistory.length-i-1)
+          new_date = addDays(register_date,this.dataHistory.length-i-1)
 
           let year = new_date.getFullYear()
           let month = new_date.getMonth()

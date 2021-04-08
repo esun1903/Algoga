@@ -13,7 +13,7 @@
           </div>
           <div class='comment-status'>
             <div>
-              <i class="far fa-clock"></i>
+              <i class="far fa-clock" style="margin-right : 8px;"></i>
               {{createdAt(data.register_date)}}
             </div>
             <div v-if='mine(data,idx)'>
