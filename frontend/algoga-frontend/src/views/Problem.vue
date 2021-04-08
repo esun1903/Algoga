@@ -14,7 +14,7 @@
         <p>Lv.{{algo.level}} <span id='emojiExplain'></span></p>
         <p>{{algo.algorithms}}</p>
         <p>정답률 : {{algo.correct_rate}} %</p> 
-        <p>350000명 중 {{algo.correct_user}}명이 풀었어요!</p> 
+        <p>35000명 중 {{algo.correct_user}}명이 풀었어요!</p> 
       </div>
     </div>
     <Preview

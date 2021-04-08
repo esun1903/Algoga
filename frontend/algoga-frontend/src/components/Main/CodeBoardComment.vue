@@ -68,7 +68,6 @@ export default {
         })
     },
     routeHome:function(data){
-      console.log(data)
       axios.get(`${SERVER_URL}/apps/v1/userInfo/${data.user_seq}`)
         .then(res=>{
           this.$router.push({name:'Main',params:{nickname:res.data.email,userno:data.user_seq}})
