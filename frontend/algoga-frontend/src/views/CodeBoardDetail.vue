@@ -17,14 +17,16 @@
           <i class="far fa-clock"></i>
           <span>{{registerDay[0]}} {{registerDay[1]}}</span>
           <div v-if='mine' class='flex'>
-            <div>
-              <i class="far fa-edit"></i>
-              <span>edit</span>
-            </div>
             <div @click='deleteBoard()'>
               <i class="far fa-trash-alt"></i>
-              <span>delete</span>
+              <span>Delete</span>
             </div>
+          </div>
+          <div class='flex' v-else>
+            <div @click='routeHome(userData.seq,userData.email)'>                
+                <i class='fas fa-home'></i> 
+                <span>Home</span> 
+              </div>
           </div>
         </div>
       </div>
@@ -112,8 +114,7 @@ export default {
         'text':this.commentInput,
         'user_seq':localStorage.getItem('userNo'),
         'code_board_seq':this.$route.params.codeBoard_seq
-      }
-      console.log(commentData)
+      }      
       axios.post(`${SERVER_URL}/apps/v1/commentRegister`,commentData)
         .then(()=>{
           commentData['register_date'] = '방금전'
@@ -155,6 +156,9 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+    },
+    routeHome:function(no,email){
+      this.$router.push({name:'Main',params:{nickname:email,userno:no}})
     }
   },
   computed:{
@@ -176,10 +180,8 @@ export default {
         this.category = res.data[0].free_write.split('/')   
         this.registerDay.push(this.data.register_date.split('T')[0])
         this.registerDay.push(this.data.register_date.split('T')[1].split('+')[0])     
-        this.likeCnt = this.data.like_cnt
-        console.log(this.data)
-        this.langClass = langClassList[this.data.language_seq]  
-        console.log(this.langClass)
+        this.likeCnt = this.data.like_cnt        
+        this.langClass = langClassList[this.data.language_seq]          
 
       })
       .catch(err => {
@@ -209,8 +211,7 @@ export default {
     await axios.get(`${SERVER_URL}/apps/v1/commentList/${codeBoard_seq}`)
       .then(res =>{
         this.commentCnt = res.data.length
-        this.commentList = res.data
-        console.log(this.commentList)
+        this.commentList = res.data        
       })
       .catch(()=>{
         this.commentCnt = 0
