@@ -180,7 +180,7 @@ class User(models.Model):
     password = models.CharField(max_length=50)
     baek_id = models.CharField(max_length=50)
     nickname = models.CharField(unique=True, max_length=50)
-    profile_image = models.FileField(null=True)
+    profile_image = models.FileField(default="defaultphoto.PNG")
     register_date = models.DateTimeField(auto_now_add=True)
     level = models.IntegerField()
     is_active = models.IntegerField(blank=True, null=True)
