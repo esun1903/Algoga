@@ -360,8 +360,7 @@ $ sudo nginx -t
 
 ```jsx
 $ sudo service nginx restart
-
-
+```
 
 
 ### ✔ 프로젝트 개발 일정
