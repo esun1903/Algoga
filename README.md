@@ -21,10 +21,7 @@
 <br>
 
 ### ❓ 문제인식
-
-**새해 목표를 꾸준히 지킨 성인남녀가 28%로 달성률이 현저히 낮은 것**을 볼 수 있습니다.
 <br>
-
 <img src = "[https://user-images.githubusercontent.com/68232654/119594053-0ce7ae00-be16-11eb-8639-40ed9a5383a2.png](https://user-images.githubusercontent.com/68232654/119594053-0ce7ae00-be16-11eb-8639-40ed9a5383a2.png)" width="800px">
 
 ### 👨🏻‍💼 페르소나 설정
@@ -36,7 +33,6 @@
 ### 💁🏻‍♀️ 해결방안
 
 <img src = "[https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png](https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png)" width="800px">
-
 <br>
 
 ### ✔️ 주요 서비스 기능
@@ -93,9 +89,9 @@
 
 ### ⚙️ Install and Usage
 
-# 🌴알고가 배포 과정
+#### 알고가 배포 과정
 
-## 📘1. EC2 접속 & 도커 이미지 생성
+##### 📘1. EC2 접속 & 도커 이미지 생성
 
 **1.1 파이썬 설치 (알고가 서비스 기준)**
 Python 3.6.1
@@ -164,7 +160,7 @@ mysql> quit
 
 ```
 
-## 📗2. Git
+##### 📗2. Git
 
 2-1. git install  브랜치 master 기준
 
@@ -172,13 +168,13 @@ mysql> quit
 
 ---
 
-## 📒3. EC2 접속 (1과 동일한 화면에서 진행하면 됨)
+##### 📒3. EC2 접속 (1과 동일한 화면에서 진행하면 됨)
 
 cd s04p23a302
 
 ---
 
-## 📕4. Frontend 배포
+##### 📕4. Frontend 배포
 
 4-1. cd algoga-frontend
 
@@ -210,7 +206,7 @@ $ npm run build
 
 ---
 
-## 📕5. Backend 배포 및 가상환경 구축
+##### 📕5. Backend 배포 및 가상환경 구축
 
 5-1.
 
@@ -397,7 +393,7 @@ location / {
 
 ```
 
-## 🌳6. Syntax 검사 및 Nginx 재시작
+##### 6. Syntax 검사 및 Nginx 재시작
 
 설정 변경 후 syntax 검사 필수
 
