@@ -33,22 +33,28 @@
 
 ### 👨🏻‍💼 페르소나 설정
 
-알고리즘을 잘 하고 싶은 취업준비생 **25세 직장인 김경민씨**
+알고리즘을 잘 하고 싶은 취업준비생 비전공생 김알못, 전공생 김알고
 <br>
-<img src = "[https://user-images.githubusercontent.com/38427646/126270878-41bec00d-65a9-416d-b8f3-8b79c3747615.png](https://user-images.githubusercontent.com/38427646/126270878-41bec00d-65a9-416d-b8f3-8b79c3747615.png)" width="800px">
-
+<img src = "[https://user-images.githubusercontent.com/38427646/126605603-d1897cec-f187-4526-917c-d2c928341ff0.png](https://user-images.githubusercontent.com/38427646/126605603-d1897cec-f187-4526-917c-d2c928341ff0.png)" width="800px">
 ### 💁🏻‍♀️ 해결방안
 
-<img src = "[https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png](https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png)" width="800px">
+<br>
+
+<img src = "[https://user-images.githubusercontent.com/38427646/126605707-b39a7acf-cc36-4d62-8bd6-eb403883f9dd.png](https://user-images.githubusercontent.com/38427646/126605707-b39a7acf-cc36-4d62-8bd6-eb403883f9dd.png" width="800px">
 
 
 ### ✔️ 주요 서비스 기능
 
 1. 메인페이지 - 회원가입시 입력 받은 **백준 아이디를 기반으로 문제 추천**
+
 2. 메인페이지 - 프로필 및 **깃허브 잔디심기**🌱 기능 (일자별로 검색 가능)
+
 3. 마이페이지 - 자신이 푼 문제와 로그, 문제 추천 목록 확인
+
 4. 문제 등록 - 사용자가 푼 문제들을 **유형별&언어별에 맞추어 작성** 및 그에 대한 **설명은** **마크다운**으로 작성 가능
+
 5. 풀이 확인 - 문제 별로 자신의 풀이 방법과 **공개되어 있는 다른 사람들의 풀이 공유 가능** 
+
 6. 다크모드 / 기본모드 기능 
 
 ### 🌱 Tech Log & Cooperation
