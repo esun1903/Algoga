@@ -40,12 +40,12 @@
 ### 💁🏻‍♀️ 해결방안
 
 <img src = "[https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png](https://user-images.githubusercontent.com/38427646/126271519-1c1e07ab-b6ea-44ac-b423-cb1a69f7fe3c.png)" width="800px">
-<br>
+
 
 ### ✔️ 주요 서비스 기능
 
 1. 메인페이지 - 회원가입시 입력 받은 **백준 아이디를 기반으로 문제 추천**
-2. 메인페이지2 - 프로필 및 **깃허브 잔디심기**🌱 기능 (일자별로 검색 가능)
+2. 메인페이지 - 프로필 및 **깃허브 잔디심기**🌱 기능 (일자별로 검색 가능)
 3. 마이페이지 - 자신이 푼 문제와 로그, 문제 추천 목록 확인
 4. 문제 등록 - 사용자가 푼 문제들을 **유형별&언어별에 맞추어 작성** 및 그에 대한 **설명은** **마크다운**으로 작성 가능
 5. 풀이 확인 - 문제 별로 자신의 풀이 방법과 **공개되어 있는 다른 사람들의 풀이 공유 가능** 
@@ -62,13 +62,8 @@
 <br>
 
 ### [실제 홈페이지](http://i4a303.p.ssafy.io/)
-
 ### [컨벤션](https://www.notion.so/332cddb89bff4354b3aee8bc1d2746a8)
-
-<br>
-
 ### 🌱 Tech Stack
-
 ### System architecture
 
 <img src = "[https://user-images.githubusercontent.com/38427646/126262711-ae506989-798f-4143-978a-882827bdd6ef.png](https://user-images.githubusercontent.com/68232654/119595810-158db380-be19-11eb-81d8-b70d8ed77e9d.png)" width="800px">
@@ -86,17 +81,10 @@
 
 <img src = "[https://user-images.githubusercontent.com/38427646/126273089-c15b39f8-c1eb-4cff-a8c9-f6d9caf6aee0.png"](https://user-images.githubusercontent.com/68232654/119596269-ce53f280-be19-11eb-9e13-77f4abfa5768.png) width="800px">
 </details>
-
-<br>
-
-### 
-
 <details>
 <summary><b>💻 실행 방법</b></summary>
 
-### ⚙️ Install and Usage
-
-#### 알고가 배포 과정
+#### 알가 배포 과정
 
 ##### 📘1. EC2 접속 & 도커 이미지 생성
 
