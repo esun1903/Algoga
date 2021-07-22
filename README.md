@@ -77,22 +77,22 @@
 <br>
 
 <details>
-<summary><b>✔️ERD</b></summary>
+<summary><b>✔️ ERD</b></summary>
 <img src = "[https://user-images.githubusercontent.com/38427646/126273089-c15b39f8-c1eb-4cff-a8c9-f6d9caf6aee0.png](https://user-images.githubusercontent.com/68232654/119595178-1a059c80-be18-11eb-8202-5f4d6675040f.png)" width="800px">
 </details>
 
 <details>
-<summary><b>✔️APITable</b></summary>
+<summary><b>✔️ APITable</b></summary>
 <img src = "[https://user-images.githubusercontent.com/38427646/126273089-c15b39f8-c1eb-4cff-a8c9-f6d9caf6aee0.png](https://user-images.githubusercontent.com/68232654/119595178-1a059c80-be18-11eb-8202-5f4d6675040f.png)" width="800px">
 
 <img src = "[https://user-images.githubusercontent.com/38427646/126273089-c15b39f8-c1eb-4cff-a8c9-f6d9caf6aee0.png"](https://user-images.githubusercontent.com/68232654/119596269-ce53f280-be19-11eb-9e13-77f4abfa5768.png) width="800px">
 </details>
 <details>
-<summary><b>💻 실행 방법</b></summary>
+<summary><b>💻  실행 방법</b></summary>
 
 #### 알가 배포 과정
 
-##### 📘1. EC2 접속 & 도커 이미지 생성
+##### 📘 1. EC2 접속 & 도커 이미지 생성
 
 **1.1 파이썬 설치 (알고가 서비스 기준)**
 Python 3.6.1
@@ -161,7 +161,7 @@ mysql> quit
 
 ```
 
-##### 📗2. Git
+##### 📗 2. Git
 
 2-1. git install  브랜치 master 기준
 
@@ -169,13 +169,13 @@ mysql> quit
 
 ---
 
-##### 📒3. EC2 접속 (1과 동일한 화면에서 진행하면 됨)
+##### 📒 3. EC2 접속 (1과 동일한 화면에서 진행하면 됨)
 
 cd s04p23a302
 
 ---
 
-##### 📕4. Frontend 배포
+##### 📕 4. Frontend 배포
 
 4-1. cd algoga-frontend
 
@@ -207,7 +207,7 @@ $ npm run build
 
 ---
 
-##### 📕5. Backend 배포 및 가상환경 구축
+##### 📕 5. Backend 배포 및 가상환경 구축
 
 5-1.
 
